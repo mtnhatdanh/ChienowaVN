@@ -10,7 +10,7 @@ Chienowa Vietnam - Report Inventory
 </div>
 <br/>
 <div class="container" id="content">
-	<table class="table table-responsive table-striped">
+	<table class="table table-responsive table-striped table-condensed">
 		<tr>
 			<th class="hidden-xs">No</th>
 			<th>Name</th>
@@ -49,7 +49,7 @@ Chienowa Vietnam - Report Inventory
 		@endif
 		@endforeach
 		@endforeach
-
+	
 	</table>
 </div>
 

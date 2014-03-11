@@ -48,23 +48,23 @@ Chienowa Vietnam - Modify  User
 					<input type="text" class="form-control" id="address" name="address" placeholder="Enter your address.." value="{{$user->address}}">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group hidden-xs">
 				<label for="password" class="col-sm-2 control-label">Password</label>
 				<div class="col-sm-4">
 					<input type="password" class="form-control" id="password" name="password" placeholder="Leave blank if dont' want to change password">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group hidden-xs">
 				<label for="password_confirmation" class="col-sm-2 control-label">Re-Password</label>
 				<div class="col-sm-4">
 					<input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Re-enter your password..">
 				</div>
 			</div>
-			<div class="col-md-2 col-md-offset-2">
+			<div class="col-sm-2 col-sm-offset-2 hidden-xs">
 				<button type="submit" class="btn btn-primary">Update user</button>
 				
 			</div>
-			<div class="col-md-1">
+			<div class="col-sm-1">
 				<a href="{{Asset('user/manage-user')}}"><button type="button" class="btn btn-default">Back</button></a>
 			</div>
 		</div>

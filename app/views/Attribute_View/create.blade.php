@@ -34,7 +34,7 @@ Chienowa Vietnam - Create New Attribute
 			</div>
 
 			<div class="col-md-2 col-md-offset-2">
-				<button type="submit" class="btn btn-primary">Create new Attribute</button>
+				<button type="submit" class="btn btn-primary hidden-xs">Create new Attribute</button>
 			</div>
 			<div class="col-md-1">
 				<a href="{{Asset('attribute')}}"><button type="button" class="btn btn-default">Back</button></a>

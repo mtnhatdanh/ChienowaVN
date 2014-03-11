@@ -10,7 +10,7 @@ Chienowa Vietnam - Manage Attributes
 
 	<br/>
 	
-	<table class="table table-responsive table-striped table-bordered">
+	<table class="table table-responsive table-striped table-bordered table-condensed">
 		<tr>
 			<th>No</th>
 			<th>Name</th>
@@ -31,7 +31,7 @@ Chienowa Vietnam - Manage Attributes
 		@endforeach
 	</table>
 	<div>
-		<a href="{{Asset('attribute/create-attribute')}}"><button type="button" class="btn btn-primary">Create new attribute</button></a>
+		<a href="{{Asset('attribute/create-attribute')}}"><button type="button" class="btn btn-primary hidden-xs">Create new attribute</button></a>
 	</div>
 </div>
 @endsection

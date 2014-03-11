@@ -1,14 +1,18 @@
 <div class="container">
-	<div class="col-sm-6"><strong>{{$item->getItemName()}}</strong></div>
+	<div class="row">
+		<div class="col-sm-6"><strong>{{$item->getItemName()}}</strong></div>
+	</div>
 </div>
 <div class="container">
-	<div class="col-sm-4"><strong>From:</strong> {{$from_date}} <strong>to:</strong> {{$to_day}}</div>
+	<div class="row">
+		<div class="col-sm-4"><strong>From:</strong> {{date('m/d/Y', strtotime($from_date))}} <strong>to:</strong> {{date('m/d/Y', strtotime($to_day))}} </div>
+	</div>
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<table class="table table-responsive">
+		<table class="table table-responsive table-condensed">
 			<tr>
-				<th>Trans No</th>
+				<th class="hidden-xs">Trans No</th>
 				<th>Date</th>
 				<th>Type</th>
 				<th>Amount</th>
@@ -17,8 +21,8 @@
 			<tr>
 				<?php $trans_no = 0; ?>
 				@foreach ($transactions as $transaction)
-				<td>{{++$trans_no}}</td>
-				<td>{{$transaction->date}}</td>
+				<td class="hidden-xs">{{++$trans_no}}</td>
+				<td>{{date('m/d/Y', strtotime($transaction->date))}}</td>
 				<td>
 					@if($transaction->type == 'I') Import
 					@else Export

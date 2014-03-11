@@ -11,9 +11,9 @@ Chienowa Vietnam - Create New Items
 	</div>
 </div>
 
-<div id="content">
+<div id="content" class="container">
 	<form action="{{Asset('item/create-item')}}" method="post" id="form-register">
-		<div class="container">
+		<div class="row">
 			<div class="form-group">
 				<label for="category" class="col-sm-1 control-label">Category</label>
 				<div class="col-sm-3">
@@ -30,7 +30,7 @@ Chienowa Vietnam - Create New Items
 		<div id="new_item_div">
 		</div>
 		<br/>
-		<div class="container text-center">
+		<div class="row text-center">
 		<button class="btn btn-primary" type="submit">Save New Item</button>
 		<button class="btn btn-default" type="button" onclick="window.history.back()">Back</button>
 	</div>

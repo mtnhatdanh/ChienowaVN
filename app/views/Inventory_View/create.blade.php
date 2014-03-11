@@ -28,58 +28,60 @@ Chienowa Vietnam - New Transaction
 
 
 
-<form action="{{Asset('inventory/create')}}" method="post" id="form-register">
-	<div class="container">
-		<div class="form-group col-sm-3">
-			<label for="type">Type</label>
-			<select name="type" id="type" class="form-control">
-				<option value="I">Import</option>
-				<option value="E">Export</option>
-			</select>
-		</div>
-	</div>
-	<div class="container">
-		<div class="form-group col-sm-3">
-			<label for="date" class="control-label">Date</label>
-			<input type="date" class="form-control" id="date" name="date">
-		</div>
-		<div class="form-group col-sm-5">
-			<label for="item" class="control-label">Item name</label>
-			<div class="input-group">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" data-toggle="modal" data-target="#lookupname" id="lookup_btn"><span class="glyphicon glyphicon-search"></span></button>
-				</span>
-				<input type="text" class="form-control" id="item" name="item" placeholder="Item name..">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" data-toggle="modal" data-target="#info_modal" id="info_btn" ><span class="glyphicon glyphicon-info-sign"></span></button>
-					<a href="{{Asset('item/create-item')}}"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button></a>
-				</span>
-				<input type="hidden" id="item_id" name="item_id">
+<div class="container">
+	<form action="{{Asset('inventory/create')}}" method="post" id="form-register">
+		<div class="row">
+			<div class="form-group col-sm-3">
+				<label for="type">Type</label>
+				<select name="type" id="type" class="form-control">
+					<option value="I">Import</option>
+					<option value="E">Export</option>
+				</select>
 			</div>
 		</div>
-		<div class="form-group col-sm-2">
-			<label for="amount" class="control-label">Amount</label>
-			<input type="text" class="form-control" id="amount" name="amount" placeholder="Amount..">
+		<div class="row">
+			<div class="form-group col-sm-3">
+				<label for="date" class="control-label">Date</label>
+				<input type="date" class="form-control" id="date" name="date">
+			</div>
+			<div class="form-group col-sm-5">
+				<label for="item" class="control-label">Item name</label>
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#lookupname" id="lookup_btn"><span class="glyphicon glyphicon-search"></span></button>
+					</span>
+					<input type="text" class="form-control" id="item" name="item" placeholder="Item name..">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#info_modal" id="info_btn" ><span class="glyphicon glyphicon-info-sign"></span></button>
+						<a href="{{Asset('item/create-item')}}"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button></a>
+					</span>
+					<input type="hidden" id="item_id" name="item_id">
+				</div>
+			</div>
+			<div class="form-group col-sm-2">
+				<label for="amount" class="control-label">Amount</label>
+				<input type="text" class="form-control" id="amount" name="amount" placeholder="Amount..">
+			</div>
+			<div class="form-group col-sm-2" id="in_stock_div">
+				<label for="amount" class="control-label">In Stock</label>
+				<input type="text" class="form-control" id="in_stock" placeholder="In Stock.." disabled="disabled">
+			</div>
 		</div>
-		<div class="form-group col-sm-2" id="in_stock_div">
-			<label for="amount" class="control-label">In Stock</label>
-			<input type="text" class="form-control" id="in_stock" placeholder="In Stock.." disabled="disabled">
+		<div class="row">
+			<div class="form-group col-sm-12">
+				<label for="note" class="control-label">Note</label>
+				<textarea class="form-control" name="note" id="note" rows="4"></textarea>
+			</div>
 		</div>
-	</div>
-	<div class="container">
-		<div class="form-group col-sm-12">
-			<label for="note" class="control-label">Note</label>
-			<textarea class="form-control" name="note" id="note" rows="4"></textarea>
+		<br/>
+		<div class="row text-center">
+			<button class="btn btn-primary">New Transaction</button>
 		</div>
+	</form>
+	
+	<div class="row">
+		<ul id="validation_errors"></ul>
 	</div>
-	<br/>
-	<div class="container text-center">
-		<button class="btn btn-primary">New Transaction</button>
-	</div>
-</form>
-
-<div class="container">
-	<ul id="validation_errors"></ul>
 </div>
 
 <!-- Modal info btn -->

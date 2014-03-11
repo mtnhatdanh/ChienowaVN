@@ -54,7 +54,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Users<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="{{Asset('user/manage-user')}}">Manage Users</a></li>
-                <li><a href="{{Asset('user/create-user')}}">Create user</a></li>
+                <li class="hidden-xs"><a href="{{Asset('user/create-user')}}">Create user</a></li>
               </ul>
             </li>
             <li class="dropdown @if(Session::get('active_menu')=='inventory') active @endif">
@@ -75,6 +75,7 @@
                 <li class="dropdown-header">Inventory</li>
                 <li><a href="{{Asset('report/inventory-in-stock')}}">In-Stock</a></li>
                 <li><a href="{{Asset('report/inventory-by-day')}}">By Day</a></li>
+                <li><a href="{{Asset('report/transactions')}}">Transactions</a></li>
                 <!-- <li class="divider"></li>
                 <li class="dropdown-header">Inventory</li>
                 <li><a href="{{Asset('inventory/create')}}">New Transaction</a></li> -->

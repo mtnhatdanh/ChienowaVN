@@ -1,40 +1,38 @@
-<div class="container">
-	<table class="table table-responsive table-striped">
-		<tr>
-			<th class="text-center">No</th>
-			<th>Name</th>
-			<th class="text-center">Infomation</th>
-			<th class="hidden-xs">Unit</th>
-			<th class="hidden-xs">Opening stock</th>
-			<th>Import</th>
-			<th>Export</th>
-			<th class="hidden-xs">Closing stock</th>
-			<th>In-Stock</th>
-		</tr>
-		<?php $item_no = 0;?>
-		@foreach ($items as $item)
-		<?php 
-		$arrayAmount  = Item::getAmountFilterByDay($item->id, $from_day, $to_day);
-		$openingStock = Item::getOpeningStock($item->id, $from_day);
-		$inStock      = $item->getInStock();
-		?>
-		<tr>
-			<td class="text-center">{{++$item_no}}</td>
-			<td>{{$item->getItemName()}}</td>
-			<td>
-				<button type="button" class="btn btn-link info_button" id="{{$item->id}}" data-toggle="modal" data-target="#myModal">Info</button>
-				<button type="button" class="btn btn-link trans_button" id="{{$item->id}}" data-toggle="modal" data-target="#myTransactions">Trans</button>
-			</td>
-			<td class="hidden-xs">{{$item->getItemUnit()}}</td>
-			<td class="hidden-xs">{{$openingStock}}</td>
-			<td>{{$arrayAmount['sumImport']}}</td>
-			<td>{{$arrayAmount['sumExport']}}</td>
-			<td class="hidden-xs">{{$openingStock+$arrayAmount['inStock']}}</td>
-			<td>{{$inStock['inStock']}}</td>
-		</tr>
-		@endforeach
-	</table>
-</div>
+<table class="table table-responsive table-striped table-condensed">
+	<tr>
+		<th class="hidden-xs text-center">No</th>
+		<th>Name</th>
+		<th class="text-center">Infomation</th>
+		<th class="hidden-xs">Unit</th>
+		<th class="hidden-xs">Opening stock</th>
+		<th>Import</th>
+		<th>Export</th>
+		<th class="hidden-xs">Closing stock</th>
+		<th class="hidden-xs">In-Stock</th>
+	</tr>
+	<?php $item_no = 0;?>
+	@foreach ($items as $item)
+	<?php 
+	$arrayAmount  = Item::getAmountFilterByDay($item->id, $from_day, $to_day);
+	$openingStock = Item::getOpeningStock($item->id, $from_day);
+	$inStock      = $item->getInStock();
+	?>
+	<tr>
+		<td class="hidden-xs text-center">{{++$item_no}}</td>
+		<td>{{$item->getItemName()}}</td>
+		<td>
+			<button type="button" class="btn btn-link info_button" id="{{$item->id}}" data-toggle="modal" data-target="#myModal">Info</button>
+			<button type="button" class="btn btn-link trans_button" id="{{$item->id}}" data-toggle="modal" data-target="#myTransactions">Trans</button>
+		</td>
+		<td class="hidden-xs">{{$item->getItemUnit()}}</td>
+		<td class="hidden-xs">{{$openingStock}}</td>
+		<td>{{$arrayAmount['sumImport']}}</td>
+		<td>{{$arrayAmount['sumExport']}}</td>
+		<td class="hidden-xs">{{$openingStock+$arrayAmount['inStock']}}</td>
+		<td class="hidden-xs">{{$inStock['inStock']}}</td>
+	</tr>
+	@endforeach
+</table>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

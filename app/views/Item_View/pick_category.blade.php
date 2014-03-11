@@ -1,4 +1,4 @@
-<div class="container">
+<div class="row">
 	@foreach($references as $reference)
 	<div class="
 	@if ($reference->attribute_id==1) col-sm-4 @else col-sm-2

@@ -10,7 +10,7 @@ Chienowa Vietnam - Manage Items
 
 	<br/>
 	
-	<table class="table table-responsive table-striped table-bordered">
+	<table class="table table-responsive table-striped table-bordered table-condensed">
 		<tr>
 			<th>No</th> <?php $no = 1; ?>
 			<th>Name</th>
@@ -22,7 +22,7 @@ Chienowa Vietnam - Manage Items
 			<td>{{$item->getItemName()}}</td>
 			<td class="text-center">
 				<button type="button" class="btn btn-link info_button" id="{{$item->id}}" data-toggle="modal" data-target="#myModal">Info</button>
-				<a href="{{Asset('item/modify-item/'.$item->id)}}"><button type="button" class="btn btn-link">Modify</button></a>
+				<a href="{{Asset('item/modify-item/'.$item->id)}}"><button type="button" class="btn btn-link hidden-xs">Modify</button></a>
 
 			</td>
 
@@ -30,7 +30,7 @@ Chienowa Vietnam - Manage Items
 		@endforeach
 	</table>
 	<div>
-		<a href="{{Asset('item/create-item')}}"><button type="button" class="btn btn-primary">Create new Item</button></a>
+		<a href="{{Asset('item/create-item')}}"><button type="button" class="btn btn-primary hidden-xs">Create new Item</button></a>
 		<a href="{{Asset('category')}}"><button type="button" class="btn btn-default">Back</button></a>
 	</div>
 </div>

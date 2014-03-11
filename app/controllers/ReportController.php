@@ -45,6 +45,19 @@ class ReportController extends Controller
 		return View::make('Report_View.inventory_filter', $data);
 	}
 
+	/**
+	 * report/transactions
+	 * @return View Transactions View
+	 */
+	public function getTransactions(){
+		return View::make('Report_View.inventory_transactions');
+	}
 
+	public function postTransactionsFilter(){
+		$from_day     = Input::get('from_day');
+		$to_day       = Input::get('to_day');
+		$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->orderBy('date', 'asc')->get();
+		return View::make('Report_View.transactions_ajax', array('transactions'=>$transactions));
+	}
 
 }
