@@ -14,10 +14,10 @@ Chienowa Vietnam - Category
 	?>
 	<table class="table table-responsive table-striped table-bordered">
 		<tr>
-			<th>No</th>
-			<th>Name</th>
-			<th>Code</th>
-			<th>Reference</th>
+			<th class="text-center">No</th>
+			<th class="text-center">Name</th>
+			<th class="text-center">Code</th>
+			<th class="text-center">Reference</th>
 		</tr>
 		@foreach ($categories as $category)
 		<tr>

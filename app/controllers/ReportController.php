@@ -10,12 +10,41 @@ class ReportController extends Controller
 		Session::put('active_menu', 'report');
 	}
 
+	/**
+	 * [getInventoryInStock description]
+	 * @return View Report_View.inventory_in_stock
+	 */
 	public function getInventoryInStock(){
-		// $items = Item::join('transactions', 'transactions.item_id', '=', 'items.id')
-		// 		->select(DB::raw('sum(amount) as total, item_id, type'))
-		$items_inStock = array();
-		$items = Transaction::groupBy('item_id')->get();
 		return View::make('Report_View.inventory_in_stock');
 	}
+
+	/**
+	 * /report/inventory-by-day
+	 * @return View Inventory_by_day
+	 */
+	public function getInventoryByDay(){
+		return View::make('Report_View.inventory_by_day');
+	}
+
+	/**
+	 * get Ajax from InventoryByDay report
+	 * @return View [description]
+	 */
+	public function postInventoryFilter(){
+		$category_id = Input::get('category_id');
+		$from_day    = Input::get('from_day');
+		$to_day      = Input::get('to_day');
+
+		$items = Item::where('category_id', '=', $category_id)->get();
+		$data  = array(
+			'items'    =>$items,
+			'from_day' =>$from_day,
+			'to_day'   =>$to_day
+			);
+
+		return View::make('Report_View.inventory_filter', $data);
+	}
+
+
 
 }

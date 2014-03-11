@@ -74,6 +74,7 @@
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Inventory</li>
                 <li><a href="{{Asset('report/inventory-in-stock')}}">In-Stock</a></li>
+                <li><a href="{{Asset('report/inventory-by-day')}}">By Day</a></li>
                 <!-- <li class="divider"></li>
                 <li class="dropdown-header">Inventory</li>
                 <li><a href="{{Asset('inventory/create')}}">New Transaction</a></li> -->

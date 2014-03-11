@@ -84,20 +84,31 @@ Route::group(array("prefix"=>"check"), function(){
 //Get data to lookup
 
 Route::group(array("prefix"=>"data"), function(){
+	
 	Route::post('amount-inStock', function(){
 		$item_id = Input::get('item_id');
 		$sumTransactions = Item::getInStock($item_id);
 		echo $sumTransactions['inStock'];
 	});
+	// Ajax for Info Item Button
+	
+	Route::post('item-info', function(){
+		$item_id = Input::get('item_id');
+		$itematts = ItemAtt::join('attributes', 'attributes.id', '=', 'item_atts.attribute_id')
+				->orderBy('order_no', 'asc')
+				->where('item_id', '=', $item_id)
+				->get();
+		return View::make('item_info', array('itematts'=>$itematts, 'item_id'=>$item_id));
+	});
+
 });
 
 Route::get('test', function(){
-	// $abc = Item::join('transactions', 'transactions.item_id', '=', 'items.id')
-	// 			->select(DB::raw('sum(amount) as total, item_id, type'))
-	// 			->groupBy('item_id', 'type')
-	// 			->first();
-	$items = Transaction::groupBy('item_id')->first();
-	print_r($items);
+	$itematts = ItemAtt::join('attributes', 'attributes.id', '=', 'item_atts.attribute_id')
+				->orderBy('order_no', 'asc')
+				->where('item_id', '=', 46)
+				->get();
+	print_r($itematts);
 	// dd(DB::getQueryLog());
 });
 

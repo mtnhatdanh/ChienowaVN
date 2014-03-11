@@ -1,55 +1,35 @@
-@extends('theme')
-
-@section('title')
-Chienowa Vietnam - Report Inventory
-@endsection
-@section('content')
-
 <div class="container">
-	<h1>Report Inventory</h1>
-</div>
-<br/>
-<div class="container" id="content">
 	<table class="table table-responsive table-striped">
 		<tr>
 			<th>No</th>
 			<th>Name</th>
 			<th>Infomation</th>
 			<th>Unit</th>
+			<th>Opening stock</th>
 			<th class="hidden-xs">Import</th>
 			<th class="hidden-xs">Export</th>
+			<th>Closing stock</th>
 			<th>In-Stock</th>
 		</tr>
-		<?php
-		$category_number = 0;
+		<?php $item_no = 0;?>
+		@foreach ($items as $item)
+		<?php 
+		$arrayAmount = Item::getAmountFilterByDay($item->id, $from_day, $to_day);
+		$openingStock = Item::getOpeningStock($item->id, $from_day);
+		$inStock = Item::getInStock($item->id);
 		?>
-		@foreach (Category::get() as $category)
-		<tr class="info">
-			<th>{{++$category_number}}.</th>
-			<th>{{ucfirst($category->name)}}</th>
-			<th></th>
-			<th></th>
-			<th class="hidden-xs"></th>
-			<th class="hidden-xs"></th>
-			<th></th>
-		</tr>
-		<?php $item_number = 0; ?>
-		@foreach (Item::where('category_id', '=', $category->id)->get() as $item)
-		<?php $inStockArray = $item->getInStock($item->id); ?>
-		@if($inStockArray['inStock'])
 		<tr>
-			<td>{{$category_number}}.{{++$item_number}}</td>
+			<td>{{++$item_no}}</td>
 			<td>{{$item->getItemName()}}</td>
 			<td><button type="button" class="btn btn-link info_button" id="{{$item->id}}" data-toggle="modal" data-target="#myModal">Info</button></td>
 			<td>{{$item->getItemUnit()}}</td>
-			<td class="hidden-xs">{{$inStockArray['sumImport']}}</td>
-			<td class="hidden-xs">{{$inStockArray['sumExport']}}</td>
-			<td>{{$inStockArray['inStock']}}</td>
+			<td>{{$openingStock}}</td>
+			<td>{{$arrayAmount['sumImport']}}</td>
+			<td>{{$arrayAmount['sumExport']}}</td>
+			<td>{{$openingStock+$arrayAmount['inStock']}}</td>
+			<td>{{$inStock['inStock']}}</td>
 		</tr>
-		@endif
 		@endforeach
-		@endforeach
-
 	</table>
 </div>
 
@@ -88,5 +68,3 @@ Chienowa Vietnam - Report Inventory
 		});
 	});
 </script>
-
-@endsection
