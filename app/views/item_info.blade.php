@@ -1,10 +1,16 @@
-<div class="container">
-	<div class="col-sm-2">Category:</div>
-	<div class="col-sm-4">{{ucfirst(Item::find($item_id)->category->name)}}</div>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-responsive table-condensed" style="border:none">
+			<tr>
+				<th style="border:none">Category:</th>
+				<td style="border:none">{{ucfirst(Item::find($item_id)->category->name)}}</td>
+			</tr>
+			@foreach ($itematts as $itematt)
+			<tr>
+				<th style="border:none">{{Attribute::find($itematt->attribute_id)->name}}:</th>
+				<td style="border:none">{{$itematt->value}}</td>
+			</tr>
+			@endforeach
+		</table>
+	</div>
 </div>
-@foreach ($itematts as $itematt)
-<div class="container">
-	<div class="col-sm-2">{{Attribute::find($itematt->attribute_id)->name}}:</div>
-	<div class="col-sm-4">{{$itematt->value}}</div>
-</div>
-@endforeach

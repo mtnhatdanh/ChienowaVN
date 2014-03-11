@@ -44,9 +44,7 @@ Chienowa Vietnam - Manage Items
         <h4 class="modal-title" id="myModalLabel">Attributes</h4>
       </div>
       <div class="modal-body">
-        <div class="container">
         	<div id="info_div"></div>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

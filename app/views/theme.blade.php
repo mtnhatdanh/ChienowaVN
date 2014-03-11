@@ -64,8 +64,8 @@
                 <li><a href="{{Asset('category')}}">Categories</a></li>
                 <li><a href="{{Asset('attribute')}}">Attributes</a></li>
                 <li class="divider"></li>
-                <li class="dropdown-header">Inventory</li>
-                <li><a href="{{Asset('inventory/create')}}">New Transaction</a></li>
+                <li class="dropdown-header hidden-xs">Inventory</li>
+                <li class="hidden-xs"><a href="{{Asset('inventory/create')}}">New Transaction</a></li>
               </ul>
             </li>
 

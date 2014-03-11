@@ -90,8 +90,8 @@ Route::group(array("prefix"=>"data"), function(){
 		$sumTransactions = Item::getInStock($item_id);
 		echo $sumTransactions['inStock'];
 	});
-	// Ajax for Info Item Button
 	
+	// Ajax for Info Item Button
 	Route::post('item-info', function(){
 		$item_id = Input::get('item_id');
 		$itematts = ItemAtt::join('attributes', 'attributes.id', '=', 'item_atts.attribute_id')
@@ -99,6 +99,24 @@ Route::group(array("prefix"=>"data"), function(){
 				->where('item_id', '=', $item_id)
 				->get();
 		return View::make('item_info', array('itematts'=>$itematts, 'item_id'=>$item_id));
+	});
+
+	// Ajax for Trans Button
+	Route::post('transaction-byday', function(){
+		$item_id  = Input::get('item_id');
+		$from_day = Input::get('from_day');
+		$to_day   = Input::get('to_day');
+		$transactions = Transaction::where('item_id', '=', $item_id)
+						->whereBetween('date', array($from_day, $to_day))
+						->get();
+		$item = Item::find($item_id);
+		$data = array(
+			'item'         => $item,
+			'transactions' => $transactions,
+			'from_date'    => $from_day,
+			'to_day'       => $to_day
+			);
+		return View::make('Report_View.item_trans_ajax', $data);
 	});
 
 });

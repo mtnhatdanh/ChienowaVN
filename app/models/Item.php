@@ -48,7 +48,8 @@ class Item extends Eloquent
      * @param  integer $item_id ID of Item
      * @return array          result array
      */
-    public static function getInStock($item_id){
+    public function getInStock(){
+        $item_id = $this->id;
         $sumImport = DB::table('transactions')
                     ->select(DB::raw('sum(amount) as total, item_id'))
                     ->where('item_id', '=', $item_id)

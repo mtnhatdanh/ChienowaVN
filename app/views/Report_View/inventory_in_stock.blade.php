@@ -12,10 +12,10 @@ Chienowa Vietnam - Report Inventory
 <div class="container" id="content">
 	<table class="table table-responsive table-striped">
 		<tr>
-			<th>No</th>
+			<th class="hidden-xs">No</th>
 			<th>Name</th>
 			<th>Infomation</th>
-			<th>Unit</th>
+			<th class="hidden-xs">Unit</th>
 			<th class="hidden-xs">Import</th>
 			<th class="hidden-xs">Export</th>
 			<th>In-Stock</th>
@@ -25,23 +25,23 @@ Chienowa Vietnam - Report Inventory
 		?>
 		@foreach (Category::get() as $category)
 		<tr class="info">
-			<th>{{++$category_number}}.</th>
+			<th class="hidden-xs">{{++$category_number}}.</th>
 			<th>{{ucfirst($category->name)}}</th>
 			<th></th>
-			<th></th>
+			<th class="hidden-xs"></th>
 			<th class="hidden-xs"></th>
 			<th class="hidden-xs"></th>
 			<th></th>
 		</tr>
 		<?php $item_number = 0; ?>
 		@foreach (Item::where('category_id', '=', $category->id)->get() as $item)
-		<?php $inStockArray = $item->getInStock($item->id); ?>
+		<?php $inStockArray = $item->getInStock(); ?>
 		@if($inStockArray['inStock'])
 		<tr>
-			<td>{{$category_number}}.{{++$item_number}}</td>
+			<td class="hidden-xs">{{$category_number}}.{{++$item_number}}</td>
 			<td>{{$item->getItemName()}}</td>
 			<td><button type="button" class="btn btn-link info_button" id="{{$item->id}}" data-toggle="modal" data-target="#myModal">Info</button></td>
-			<td>{{$item->getItemUnit()}}</td>
+			<td class="hidden-xs">{{$item->getItemUnit()}}</td>
 			<td class="hidden-xs">{{$inStockArray['sumImport']}}</td>
 			<td class="hidden-xs">{{$inStockArray['sumExport']}}</td>
 			<td>{{$inStockArray['inStock']}}</td>
@@ -62,9 +62,7 @@ Chienowa Vietnam - Report Inventory
         <h4 class="modal-title" id="myModalLabel">Attributes</h4>
       </div>
       <div class="modal-body">
-        <div class="container">
         	<div id="info_div"></div>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
