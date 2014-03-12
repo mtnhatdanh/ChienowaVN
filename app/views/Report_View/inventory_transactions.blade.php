@@ -24,6 +24,14 @@ Chienowa Vietnam - Report Transactions
 				<input type="date" class="form-control" id="to_day" name="to_day">
 			</div>
 			<div class="form-group col-sm-2">
+				<label for="transaction_type" class="control-label">Type</label>
+				<select class="form-control" id="transaction_type" name="transaction_type">
+					<option value="A">--- All ---</option>
+					<option value="I">Import</option>
+					<option value="E">Export</option>
+				</select>
+			</div>
+			<div class="form-group col-sm-2">
 				<button class="btn btn-default" type="button" id="filter_button">Filter</button>
 			</div>
 		</div>
@@ -37,12 +45,13 @@ Chienowa Vietnam - Report Transactions
 		$('#filter_button').click(function(){
 			from_day = $('#from_day').val();
 			to_day   = $('#to_day').val();
+			type     = $('#transaction_type').val();
 			if(from_day == "" || to_day == "" || from_day > to_day) alert('Wrong Input!!');
 			else {
 				$.ajax({
 						url: '{{Asset('report/transactions-filter')}}',
 						type: 'post',
-						data: {from_day: from_day, to_day: to_day},
+						data: {from_day: from_day, to_day: to_day, type: type},
 						success: function (data) {
 							$('#result_div').html(data);
 						}

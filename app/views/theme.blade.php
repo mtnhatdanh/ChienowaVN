@@ -29,6 +29,7 @@
     <script src="{{Asset('js/jquery-validate/jquery.validate.js')}}"></script>
     <script src="{{Asset('bootstrap-3.1.1/dist/js/bootstrap.min.js')}}"></script>
     <script src="{{Asset('js/jquery.autocomplete.js')}}"></script>
+    <script src="{{Asset('js/function.js')}}"></script>
 
     
   </head>
@@ -69,6 +70,14 @@
               </ul>
             </li>
 
+            <li class="dropdown @if(Session::get('active_menu')=='expense') active @endif">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Expense<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{Asset('expense/create-expense')}}">Create Expense</a></li>
+                <li><a href="{{Asset('expense/manage-expense')}}">Manage Expense</a></li>
+              </ul>
+            </li>
+
             <li class="dropdown @if(Session::get('active_menu')=='report') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -81,6 +90,8 @@
                 <li><a href="{{Asset('inventory/create')}}">New Transaction</a></li> -->
               </ul>
             </li>
+
+            
 
             <!-- <li><a href="#about">Expense</a></li>
             <li><a href="#contact">Projects</a></li> -->
@@ -97,7 +108,7 @@
     
     @yield('content')
 
-    <div id="footer">
+    <div id="footer" class="hidden-print">
       <div class="container">
         <span class="text-muted">Copyright &copy; 2014, Chienowa Co., Ltd</span><br/>
         <span class="text-muted">Design by Minh Giang</span><br/>

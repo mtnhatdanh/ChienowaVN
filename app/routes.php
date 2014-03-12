@@ -50,6 +50,7 @@ Route::group(array('before'=>'check_signin'), function(){
 	Route::controller('item', 'ItemController');
 	Route::controller('inventory', 'InventoryController');
 	Route::controller('report', 'ReportController');
+	Route::controller('expense', 'ExpenseController');
 });
 
 //Check for validation jquery
@@ -122,11 +123,12 @@ Route::group(array("prefix"=>"data"), function(){
 });
 
 Route::get('test', function(){
-	$itematts = ItemAtt::join('attributes', 'attributes.id', '=', 'item_atts.attribute_id')
-				->orderBy('order_no', 'asc')
-				->where('item_id', '=', 46)
-				->get();
-	print_r($itematts);
+	$result = DB::table('information_schema.tables')
+			->select('auto_increment')
+			->where('table_schema', '=', 'ChienowaVN')
+			->where('table_name', '=', 'users')
+			->first();
+	print_r($result);
 	// dd(DB::getQueryLog());
 });
 

@@ -53,10 +53,19 @@ class ReportController extends Controller
 		return View::make('Report_View.inventory_transactions');
 	}
 
+	/**
+	 * Report Transaction Amax
+	 * @return View Table transactions
+	 */
 	public function postTransactionsFilter(){
-		$from_day     = Input::get('from_day');
-		$to_day       = Input::get('to_day');
-		$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->orderBy('date', 'asc')->get();
+		$from_day = Input::get('from_day');
+		$to_day   = Input::get('to_day');
+		$type     = Input::get('type');
+		if ($type == "A") {
+			$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->orderBy('date', 'asc')->get();
+		} else {
+			$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->where('type', '=', $type)->orderBy('date', 'asc')->get();
+		}
 		return View::make('Report_View.transactions_ajax', array('transactions'=>$transactions));
 	}
 
