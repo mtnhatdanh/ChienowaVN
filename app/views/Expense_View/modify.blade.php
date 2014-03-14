@@ -1,49 +1,43 @@
 @extends('theme')
 
 @section('title')
-Chienowa Vietnam - Create New Expense
+Chienowa Vietnam - Modify Expense
 @endsection
 @section('content')
-
-<?php
-$payment_no = DB::table('information_schema.tables')
-			->select('auto_increment')
-			->where('table_schema', '=', 'ChienowaVN')
-			->where('table_name', '=', 'expenses')
-			->first()
-			->auto_increment;
-?>
 
 
 <div  id="content" class="container hidden-print">
 	<div class="page-header">
-		<h1>Create new Expense</h1>
+		<h1>Modify Expense</h1>
 	</div>
-	@if($notification)
-	<div class="row alert alert-success">{{$notification}}</div>
-	@endif
-	<form action="{{Asset('expense/create-expense')}}" method="post" id="form-register">
+
+	<div class="row">
+		<div class="col-sm-5"><strong>Payment No: </strong> {{$expense->id}}</div>
+	</div>
+	<br/>
+	
+	<form action="{{Asset('expense/modify')}}/{{$expense->id}}" method="post" id="form-register">
 		
 		<div class="row">
 			<div class="form-group col-sm-2">
 				<label for="date" class="control-label">Date</label>
-				<input type="date" class="form-control" id="date" name="date">
+				<input type="date" class="form-control" id="date" name="date" value="{{$expense->date}}">
 			</div>
 			<div class="form-group col-sm-3">
 				<label for="staff" class="control-label">Staff</label>
 				<select class="form-control" id="user_id" name="user_id">
 					<option value="-1">-- Pick a staff name --</option>
 					@foreach (User::where('position_id', '!=', 1)->get() as $user)
-					<option value="{{$user->id}}">{{$user->name}}</option>
+					<option value="{{$user->id}}" @if($user->id == $expense->user_id) selected @endif>{{$user->name}}</option>
 					@endforeach
 				</select>
 			</div>
 			<div class="form-group col-sm-3">
 				<label for="currency" class="control-label">Amounts of money</label>
 				<div class="input-group">
-					<input class="form-control" type="text" id="currency" name="currency" placeholder="Amount of money.." pattern="[0-9]*">
+					<input class="form-control" type="text" id="currency" name="currency" placeholder="Amount of money.." pattern="[0-9]*" value="{{$expense->amount}}">
 					<span class="input-group-addon">VND</span>
-					<input type="hidden" id="amount" name="amount" required>
+					<input type="hidden" id="amount" name="amount" value="{{$expense->amount}}" required>
 				</div>
 			</div>
 			
@@ -51,13 +45,13 @@ $payment_no = DB::table('information_schema.tables')
 		<div class="row">
 			<div class="form-group col-sm-8">
 				<label for="description" class="control-label">Description</label>
-				<textarea class="form-control" name="description" id="description" rows="4"></textarea>
+				<textarea class="form-control" name="description" id="description" rows="4">{{$expense->description}}</textarea>
 			</div>
 		</div>
 		<div class="row">
 			<div class="form-group col-sm-2">
 				<label>
-					<input type="checkbox" id="approved" name="approved" value="1"> Approved
+					<input type="checkbox" id="approved" name="approved" value="1" @if($expense->status==1) checked @endif> Approved
 				</label>
 			</div>
 		</div>
@@ -65,7 +59,7 @@ $payment_no = DB::table('information_schema.tables')
 
 		<div class="row">
 			<div class="col-md-2">
-				<button type="submit" class="btn btn-primary hidden-xs">Create new Expense</button>
+				<button type="submit" class="btn btn-primary hidden-xs">Update Expense</button>
 			</div>
 			<div class="col-md-1">
 				<button type="button" class="btn btn-success hidden-xs" id="print_button">Print</button>
@@ -89,7 +83,7 @@ $payment_no = DB::table('information_schema.tables')
 	</div>
 	<div class="row text-center">
 		<h3>PAYMENT</h3>
-		No: {{$payment_no}} - Date: <span id="date_span"></span>
+		No: {{$expense->id}} - Date: <span id="date_span"></span>
 	</div>
 	<br/>
 	<div class="row">

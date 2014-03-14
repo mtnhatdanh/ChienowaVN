@@ -85,9 +85,8 @@
                 <li><a href="{{Asset('report/inventory-in-stock')}}">In-Stock</a></li>
                 <li><a href="{{Asset('report/inventory-by-day')}}">By Day</a></li>
                 <li><a href="{{Asset('report/transactions')}}">Transactions</a></li>
-                <!-- <li class="divider"></li>
-                <li class="dropdown-header">Inventory</li>
-                <li><a href="{{Asset('inventory/create')}}">New Transaction</a></li> -->
+                <li class="divider"></li>
+                <li><a href="{{Asset('report/expense')}}">Expense report</a></li>
               </ul>
             </li>
 

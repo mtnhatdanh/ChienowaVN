@@ -69,4 +69,12 @@ class ReportController extends Controller
 		return View::make('Report_View.transactions_ajax', array('transactions'=>$transactions));
 	}
 
+	/**
+	 * Expense report
+	 * @return View
+	 */
+	public function getExpense(){
+		return View::make('Report_View.expense');
+	}
+
 }
