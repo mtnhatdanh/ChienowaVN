@@ -5,7 +5,7 @@ Chienowa Vietnam - Expense Report
 @endsection
 @section('content')
 
-<div class="container">
+<div class="container hidden-print">
 	<div class="page-header">
 		<h1>Expense Report</h1>
 	</div>
@@ -16,7 +16,7 @@ Chienowa Vietnam - Expense Report
 $status = array('OnProcess', 'Approved', 'Canceled');
 ?>
 
-<div id="content" class="container">
+<div id="content" class="container hidden-print">
 	<div class="form-inline">
 		<div class="row">
 			<div class="form-group col-sm-3">
@@ -27,17 +27,29 @@ $status = array('OnProcess', 'Approved', 'Canceled');
 				<label for="to_day" class="control-label">To day</label>
 				<input type="date" class="form-control" id="to_day" name="to_day">
 			</div>
-			<div class="form-group col-sm-2">
+			<div class="form-group col-sm-3">
 				<label for="Status" class="control-label">Status</label>
 				<select class="form-control" id="status" name="status">
-					<option value="All">-- All --</option>
+					<option value="-1">-- All --</option>
 					@foreach ($status as $key=>$value)
 					<option value="{{$key}}">{{$value}}</option>
 					@endforeach
 				</select>
 			</div>
-			<div class="form-group col-sm-2">
-				<button class="btn btn-default" type="button" id="filter_button">Filter</button>
+			<div class="form-group col-sm-3">
+				<label for="user_id">Staff</label>
+				<select name="user_id" id="user_id" class="form-control">
+					<option value="-1">-- All --</option>
+					@foreach ($users as $user)
+					<option value="{{$user->id}}">{{$user->name}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<br/>
+		<div class="row">
+			<div class="col-sm-offset-5 col-sm-2">
+				<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
 			</div>
 		</div>
 	</div>
@@ -45,21 +57,23 @@ $status = array('OnProcess', 'Approved', 'Canceled');
 	<div id="result_div"></div>
 	
 </div>
+<div id="print_div"></div>
 
 <script type="text/javascript">
 	$(document).ready(function(){
 
 		// Ajax for filter
 		$('#filter_button').click(function(){
-			category_id = $('#category_id').val();
-			from_day    = $('#from_day').val();
-			to_day      = $('#to_day').val();
-			if(from_day == "" || to_day == "" || from_day > to_day) alert('Wrong Input!!');
+			from_day = $('#from_day').val();
+			to_day   = $('#to_day').val();
+			status   = $('#status').val();
+			user_id  = $('#user_id').val();
+			if(from_day == "" || to_day == "" || from_day > to_day) alert('Invalid input!!');
 			else {
 				$.ajax({
-						url: '{{Asset('report/inventory-filter')}}',
+						url: '{{Asset('report/expense')}}',
 						type: 'post',
-						data: {category_id: category_id, from_day: from_day, to_day: to_day},
+						data: {from_day: from_day, to_day: to_day, status: status, user_id: user_id},
 						success: function (data) {
 							$('#result_div').html(data);
 						}

@@ -74,7 +74,31 @@ class ReportController extends Controller
 	 * @return View
 	 */
 	public function getExpense(){
-		return View::make('Report_View.expense');
+		$users = User::where('id', '!=', 16)->get();
+		return View::make('Report_View.expense', array('users'=>$users));
+	}
+
+	/**
+	 * ajax for expense report /report/expense
+	 * @return Table
+	 */
+	public function postExpense(){
+		$from_day = Input::get('from_day');
+		$to_day = Input::get('to_day');
+		$status = Input::get('status');
+		$user_id = Input::get('user_id');
+
+		$result = Expense::whereBetween('date', array($from_day, $to_day));
+		if ($status>0) {
+			$result = $result->where('status', '=', $status);
+		}
+		if ($user_id>0) {
+			$result = $result->where('user_id', '=', $user_id);
+		}
+		$expenses = $result->orderBy('date', 'asc')->get();
+
+		return View::make('Report_View.expense_table', array('expenses'=>$expenses));
+
 	}
 
 }

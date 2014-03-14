@@ -120,6 +120,13 @@ Route::group(array("prefix"=>"data"), function(){
 		return View::make('Report_View.item_trans_ajax', $data);
 	});
 
+	// Ajax for Payment From print button
+	Route::post('payment-form', function(){
+		$expense_id = Input::get('expense_id');
+		$expense    = Expense::find($expense_id);
+		return View::make('Expense_View.payment_ajax', array('expense'=>$expense));
+	});
+
 });
 
 Route::get('test', function(){

@@ -70,7 +70,7 @@
               </ul>
             </li>
 
-            <li class="dropdown @if(Session::get('active_menu')=='expense') active @endif">
+            <li class="dropdown @if(Session::get('active_menu')=='expense') active @endif hidden-xs">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Expense<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="{{Asset('expense/create-expense')}}">Create Expense</a></li>

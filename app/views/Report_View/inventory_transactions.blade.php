@@ -32,7 +32,7 @@ Chienowa Vietnam - Report Transactions
 				</select>
 			</div>
 			<div class="form-group col-sm-2">
-				<button class="btn btn-default" type="button" id="filter_button">Filter</button>
+				<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
 			</div>
 		</div>
 	</div>

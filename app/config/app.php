@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://localhost/ChienowaVN',
+	'url' => 'http://localhost:8080/ChienowaVN',
 
 	/*
 	|--------------------------------------------------------------------------
