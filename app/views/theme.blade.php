@@ -67,6 +67,7 @@
                 <li class="divider"></li>
                 <li class="dropdown-header hidden-xs">Inventory</li>
                 <li class="hidden-xs"><a href="{{Asset('inventory/create')}}">New Transaction</a></li>
+                <li class="hidden-xs"><a href="{{Asset('inventory/manage')}}">Manage Transaction</a></li>
               </ul>
             </li>
 
@@ -75,6 +76,16 @@
               <ul class="dropdown-menu">
                 <li><a href="{{Asset('expense/create-expense')}}">Create Expense</a></li>
                 <li><a href="{{Asset('expense/manage-expense')}}">Manage Expense</a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown @if(Session::get('active_menu')=='projects') active @endif">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">Quality Control</li>
+                <li><a href="{{Asset('quality-control/measuring-equipment')}}">Measuring Equipment</a></li>
+<!--                 <li class="divider"></li>
+                <li class="dropdown-header">Local Projects</li> -->
               </ul>
             </li>
 

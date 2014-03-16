@@ -22,13 +22,11 @@ Chienowa Vietnam - New Transaction
 
 </style>
 
-@if($notification)
-<div class="container alert alert-success">{{$notification}}</div>
-@endif
 
 
 
 <div class="container">
+	@include('notification')
 	<form action="{{Asset('inventory/create')}}" method="post" id="form-register">
 		<div class="row">
 			<div class="form-group col-sm-3">

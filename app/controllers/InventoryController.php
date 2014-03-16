@@ -16,9 +16,9 @@ class InventoryController extends Controller
 	 */
 	public function getCreate(){
 		$itematts     = ItemAtt::where('attribute_id', '=', 1)->get();
-		$notification = Session::get('notification_transaction');
+		$notification = Cache::get('notification');
 		$data         = array('itematts'=>$itematts,'notification'=>$notification);
-		Session::forget('notification_transaction');
+		Cache::forget('notification');
 		return View::make('Inventory_View.create', $data);
 	}
 
@@ -35,8 +35,8 @@ class InventoryController extends Controller
 			);
 
 		if (Input::get('type')=="E") {
-			$inStock = Item::getInStock(Input::get('item_id'));
-			if(Input::get('amount')>$inStock) return "The amount is excess the instock!!";
+			$inStock = Item::find(Input::get('item_id'))->getInStock();
+			if(Input::get('amount')>$inStock['inStock']) return "The amount is excess the instock!!";
 		}
 
 		if (!Validator::make(Input::all(), $rules)->fails()) {
@@ -47,7 +47,10 @@ class InventoryController extends Controller
 			$transaction->amount  = Input::get('amount');
 			$transaction->note    = Input::get('note');
 			$transaction->save();
-			Session::put('notification_transaction', 'Transaction has been created successful!!');
+			$notification = new Notification;
+			$notification->type = "success";
+			$notification->value = "Transaction has been created successful!!";
+			Cache::put('notification', $notification, 10);
 			return Redirect::to('inventory/create');
 		} else echo "Validator fails";
 	}
@@ -102,6 +105,84 @@ class InventoryController extends Controller
 		$data = array('items'=>$items);
 
 		return View::make('Inventory_View.lookup_item', $data);
+	}
+
+	/**
+	 * /inventory/manage
+	 * @return View manage view
+	 */
+	public function getManage(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Inventory_View.manage', array('notification'=>$notification));
+	}
+
+	/**
+	 * get data from Manage View
+	 * @return View ajax 
+	 */
+	public function postManage(){
+		$from_day     = Input::get('from_day');
+		$to_day       = Input::get('to_day');
+		$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->orderBy('date', 'asc')->get();
+		return View::make('Inventory_View.manage_table', array('transactions'=>$transactions));
+	}
+
+	/**
+	 * getData to Delete Transaction
+	 * @return Redirect to View
+	 */
+	public function postDeleteTransaction(){
+		$transaction_id = Input::get('transaction_id');
+		$rules = array(
+			"transaction_id"    =>"required|min:1"
+			);
+
+		if (!Validator::make(Input::all(), $rules)->fails()) {
+			$transaction         = Transaction::find($transaction_id)->delete();
+			$notification        = new Notification;
+			$notification->type  = "success";
+			$notification->value = "You have just deleted transaction!!";
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('inventory/manage');
+		}
+	}
+
+	/**
+	 * Modify Transaction
+	 * @param  ID $transaction_id 
+	 * @return View                 Modify VIew
+	 */
+	public function getModify($transaction_id) {
+		$transaction = Transaction::find($transaction_id);
+		return View::make('Inventory_View.modify', array('transaction'=>$transaction));
+	}
+
+	public function postModify($transaction_id) {
+
+		$transaction = Transaction::find($transaction_id);
+
+		$rules = array(
+			"amount"  =>"required|numeric"
+			);
+
+		if ($transaction->type=="E") {
+			$inStock = $transaction->item->getInStock();
+			if(Input::get('amount')>$inStock['inStock']) return "The amount is excess the instock!!";
+		}
+
+		if (!Validator::make(Input::all(), $rules)->fails()) {
+			$transaction->amount  = Input::get('amount');
+			$transaction->note    = Input::get('note');
+			$transaction->save();
+
+			$notification        = new Notification;
+			$notification->type  = "success";
+			$notification->value = "Transaction has been updated successful!!";
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('inventory/manage');
+		} else echo "Validator fails";
+
 	}
 
 }

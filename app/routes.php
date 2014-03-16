@@ -51,6 +51,7 @@ Route::group(array('before'=>'check_signin'), function(){
 	Route::controller('inventory', 'InventoryController');
 	Route::controller('report', 'ReportController');
 	Route::controller('expense', 'ExpenseController');
+	Route::controller('quality-control', 'QualityControlController');
 });
 
 //Check for validation jquery
@@ -80,6 +81,12 @@ Route::group(array("prefix"=>"check"), function(){
 			return "true";
 		} else return "false";
 	});
+	// Check valid equipment
+	Route::post('check-equiment', function(){
+		if(MeasuringEquipment::check_equipment_exist(Input::get('name'))) {
+			return "false";
+		} else return "true";
+	});
 });
 
 //Get data to lookup
@@ -88,7 +95,7 @@ Route::group(array("prefix"=>"data"), function(){
 	
 	Route::post('amount-inStock', function(){
 		$item_id = Input::get('item_id');
-		$sumTransactions = Item::getInStock($item_id);
+		$sumTransactions = Item::find($item_id)->getInStock();
 		echo $sumTransactions['inStock'];
 	});
 	
@@ -130,12 +137,8 @@ Route::group(array("prefix"=>"data"), function(){
 });
 
 Route::get('test', function(){
-	$result = DB::table('information_schema.tables')
-			->select('auto_increment')
-			->where('table_schema', '=', 'ChienowaVN')
-			->where('table_name', '=', 'users')
-			->first();
-	print_r($result);
-	// dd(DB::getQueryLog());
+	$notification = new Notification;
+	$notification->set('success', 'abc');
+	print_r($notification);
 });
 

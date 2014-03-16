@@ -14,9 +14,11 @@ class UserController extends Controller
 	 * @return View [description]
 	 */
 	public function getManageUser(){
-		$users= User::where('position_id', '!=', 1)->get();
-		$director = User::where('position_id', '=', 1)->get();
-		$data = array('users'=>$users, 'director'=>$director);
+		$users        = User::where('position_id', '!=', 1)->get();
+		$director     = User::where('position_id', '=', 1)->get();
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		$data         = array('users'=>$users, 'director'=>$director, 'notification'=>$notification);
 		return View::make('User_View.manage',$data);
 	}
 

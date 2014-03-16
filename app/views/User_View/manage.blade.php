@@ -8,6 +8,8 @@ Chienowa Vietnam - Manage Users
 <div class="container" id="content">
 	<h1>Manage User</h1>
 
+	@include('notification')
+
 	<br/>
 	<p><span class="label label-primary">Director</span> <strong>Mr {{$director[0]->name}}</strong></p>
 	
@@ -48,7 +50,7 @@ Chienowa Vietnam - Manage Users
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        <a href="{{Asset('user/delete-user/'.$user->id)}}"><button type="button" class="btn btn-primary">Delete User</button>
+			        <a href="{{Asset('user/delete-user/'.$user->id)}}"><button type="button" class="btn btn-primary">Delete User</button></a>
 			      </div>
 			    </div>
 			  </div>

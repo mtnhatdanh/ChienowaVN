@@ -79,3 +79,27 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+// Model Even prevent delete object while still have link
+
+User::deleting(function($user){
+	if (count($user->expense)) {
+		$notification = new Notification;
+		$notification->type = "danger";
+		$notification->value = "Can not delete user ".$user->name;
+		Cache::put('notification', $notification, 10);
+		return false;
+	}
+});
+
+Category::deleting(function($category){
+	if (count($category->reference) || count($category->item)) {
+		return false;
+	}
+});
+
+Item::deleting(function($item){
+	if (count($item->itematt) || count($item->transaction)) {
+		return false;
+	}
+});
