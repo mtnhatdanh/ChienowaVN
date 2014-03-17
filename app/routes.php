@@ -139,7 +139,7 @@ Route::group(array("prefix"=>"data"), function(){
 // Export to Excel
 Route::group(array("prefix"=>"excel-export"), function(){
 	
-	Route::get('inventory-in-stock', function(){
+	Route::post('inventory-in-stock', function(){
 		Excel::loadView('ExportExcel_View.inventory_in_stock')
 			->setTitle('Inventory')
 			->sheet('InStock')

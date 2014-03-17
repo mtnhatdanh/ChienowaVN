@@ -79,7 +79,7 @@
               </ul>
             </li>
 
-            <li class="dropdown @if(Session::get('active_menu')=='projects') active @endif">
+            <!-- <li class="dropdown @if(Session::get('active_menu')=='projects') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Quality Control</li>
@@ -87,7 +87,7 @@
                 <li class="divider"></li>
                 <li class="dropdown-header">Local Projects</li>
               </ul>
-            </li>
+            </li> -->
 
             <li class="dropdown @if(Session::get('active_menu')=='report') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>

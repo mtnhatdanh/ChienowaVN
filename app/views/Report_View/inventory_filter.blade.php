@@ -35,7 +35,7 @@
 </table>
 
 <div class="row">
-	<div class="col-sm-2">
+	<div class="col-sm-2 hidden-xs">
 		<button class="btn btn-default btn-block" id="export_button">Export to Excel file..</button>
 	</div>
 </div>

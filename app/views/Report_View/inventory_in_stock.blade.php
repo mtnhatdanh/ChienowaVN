@@ -12,9 +12,11 @@ Report Inventory
 
 <div class="container" id="content">
 	<div class="row">
-		<div class="col-sm-2">
-			<button type="button" class="btn btn-default btn-block" id="excel_button">Export to Excel file..</button>
-		</div>
+		<form action="{{Asset('excel-export/inventory-in-stock')}}" method="post" id="export_excel_from">
+			<div class="col-sm-2">
+				<button type="submit" class="btn btn-default btn-block hidden-xs" id="excel_button">Export to Excel file..</button>
+			</div>
+		</form>
 	</div>
 	<br/>
 	<div class="row">
@@ -96,9 +98,6 @@ Report Inventory
 				});
 		});
 
-		$('#excel_button').click(function(){
-			window.open('{{Asset('excel-export/inventory-in-stock')}}');
-		});
 	});
 </script>
 
