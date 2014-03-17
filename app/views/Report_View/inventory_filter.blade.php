@@ -20,7 +20,7 @@
 	<tr>
 		<td class="hidden-xs text-center">{{++$item_no}}</td>
 		<td>{{$item->getItemName()}}</td>
-		<td>
+		<td class="text-center">
 			<button type="button" class="btn btn-link info_button" id="{{$item->id}}" data-toggle="modal" data-target="#myModal">Info</button>
 			<button type="button" class="btn btn-link trans_button" id="{{$item->id}}" data-toggle="modal" data-target="#myTransactions">Trans</button>
 		</td>
@@ -33,6 +33,12 @@
 	</tr>
 	@endforeach
 </table>
+
+<div class="row">
+	<div class="col-sm-2">
+		<button class="btn btn-default btn-block" id="export_button">Export to Excel file..</button>
+	</div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -98,6 +104,16 @@
 						$('#transaction_div').html(data);
 					}
 				});
+		});
+
+		// Export Excel file button
+		$('#export_button').click(function(){
+			from_day    = $('#from_day').val();
+			to_day      = $('#to_day').val();
+			if(from_day == "" || to_day == "" || from_day > to_day) alert('Wrong Input!!');
+			else {
+				$('#filter_form').submit();
+			}
 		});
 
 

@@ -84,12 +84,12 @@ class ReportController extends Controller
 	 */
 	public function postExpense(){
 		$from_day = Input::get('from_day');
-		$to_day = Input::get('to_day');
-		$status = Input::get('status');
-		$user_id = Input::get('user_id');
+		$to_day   = Input::get('to_day');
+		$status   = Input::get('status');
+		$user_id  = Input::get('user_id');
 
 		$result = Expense::whereBetween('date', array($from_day, $to_day));
-		if ($status>0) {
+		if ($status>=0) {
 			$result = $result->where('status', '=', $status);
 		}
 		if ($user_id>0) {

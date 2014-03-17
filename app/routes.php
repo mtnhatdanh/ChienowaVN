@@ -136,9 +136,93 @@ Route::group(array("prefix"=>"data"), function(){
 
 });
 
+// Export to Excel
+Route::group(array("prefix"=>"excel-export"), function(){
+	
+	Route::get('inventory-in-stock', function(){
+		Excel::loadView('ExportExcel_View.inventory_in_stock')
+			->setTitle('Inventory')
+			->sheet('InStock')
+			->export('xls');
+	});
+
+	// Export to excel in Inventory By Day
+	Route::post('inventory-by-day', function(){
+		$category_id = Input::get('category_id');
+		$from_day    = Input::get('from_day');
+		$to_day      = Input::get('to_day');
+
+		$items = Item::where('category_id', '=', $category_id)->get();
+		$data  = array(
+			'items'    =>$items,
+			'from_day' =>$from_day,
+			'to_day'   =>$to_day
+			);
+		Excel::loadView('ExportExcel_View.inventory_by_day', $data)
+			->setTitle('Inventory_by_day')
+			->sheet('ByDay')
+			->export('xls');
+	});
+
+	// Export to excel in Transaction
+	Route::post('transaction', function(){
+		$from_day = Input::get('from_day');
+		$to_day   = Input::get('to_day');
+		$type     = Input::get('transaction_type');
+		if ($type == "A") {
+			$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->orderBy('date', 'asc')->get();
+		} else {
+			$transactions = Transaction::whereBetween('date', array($from_day, $to_day))->where('type', '=', $type)->orderBy('date', 'asc')->get();
+		}
+		$data = array(
+			'from_day'     =>$from_day,
+			'to_day'       =>$to_day,
+			'transactions' =>$transactions
+			);
+		Excel::loadView('ExportExcel_View.transaction', $data)
+			->setTitle('Transaction')
+			->sheet('TS')
+			->export('xls');
+	});
+
+	// Export to excel in Expense
+	Route::post('expense', function(){
+		$from_day = Input::get('from_day');
+		$to_day   = Input::get('to_day');
+		$status   = Input::get('status');
+		$user_id  = Input::get('user_id');
+
+		$result = Expense::whereBetween('date', array($from_day, $to_day));
+		if ($status>=0) {
+			$result = $result->where('status', '=', $status);
+		}
+		if ($user_id>0) {
+			$result = $result->where('user_id', '=', $user_id);
+		}
+		$expenses = $result->orderBy('date', 'asc')->get();
+
+		$data = array(
+				'from_day'  =>$from_day,
+				'to_day'    =>$to_day,
+				'expenses'  =>$expenses,
+				'status_id' =>$status,
+				'user_id'   =>$user_id
+				);
+
+		Excel::loadView('ExportExcel_View.expense', $data)
+			->setTitle('Expense')
+			->sheet('EX')
+			->export('xls');
+	});
+});
+
+// test route
 Route::get('test', function(){
-	$notification = new Notification;
-	$notification->set('success', 'abc');
-	print_r($notification);
+	Excel::create('ExcelName')
+        	->sheet('SheetName')
+            ->with(array('1', '2'))
+        	->export('xls');
+	// $data = array('categories'=>Category::get());
+	// Excel::loadView('category', $data)->export('category.xls');
 });
 

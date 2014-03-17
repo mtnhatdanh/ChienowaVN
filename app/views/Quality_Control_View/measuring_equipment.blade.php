@@ -26,7 +26,7 @@ Chienowa Vietnam - Manage Expense
 					<th class="text-center">Equipment No</th>
 					<th>Name</th>
 					<th>Description</th>
-					<td>Action</td>
+					<th>Action</th>
 				</tr>
 				@foreach (MeasuringEquipment::get() as $equipment)
 				<tr>

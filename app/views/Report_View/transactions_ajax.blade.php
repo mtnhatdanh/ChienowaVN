@@ -30,6 +30,12 @@
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-sm-2">
+		<button class="btn btn-default btn-block" id="export_button">Export to Excel file..</button>
+	</div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -64,6 +70,16 @@
 						$('#info_div').html(data);
 					}
 				});
+		});
+
+		// Export Excel file button
+		$('#export_button').click(function(){
+			from_day    = $('#from_day').val();
+			to_day      = $('#to_day').val();
+			if(from_day == "" || to_day == "" || from_day > to_day) alert('Wrong Input!!');
+			else {
+				$('#filter_form').submit();
+			}
 		});
 
 

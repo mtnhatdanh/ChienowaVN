@@ -84,8 +84,8 @@
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Quality Control</li>
                 <li><a href="{{Asset('quality-control/measuring-equipment')}}">Measuring Equipment</a></li>
-<!--                 <li class="divider"></li>
-                <li class="dropdown-header">Local Projects</li> -->
+                <li class="divider"></li>
+                <li class="dropdown-header">Local Projects</li>
               </ul>
             </li>
 

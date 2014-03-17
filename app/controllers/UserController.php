@@ -60,6 +60,12 @@ class UserController extends Controller
 			$user->email       = Input::get('email');
 			$user->address     = Input::get('address');
 			$user->save();
+
+			$notification = new Notification;
+			$notification->set('success', 'User has bees created successful!!');
+
+			Cache::put('notification', $notification, 10);
+
 			return Redirect::to('user/manage-user');
 		} else echo "Validator fails";
 	}
@@ -71,6 +77,9 @@ class UserController extends Controller
 	 */
 	public function getDeleteUser($user_id){
 		User::find($user_id)->delete();
+		$notification = new Notification;
+		$notification->set('success', 'You have deleted user successful!!');
+		Cache::put('notification', $notification, 10);
 		return Redirect::to('user/manage-user');
 	}
 

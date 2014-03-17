@@ -17,42 +17,44 @@ $status = array('OnProcess', 'Approved', 'Canceled');
 ?>
 
 <div id="content" class="container hidden-print">
-	<div class="form-inline">
-		<div class="row">
-			<div class="form-group col-sm-3">
-				<label for="from_day" class="control-label">From day</label>
-				<input type="date" class="form-control" id="from_day" name="from_day">
+	<form action="{{Asset('excel-export/expense')}}" method="post" id="filter_form">
+		<div class="form-inline">
+			<div class="row">
+				<div class="form-group col-sm-3">
+					<label for="from_day" class="control-label">From day</label>
+					<input type="date" class="form-control" id="from_day" name="from_day">
+				</div>
+				<div class="form-group col-sm-3">
+					<label for="to_day" class="control-label">To day</label>
+					<input type="date" class="form-control" id="to_day" name="to_day">
+				</div>
+				<div class="form-group col-sm-3">
+					<label for="Status" class="control-label">Status</label>
+					<select class="form-control" id="status" name="status">
+						<option value="-1">-- All --</option>
+						@foreach ($status as $key=>$value)
+						<option value="{{$key}}">{{$value}}</option>
+						@endforeach
+					</select>
+				</div>
+				<div class="form-group col-sm-3">
+					<label for="user_id">Staff</label>
+					<select name="user_id" id="user_id" class="form-control">
+						<option value="-1">-- All --</option>
+						@foreach ($users as $user)
+						<option value="{{$user->id}}">{{$user->name}}</option>
+						@endforeach
+					</select>
+				</div>
 			</div>
-			<div class="form-group col-sm-3">
-				<label for="to_day" class="control-label">To day</label>
-				<input type="date" class="form-control" id="to_day" name="to_day">
-			</div>
-			<div class="form-group col-sm-3">
-				<label for="Status" class="control-label">Status</label>
-				<select class="form-control" id="status" name="status">
-					<option value="-1">-- All --</option>
-					@foreach ($status as $key=>$value)
-					<option value="{{$key}}">{{$value}}</option>
-					@endforeach
-				</select>
-			</div>
-			<div class="form-group col-sm-3">
-				<label for="user_id">Staff</label>
-				<select name="user_id" id="user_id" class="form-control">
-					<option value="-1">-- All --</option>
-					@foreach ($users as $user)
-					<option value="{{$user->id}}">{{$user->name}}</option>
-					@endforeach
-				</select>
+			<br/>
+			<div class="row">
+				<div class="col-sm-offset-5 col-sm-2">
+					<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
+				</div>
 			</div>
 		</div>
-		<br/>
-		<div class="row">
-			<div class="col-sm-offset-5 col-sm-2">
-				<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
-			</div>
-		</div>
-	</div>
+	</form>
 	<br/>
 	<div id="result_div"></div>
 	

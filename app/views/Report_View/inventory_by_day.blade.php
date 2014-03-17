@@ -13,31 +13,34 @@ Chienowa Vietnam - Report Inventory
 <br/>
 
 <div id="content" class="container">
-	<div class="form-inline">
-		<div class="row">
-			<div class="form-group col-sm-3">
-				<label for="category_id" class="control-label">Category</label>
-				<select type="category_id" class="form-control" id="category_id" name="category_id">
-					@foreach (Category::get() as $category)
-					<option value="{{$category->id}}">{{$category->name}}</option>
-					@endforeach
-				</select>
-			</div>
-			<div class="form-group col-sm-3">
-				<label for="from_day" class="control-label">From day</label>
-				<input type="date" class="form-control" id="from_day" name="from_day">
-			</div>
-			<div class="form-group col-sm-3">
-				<label for="to_day" class="control-label">To day</label>
-				<input type="date" class="form-control" id="to_day" name="to_day">
-			</div>
-			<div class="form-group col-sm-2">
-				<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
+	<form action="{{Asset('excel-export/inventory-by-day')}}" method="post" id="filter_form">
+		<div class="form-inline">
+			<div class="row">
+				<div class="form-group col-sm-3">
+					<label for="category_id" class="control-label">Category</label>
+					<select type="category_id" class="form-control" id="category_id" name="category_id">
+						@foreach (Category::get() as $category)
+						<option value="{{$category->id}}">{{$category->name}}</option>
+						@endforeach
+					</select>
+				</div>
+				<div class="form-group col-sm-3">
+					<label for="from_day" class="control-label">From day</label>
+					<input type="date" class="form-control" id="from_day" name="from_day">
+				</div>
+				<div class="form-group col-sm-3">
+					<label for="to_day" class="control-label">To day</label>
+					<input type="date" class="form-control" id="to_day" name="to_day">
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
+				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 	<br/>
 	<div id="result_div"></div>
+	
 	
 </div>
 
