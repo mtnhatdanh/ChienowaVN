@@ -58,7 +58,7 @@
                 <li class="hidden-xs"><a href="{{Asset('user/create-user')}}">Create user</a></li>
               </ul>
             </li>
-            <li class="dropdown @if(Session::get('active_menu')=='inventory') active @endif">
+            <li class="dropdown @if(Session::get('active_menu')=='inventory') active @endif hidden-xs">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Manage</li>

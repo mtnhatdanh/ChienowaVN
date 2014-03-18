@@ -80,7 +80,23 @@ App::down(function()
 
 require app_path().'/filters.php';
 
-// Model Even prevent delete object while still have link
+// Model Event validation create new Transacton
+Transaction::creating(function($transaction)
+{
+    if ( ! $transaction->isValid()) {
+    	$notification = new Notification;
+    	$notification->set('danger', 'Can not create!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+    }
+});
+
+Transaction::updating(function($transaction)
+{
+    if ( ! $transaction->isValid()) return false;
+}); 
+
+// Model Event prevent delete object while still have link
 
 User::deleting(function($user){
 	if (count($user->expense)) {

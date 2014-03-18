@@ -23,10 +23,10 @@ class InventoryController extends Controller
 	}
 
 	/**
-	 * get post data from inventory/create
-	 * @return new data to transactions table
+	 * push Transaction to Cart
+	 * @return Cache cart
 	 */
-	public function postCreate(){
+	public function postCart(){
 		$rules = array(
 			"type"    =>"required|max:1",
 			"date"    =>"required|date",
@@ -46,13 +46,57 @@ class InventoryController extends Controller
 			$transaction->type    = Input::get('type');
 			$transaction->amount  = Input::get('amount');
 			$transaction->note    = Input::get('note');
-			$transaction->save();
-			$notification = new Notification;
-			$notification->type = "success";
-			$notification->value = "Transaction has been created successful!!";
-			Cache::put('notification', $notification, 10);
+
+			if (!Cache::has('cart')) {
+				$cart   = array();
+				$cart[] = $transaction;
+				Cache::put('cart', $cart, 10);
+			} else {
+				$cart = Cache::get('cart');
+				$cart[] = $transaction;
+				Cache::put('cart', $cart, 10);
+			}
+
+			// $notification = new Notification;
+			// $notification->type = "success";
+			// $notification->value = "Transaction has been push to Cart Table!!";
+			// Cache::put('notification', $notification, 10);
 			return Redirect::to('inventory/create');
 		} else echo "Validator fails";
+	}
+
+	public function postCartHandle(){
+		$key = Input::get('key');
+		$cart = Cache::get('cart');
+		unset($cart[$key]);
+		Cache::put('cart', $cart, 10);
+	}
+
+	/**
+	 * Confirm Transaction button
+	 * @return Update database
+	 */
+	public function postConfirmTransaction(){
+		if (!empty(Cache::get('cart'))) {
+			$cart = Cache::get('cart');
+			foreach ($cart as $transaction) {
+				$transaction->save();
+			}
+
+			$notification        = new Notification;
+			$notification->type  = "success";
+			$notification->value = "Transaction has been created successful!!";
+
+			Cache::forget('cart');
+
+		} else {
+			$notification = new Notification;
+			$notification->set('danger', 'Your cart is empty!!');
+
+		}
+		Cache::put('notification', $notification, 10);
+		return Redirect::to('inventory/create');
+
 	}
 
 	/**

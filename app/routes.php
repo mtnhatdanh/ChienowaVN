@@ -214,6 +214,21 @@ Route::group(array("prefix"=>"excel-export"), function(){
 			->sheet('EX')
 			->export('xls');
 	});
+
+	// Export to excel in New Transaction
+	Route::post('new-transaction', function(){
+		if (!empty(Cache::get('cart'))) {
+			Excel::loadView('ExportExcel_View.new_transaction')
+					->setTitle('New_Transaction')
+					->sheet('NT')
+					->export('xls');
+		} else {
+			$notification = new Notification;
+			$notification->set('danger', 'You do not have any transaction to export!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('inventory/create');
+		}
+	});
 });
 
 // test route

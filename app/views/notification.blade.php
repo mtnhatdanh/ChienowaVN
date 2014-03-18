@@ -1,8 +1,6 @@
 @if($notification)
-	@if($notification->type=='success')
-	<div class="row alert alert-success">{{$notification->value}}</div>
-	@endif
-	@if($notification->type=='danger')
-	<div class="row alert alert-danger">{{$notification->value}}</div>
-	@endif
+	<div class="row alert alert-{{$notification->type}} alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<strong>{{ucfirst($notification->type)}}!!</strong> {{$notification->value}}
+	</div>
 @endif
