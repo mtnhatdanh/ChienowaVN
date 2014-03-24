@@ -13,11 +13,14 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return Redirect::to('signin');
 });
 
 
 Route::get('signin', function(){
+	if (Session::has('user')) {
+		return Redirect::to('/user/manage-user');
+	}
 	if (Session::has('error_signin')) {
 		$error = Session::get('error_signin');
 		return View::make('signin',array('error'=>$error));
@@ -134,6 +137,28 @@ Route::group(array("prefix"=>"data"), function(){
 		return View::make('Expense_View.payment_ajax', array('expense'=>$expense));
 	});
 
+	// Ajax for Calibration Equipments print button
+	Route::post('print-calibrations', function(){
+		$date        = Input::get('date');
+		$description = Input::get('description');
+		$data = array(
+			'date'        => $date,
+			'description' => $description
+			);
+		return View::make('Quality_Control_View.calibrations_form_print', $data);
+	});
+
+	// Ajax for Daily Quality Control print button
+	Route::post('print-quality-report', function(){
+		$date        = Input::get('date');
+		$description = Input::get('description');
+		$data = array(
+			'date'        => $date,
+			'description' => $description
+			);
+		return View::make('Quality_Control_View.quality_report_form_print', $data);
+	});
+
 });
 
 // Export to Excel
@@ -233,11 +258,7 @@ Route::group(array("prefix"=>"excel-export"), function(){
 
 // test route
 Route::get('test', function(){
-	Excel::create('ExcelName')
-        	->sheet('SheetName')
-            ->with(array('1', '2'))
-        	->export('xls');
-	// $data = array('categories'=>Category::get());
-	// Excel::loadView('category', $data)->export('category.xls');
+	Cache::forget('inspections');
+	Cache::forget('calibrations');
 });
 

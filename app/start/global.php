@@ -96,6 +96,62 @@ Transaction::updating(function($transaction)
     if ( ! $transaction->isValid()) return false;
 }); 
 
+// Model Event validation Calibration
+Calibration::creating(function($calibration){
+	if (!$calibration->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not create!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+
+Calibration::updating(function($calibration){
+	if (!$calibration->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not update!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+
+// Model Event validation Report
+Report::creating(function($report){
+	if (!$report->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not create!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+
+Report::updating(function($report){
+	if (!$report->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not update!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+
+// Model Event validation Inspection
+Inspection::creating(function($inspection){
+	if (!$inspection->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not create!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+Inspection::updating(function($inspection){
+	if (!$inspection->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not update!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+
 // Model Event prevent delete object while still have link
 
 User::deleting(function($user){
@@ -119,3 +175,4 @@ Item::deleting(function($item){
 		return false;
 	}
 });
+

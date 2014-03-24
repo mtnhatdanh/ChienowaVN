@@ -1,7 +1,7 @@
 @extends("theme")
 
 @section('title')
-Chienowa Vietnam - Manage Expense
+Manage Equipment
 @endsection
 
 @section('content')

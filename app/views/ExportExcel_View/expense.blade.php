@@ -8,7 +8,7 @@ $sum    = 0;
 </div>
 <div class="container">
 	<span><strong>From day:</strong> {{date('m-d-Y', strtotime($from_day))}} <strong>to day: </strong>{{date('m-d-Y', strtotime($to_day))}}</span><br/>
-	<span><strong>Status: @if ($status_id<0) All @else $status[$status_id] @endif</strong></span><br/>
+	<span><strong>Status: <?php if ($status_id<0) echo "All"; else echo($status[$status_id]); ?></strong></span><br/>
 	<span><strong>Staff: {{User::find($user_id)->name}}</strong></span>
 </div>
 <div class="container">

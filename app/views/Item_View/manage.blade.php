@@ -1,7 +1,7 @@
 @extends("theme")
 
 @section('title')
-Chienowa Vietnam - Manage Items
+Manage Items
 @endsection
 
 @section('content')

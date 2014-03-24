@@ -1,7 +1,7 @@
 @extends('theme')
 
 @section('title')
-Chienowa Vietnam - Create New Items
+Create New Items
 @endsection
 @section('content')
 

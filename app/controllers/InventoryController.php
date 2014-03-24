@@ -50,12 +50,13 @@ class InventoryController extends Controller
 			if (!Cache::has('cart')) {
 				$cart   = array();
 				$cart[] = $transaction;
-				Cache::put('cart', $cart, 10);
+				
 			} else {
-				$cart = Cache::get('cart');
+				$cart   = Cache::get('cart');
 				$cart[] = $transaction;
-				Cache::put('cart', $cart, 10);
 			}
+			
+			Cache::put('cart', $cart, 10);
 
 			// $notification = new Notification;
 			// $notification->type = "success";
