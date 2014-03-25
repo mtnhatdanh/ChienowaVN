@@ -26,5 +26,24 @@ class Report extends Eloquent
         )->passes();
     }
 
+    public function sumInspection(){
+        $sum   = 0;
+        $sumOK = 0;
+        $sumNG = 0;
+        foreach ($this->inspection as $inspection) {
+            $sum += $inspection->amount;
+            if ($inspection->quality) {
+                $sumOK += $inspection->amount;
+            } else $sumNG =+ $inspection->amount;
+        }
+        $result = array('sum'=>$sum, 'sumOK'=>$sumOK, 'sumNG'=>$sumNG);
+        return $result;
+    }
+
+    public function countEquipment(){
+        $result = count($this->calibration);
+        return $result;
+    }
+
 
 }

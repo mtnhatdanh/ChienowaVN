@@ -1,5 +1,6 @@
-@if (count($inspections))
-<table class="table table-responsive table-condensed table-bordered">
+@if (count(Cache::get('inspections')))
+<?php $inspections = Cache::get('inspections')?>
+<table class="table table-responsive table-condensed">
 	<tr>
 		<th class="text-center">No</th>
 		<th>Staff</th>
@@ -17,7 +18,7 @@
 	<tr>
 		<td class="text-center">{{++$no}}</td>
 		<td>{{$inspection->user->name}}</td>
-		<td>{{$inspection->amount}}</td>
+		<td>{{number_format($inspection->amount, 0, '.', ',')}}</td>
 		<td class="text-center">@if ($inspection->quality) OK @else NG @endif</td>
 		<td>{{$inspection->description}}</td>
 		<td class="text-center"><button class="btn btn-link del_button" id="{{$key}}" type="button">Del</button></td>
@@ -26,7 +27,10 @@
 	@endforeach
 	<tr>
 		<td class="text-center" colspan="2"><strong>Sumary</strong></td>
-		<td><strong>{{$sum}}</strong></td>
+		<td><strong>{{number_format($sum, 0, '.', ',')}}</strong></td>
+		<td></td>
+		<td></td>
+		<td></td>
 	</tr>
 	
 	
@@ -47,7 +51,7 @@
 				type: 'post',
 				data: {key: key},
 				success: function (data) {
-					location.reload();
+					$('#inspection_table').html(data);
 				}
 			});
 	});

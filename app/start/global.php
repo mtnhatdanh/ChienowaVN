@@ -134,6 +134,16 @@ Report::updating(function($report){
 	}
 });
 
+// Model Event prevent delete report while still have link
+Report::deleting(function($report){
+	if (count($report->calibration)||count($report->inspection)) {
+		$notification = new Notification;
+		$notification->set('danger', 'Can not delete this report!!');
+		Cache::put('notification', $notification, 10);
+		return false;
+	}
+});
+
 // Model Event validation Inspection
 Inspection::creating(function($inspection){
 	if (!$inspection->isValid()) {

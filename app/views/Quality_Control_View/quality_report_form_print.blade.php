@@ -22,10 +22,15 @@ foreach ($inspections as $key => $inspection) {
 	</div>
 	<div class="row text-center">
 		<h3>Quality Control Report</h3>
-		<span>Date: {{date('m/d/Y', strtotime($date))}}</span><br/>
-		<span>Description: {{$description}}</span>
 	</div>
 	<br/>
+	<div class="row">
+		<div class="col-xs-12">
+			<span>Date: {{date('m/d/Y', strtotime($date))}}</span><br/>
+			<span>Product: {{$product->name}}</span><br/>
+			<span>Description: {{$description}}</span>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-xs-4">
 			<strong>Total products checked: </strong><span>{{$sum}}</span>

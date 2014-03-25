@@ -50,7 +50,7 @@ $status = array('OnProcess', 'Approved', 'Canceled');
 			<br/>
 			<div class="row">
 				<div class="col-sm-offset-5 col-sm-2">
-					<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
+					<button class="btn btn-default btn-block" type="button" id="filter_button" data-loading-text="Loading..">Filter</button>
 				</div>
 			</div>
 		</div>
@@ -72,12 +72,15 @@ $status = array('OnProcess', 'Approved', 'Canceled');
 			user_id  = $('#user_id').val();
 			if(from_day == "" || to_day == "" || from_day > to_day) alert('Invalid input!!');
 			else {
+				var btn=$(this);
+				btn.button('loading');
 				$.ajax({
 						url: '{{Asset('report/expense')}}',
 						type: 'post',
 						data: {from_day: from_day, to_day: to_day, status: status, user_id: user_id},
 						success: function (data) {
 							$('#result_div').html(data);
+							btn.button('reset');
 						}
 					});
 			}

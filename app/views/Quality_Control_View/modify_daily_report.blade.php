@@ -1,7 +1,7 @@
 @extends("theme")
 
 @section('title')
-New Daily Report
+Modify Daily Report
 @endsection
 
 @section('content')
@@ -9,9 +9,8 @@ New Daily Report
 
 <div class="container hidden-print">
 	<div class="page-header">
-		<h1>New Daily Report for Quality Control</h1>
+		<h1>Modify Daily Report for Quality Control</h1>
 	</div>
-	@include('notification')
 </div>
 
 <div class="container hidden-print" id="content">
@@ -22,23 +21,23 @@ New Daily Report
 				<div class="panel-heading"><h3 class="panel-title">Main infomation</h3></div>
 				<div class="panel-body">
 					
-					<form action="{{Asset('quality-control/new-daily-report')}}" method="post" id="form-report">
+					<form action="{{Asset('quality-control/modify-report/'.$report->id)}}" method="post" id="form-report">
 						<div class="row">
 							<div class="form-group col-sm-3">
 								<label for="product_id" class="control-label">Product</label>
 								<select type="product_id" class="form-control" id="product_id" name="product_id">
 									@foreach (Product::get() as $product)
-									<option value="{{$product->id}}">{{$product->name}}</option>
+									<option value="{{$product->id}}" @if ($report->product_id == $product->id) selected @endif>{{$product->name}}</option>
 									@endforeach
 								</select>
 							</div>
 							<div class="form-group col-sm-3">
 								<label for="date" class="control-label">Date</label>
-								<input type="date" class="form-control" id="date" name="date" value="{{date('Y-m-d')}}">
+								<input type="date" class="form-control" id="date" name="date" value="{{$report->date}}">
 							</div>
 							<div class="form-group col-sm-6">
 								<label for="description" class="control-label">Description</label>
-								<input type="text" class="form-control" id="description_report" name="description" placeholder="Description..">
+								<input type="text" class="form-control" id="description_report" name="description" placeholder="Description.." value="{{$report->description}}">
 							</div>
 						</div>
 						
@@ -51,6 +50,9 @@ New Daily Report
 							</div>
 							<div class="col-sm-2">
 								<button type="button" class="btn btn-success btn-block" data-toggle="modal" href='#validation-modal'>Equipments Calibration</button>
+							</div>
+							<div class="col-sm-3">
+								<a href="{{Asset('quality-control/manage-daily-report')}}"><button type="button" class="btn btn-default btn-block">Back to Manage Reports</button></a>
 							</div>
 						</div>
 					</form>
@@ -100,9 +102,11 @@ New Daily Report
 								</div>
 						</div>
 					</div>
+					
 					<div id="inspection_table">
 						@include('Quality_Control_View.inspection_table')
 					</div>
+
 				</div>
 		
 			</div>

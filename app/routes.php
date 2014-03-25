@@ -152,9 +152,12 @@ Route::group(array("prefix"=>"data"), function(){
 	Route::post('print-quality-report', function(){
 		$date        = Input::get('date');
 		$description = Input::get('description');
+		$product_id  = Input::get('product_id');
+		$product     = Product::find($product_id);
 		$data = array(
 			'date'        => $date,
-			'description' => $description
+			'description' => $description,
+			'product'     => $product
 			);
 		return View::make('Quality_Control_View.quality_report_form_print', $data);
 	});
@@ -258,7 +261,11 @@ Route::group(array("prefix"=>"excel-export"), function(){
 
 // test route
 Route::get('test', function(){
-	Cache::forget('inspections');
-	Cache::forget('calibrations');
+	
+	$test = Report::find(3);
+	$result = $test->countEquipment();
+	print_r($result);
+	// Cache::forget('inspections');
+	// Cache::forget('calibrations');
 });
 

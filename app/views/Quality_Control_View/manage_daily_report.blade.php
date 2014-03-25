@@ -1,15 +1,16 @@
 @extends("theme")
 
 @section('title')
-Manage Expense
+Manage Daily Reports
 @endsection
 
 @section('content')
 
 <div class="container">
 	<div class="page-header">
-		<h1>Manage Expense</h1>
+		<h1>Manage Daily Report</h1>
 	</div>
+	@include('notification')
 </div>
 <br/>
 
@@ -24,7 +25,7 @@ Manage Expense
 			<input type="date" class="form-control" id="to_day" name="to_day">
 		</div>
 		<div class="form-group col-sm-2">
-			<button class="btn btn-default" type="button" id="filter_button">Filter</button>
+			<button class="btn btn-default btn-block" type="button" id="filter_button" data-loading-text="Loading..">Filter</button>
 		</div>
 	</div>
 	<br/>
@@ -38,12 +39,15 @@ Manage Expense
 			to_day   = $('#to_day').val();
 			if(from_day == "" || to_day == "" || from_day > to_day) alert('Input data is not valid!!');
 			else {
+				var btn=$(this);
+				btn.button('loading');
 				$.ajax({
-						url: '{{Asset('expense/manage-expense')}}',
+						url: '{{Asset('quality-control/manage-daily-report')}}',
 						type: 'post',
 						data: {from_day: from_day, to_day: to_day},
 						success: function (data) {
 							$('#result_div').html(data);
+							btn.button('reset');
 						}
 					});
 			}

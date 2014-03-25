@@ -85,8 +85,9 @@
                 <li class="dropdown-header">Quality Control</li>
                 <li><a href="{{Asset('quality-control/measuring-equipment')}}">Measuring Equipment</a></li>
                 <li><a href="{{Asset('quality-control/new-daily-report')}}">New Daily Report</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Local Projects</li>
+                <li><a href="{{Asset('quality-control/manage-daily-report')}}">Manage Daily Report</a></li>
+                <!-- <li class="divider"></li>
+                <li class="dropdown-header">Local Projects</li> -->
               </ul>
             </li>
 
@@ -103,9 +104,6 @@
             </li>
 
             
-
-            <!-- <li><a href="#about">Expense</a></li>
-            <li><a href="#contact">Projects</a></li> -->
           </ul>
           <ul class="nav navbar-nav navbar-right">
               <li><a href="{{Asset('user/modify-user')}}/{{Session::get('user')->id}}"><span class="glyphicon glyphicon-user"></span> {{ucfirst(Session::get('user')->username)}}</a></li>

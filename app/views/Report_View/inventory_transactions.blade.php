@@ -33,7 +33,7 @@ Chienowa Vietnam - Report Transactions
 					</select>
 				</div>
 				<div class="form-group col-sm-2">
-					<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
+					<button class="btn btn-default btn-block" type="button" id="filter_button" data-loading-text="Loading..">Filter</button>
 				</div>
 			</div>
 		</div>
@@ -50,12 +50,15 @@ Chienowa Vietnam - Report Transactions
 			type     = $('#transaction_type').val();
 			if(from_day == "" || to_day == "" || from_day > to_day) alert('Wrong Input!!');
 			else {
+				var btn=$(this);
+				btn.button('loading');
 				$.ajax({
 						url: '{{Asset('report/transactions-filter')}}',
 						type: 'post',
 						data: {from_day: from_day, to_day: to_day, type: type},
 						success: function (data) {
 							$('#result_div').html(data);
+							btn.button('reset');
 						}
 					});
 			}

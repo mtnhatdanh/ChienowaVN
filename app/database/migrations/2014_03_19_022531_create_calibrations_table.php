@@ -18,7 +18,7 @@ class CreateCalibrationsTable extends Migration {
             $table->integer("report_id");
             $table->integer("equipment_id");
             $table->string("before_inspection");
-            $table->string("after_inpspection");
+            $table->string("after_inpsection");
             $table->timestamps();
         });
 	}

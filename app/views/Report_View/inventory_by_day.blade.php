@@ -33,7 +33,7 @@ Chienowa Vietnam - Report Inventory
 					<input type="date" class="form-control" id="to_day" name="to_day">
 				</div>
 				<div class="col-sm-2">
-					<button class="btn btn-default btn-block" type="button" id="filter_button">Filter</button>
+					<button class="btn btn-default btn-block" type="button" id="filter_button" data-loading-text="Loading..">Filter</button>
 				</div>
 			</div>
 		</div>
@@ -54,12 +54,15 @@ Chienowa Vietnam - Report Inventory
 			to_day      = $('#to_day').val();
 			if(from_day == "" || to_day == "" || from_day > to_day) alert('Wrong Input!!');
 			else {
+				var btn=$(this);
+				btn.button('loading');
 				$.ajax({
 						url: '{{Asset('report/inventory-filter')}}',
 						type: 'post',
 						data: {category_id: category_id, from_day: from_day, to_day: to_day},
 						success: function (data) {
 							$('#result_div').html(data);
+							btn.button('reset');
 						}
 					});
 			}
