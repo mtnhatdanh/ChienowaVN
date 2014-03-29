@@ -17,7 +17,21 @@ class CreateDailyReportsTable extends Migration {
             $table->increments("id");
             $table->integer("product_id");
             $table->date("date");
-            $table->text("description");
+            $table->boolean('judgement');
+            $table->string('app_staff_id');
+            $table->string('measurement_staff_id');
+            $table->string('equipment');
+            $table->string('rs_worker');
+            $table->string('molding');
+            $table->string('slight_stop');
+            $table->string('metal_mold');
+            $table->string('method');
+            $table->string('materials');
+            $table->string('other');
+            $table->string('material_grade');
+            $table->string('material_lot_no');
+            $table->boolean('judgement_grade');
+            $table->boolean('judgement_color');
             $table->timestamps();
         });
 	}

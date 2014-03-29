@@ -80,12 +80,13 @@
             </li>
 
             <li class="dropdown @if(Session::get('active_menu')=='projects') active @endif">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Quality Control<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li class="dropdown-header">Quality Control</li>
-                <li><a href="{{Asset('quality-control/measuring-equipment')}}">Measuring Equipment</a></li>
                 <li><a href="{{Asset('quality-control/new-daily-report')}}">New Daily Report</a></li>
                 <li><a href="{{Asset('quality-control/manage-daily-report')}}">Manage Daily Report</a></li>
+                <li><a href="{{Asset('quality-control/measuring-equipment')}}">Measuring Equipment</a></li>
+                <li><a href="{{Asset('quality-control/product-list')}}">Product list</a></li>
+                <li><a href="{{Asset('quality-control/product-attributes')}}">Product Attributes</a></li>
                 <!-- <li class="divider"></li>
                 <li class="dropdown-header">Local Projects</li> -->
               </ul>
@@ -105,7 +106,7 @@
 
             
           </ul>
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right hidden-xs">
               <li><a href="{{Asset('user/modify-user')}}/{{Session::get('user')->id}}"><span class="glyphicon glyphicon-user"></span> {{ucfirst(Session::get('user')->username)}}</a></li>
               <li><a href="{{Asset('user/logout')}}"><span class="glyphicon glyphicon-log-out"></span> Signout</a></li>
             </ul>

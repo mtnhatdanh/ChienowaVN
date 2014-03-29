@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInspectionsTable extends Migration {
+class CreateInspectionDetailTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,12 @@ class CreateInspectionsTable extends Migration {
 	 */
 	public function up()
 	{
-		//Create Inspections Table
-		Schema::create('inspections', function ($table) {
+		//Create Inspection_details table
+		Schema::create('inspection_details', function ($table) {
             $table->increments("id");
-            $table->integer("report_id");
+            $table->integer("inspection_id");
+            $table->integer('product_ref_id');
+            $table->string('value');
             $table->timestamps();
         });
 	}
@@ -27,8 +29,8 @@ class CreateInspectionsTable extends Migration {
 	 */
 	public function down()
 	{
-		//Drop Inspections table
-		Schema::drop('inspections');
+		//Drop inspection_details table
+		Schema::drop('inspection_details');
 	}
 
 }

@@ -90,6 +90,18 @@ Route::group(array("prefix"=>"check"), function(){
 			return "false";
 		} else return "true";
 	});
+	// Check valid product
+	Route::post('check-product', function(){
+		if(Product::check_product_exist(Input::get('name'))) {
+			return "false";
+		} else return "true";
+	});
+	// Check valid product attribute
+	Route::post('check-product-attribute', function(){
+		if(ProductAtt::check_product_att_exist(Input::get('name'))) {
+			return "false";
+		} else return "true";
+	});
 });
 
 //Get data to lookup

@@ -12,9 +12,9 @@
 			<tr>
 				<th>No</th>
 				<th>Date</th>
-				<th>SumAmount</th>
-				<th>OK</th>
-				<th>NG</th>
+				<th class="text-right">OK</th>
+				<th class="text-right">NG</th>
+				<th class="text-right">SumAmount</th>
 				<th>Equipments Used</th>
 				<th>Description</th>
 				<th>Action</th>
@@ -35,9 +35,9 @@
 			<tr>
 				<td class="text-center">{{++$no}}</td>
 				<td class="text-center">{{date('m/d/Y', strtotime($report->date))}}</td>
-				<td class="text-right">{{number_format($sumInspection['sum'], 0, '.', ',')}}</td>
 				<td class="text-right">{{number_format($sumInspection['sumOK'], 0, '.', ',')}}</td>
 				<td class="text-right">{{number_format($sumInspection['sumNG'], 0, '.', ',')}}</td>
+				<td class="text-right">{{number_format($sumInspection['sum'], 0, '.', ',')}}</td>
 				<td class="text-center">{{$report->countEquipment()}}</td>
 				<td>{{$report->description}}</td>
 				<td class="text-center">
@@ -48,9 +48,9 @@
 			@endforeach
 			<tr>
 				<td colspan="2" class="text-center"><strong>Sumary</strong></td>
-				<td class="text-right"><strong>{{number_format($sumA, 0, '.', ',')}}</strong></td>
 				<td class="text-right"><strong>{{number_format($sumOK, 0, '.', ',')}}</strong></td>
 				<td class="text-right"><strong>{{number_format($sumNG, 0, '.', ',')}}</strong></td>
+				<td class="text-right"><strong>{{number_format($sumA, 0, '.', ',')}}</strong></td>
 			</tr>
 		</table>
 	</div>

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInspectionsTable extends Migration {
+class CreateStaffRanksTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,12 @@ class CreateInspectionsTable extends Migration {
 	 */
 	public function up()
 	{
-		//Create Inspections Table
-		Schema::create('inspections', function ($table) {
+		//Create staff_ranks table
+		Schema::create('staff_ranks', function ($table) {
             $table->increments("id");
-            $table->integer("report_id");
+            $table->integer("user_id");
+            $table->integer('rank');
+            $table->string('description');
             $table->timestamps();
         });
 	}
@@ -27,8 +29,8 @@ class CreateInspectionsTable extends Migration {
 	 */
 	public function down()
 	{
-		//Drop Inspections table
-		Schema::drop('inspections');
+		//Drop table
+		Schema::drop('staff_ranks');
 	}
 
 }

@@ -6,10 +6,24 @@ New Daily Report
 
 @section('content')
 
+<?php
+$report_no = DB::table('information_schema.tables')
+			->select('auto_increment')
+			->where('table_schema', '=', 'ChienowaVN')
+			->where('table_name', '=', 'daily_reports')
+			->first()
+			->auto_increment;
+?>
 
+<style>
+	td {
+		vertical-align: middle!important;
+	}
+</style>
 <div class="container hidden-print">
 	<div class="page-header">
 		<h1>New Daily Report for Quality Control</h1>
+		<strong>Report No: </strong> {{$report_no}}
 	</div>
 	@include('notification')
 </div>
@@ -23,8 +37,8 @@ New Daily Report
 				<div class="panel-body">
 					
 					<form action="{{Asset('quality-control/new-daily-report')}}" method="post" id="form-report">
-						<div class="row">
-							<div class="form-group col-sm-3">
+						<div class="row form-group">
+							<div class="col-sm-3">
 								<label for="product_id" class="control-label">Product</label>
 								<select type="product_id" class="form-control" id="product_id" name="product_id">
 									@foreach (Product::get() as $product)
@@ -32,16 +46,40 @@ New Daily Report
 									@endforeach
 								</select>
 							</div>
-							<div class="form-group col-sm-3">
+							<div class="col-sm-3">
 								<label for="date" class="control-label">Date</label>
 								<input type="date" class="form-control" id="date" name="date" value="{{date('Y-m-d')}}">
 							</div>
-							<div class="form-group col-sm-6">
-								<label for="description" class="control-label">Description</label>
-								<input type="text" class="form-control" id="description_report" name="description" placeholder="Description..">
+							<div class="col-sm-3 form-group">
+								<label for="judgement" class="control-label">JUDGEMENT</label>
+								<select name="judgement" id="judgement" class="form-control">
+									<option value="-1">-- Select --</option>
+									<option value="1">OK</option>
+									<option value="0">NG</option>
+								</select>
 							</div>
 						</div>
-						
+						<div class="row form-group">
+							<div class="col-sm-3 form-group">
+								<label for="app_staff_id" class="control-label">APP'D</label>
+								<select name="app_staff_id" id="app_staff_id" class="form-control">
+									<option value="-1">-- Select a staff --</option>
+									@foreach (User::where('id', '!=', 16)->get() as $user)
+									<option value="{{$user->id}}">{{$user->name}}</option>
+									@endforeach
+								</select>
+							</div>
+							<div class="col-sm-3 form-group">
+								<label for="measurement_staff_id" class="control-label">Measurement</label>
+								<select name="measurement_staff_id" id="measurement_staff_id" class="form-control">
+									<option value="-1">-- Select a staff --</option>
+									@foreach (User::where('id', '!=', 16)->get() as $user)
+									<option value="{{$user->id}}">{{$user->name}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+
 						<div class="row">
 							<div class="col-sm-2">
 								<button class="btn btn-primary btn-block">Save Report</button>
@@ -53,9 +91,75 @@ New Daily Report
 								<button type="button" class="btn btn-success btn-block" data-toggle="modal" href='#validation-modal'>Equipments Calibration</button>
 							</div>
 						</div>
+						
 					</form>
 
 				</div>
+
+				<table class="table table-responsive table-condensed table-bordered">
+					<thead>
+						<tr>
+							<th class="text-center" colspan="4">ABNORMALITY REPORT</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Equipment</td>
+							<td><input type="text" name="equipment" id="inputEquipment" class="form-control"></td>
+							<td>Resulted from workers</td>
+							<td><input type="text" name="rs_worker" id="inputRs_worker" class="form-control"></td>
+						</tr>
+						<tr>
+							<td>Molding machine</td>
+							<td><input type="text" name="molding" id="inputMolding" class="form-control"></td>
+							<td>Slight Stop</td>
+							<td><input type="text" name="slight_stop" id="inputSlight_stop" class="form-control"></td>
+						</tr>
+						<tr>
+							<td>Metal mold</td>
+							<td><input type="text" name="metal_mold" id="inputMetal_mold" class="form-control"></td>
+							<td>Method</td>
+							<td><input type="text" name="method" id="inputMethod" class="form-control"></td>
+						</tr>
+						<tr>
+							<td>Materials</td>
+							<td><input type="text" name="materials" id="inputMaterials" class="form-control"></td>
+							<td>Other</td>
+							<td><input type="text" name="other" id="inputOther" class="form-control"></td>
+						</tr>
+						<tr>
+							<th class="text-center" colspan="2">MATERIAL</th>
+							<th class="text-center">LOT NO.</th>
+							<th class="text-center">Judement Material</th>
+						</tr>
+						<tr>
+							<td>Grade</td>
+							<td><input type="text" name="material_grade" id="inputMaterial_grade" class="form-control"></td>
+							<td rowspan="2" class="text-center"><input class="form-control" type="text" name="material_lot_no" id="inputMaterial_lot_no" size="5"></td>
+							<td class="text-center">
+								<label class="radio-inline">
+									<input type="radio" name="judgement_grade" id="judgement_grade1" value="1" checked>OK
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="judgement_grade" id="judgement_grade2" value="0">NG
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Color</td>
+							<td><input type="text" name="material_color" id="inputMaterial_color" class="form-control"></td>
+							<td class="text-center">
+								<label class="radio-inline">
+									<input type="radio" name="judgement_color" id="judgement_color1" value="1" checked>OK
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="judgement_color" id="judgement_color2" value="0">NG
+								</label>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

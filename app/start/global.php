@@ -134,7 +134,7 @@ Report::updating(function($report){
 	}
 });
 
-// Model Event prevent delete report while still have link
+// Model Event prevent delete Report while still have link
 Report::deleting(function($report){
 	if (count($report->calibration)||count($report->inspection)) {
 		$notification = new Notification;
@@ -186,3 +186,39 @@ Item::deleting(function($item){
 	}
 });
 
+// Model Event validation Product
+Product::creating(function($product){
+	if (!$product->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not create!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+Product::updating(function($Product){
+	if (!$product->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not update!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+
+
+// Model Event validation ProductAtt
+ProductAtt::creating(function($ProductAtt){
+	if (!$ProductAtt->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not create!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});
+ProductAtt::updating(function($ProductAtt){
+	if (!$ProductAtt->isValid()) {
+		$notification = new Notification;
+    	$notification->set('danger', 'Can not update!!');
+    	Cache::put('notification', $notification, 10);
+    	return false;
+	}
+});

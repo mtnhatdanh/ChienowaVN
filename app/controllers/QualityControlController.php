@@ -375,4 +375,151 @@ class QualityControlController extends Controller
 		}
 	}
 
+	/**
+	 * Product List page
+	 * @return View Quality_Control_View.product
+	 */
+	public function getProductList(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Quality_Control_View.product', array('notification'=>$notification));
+	}
+
+	/**
+	 * Create New Product
+	 * @return Update database
+	 */
+	public function postProductList(){
+		$product = new Product;
+		$product->name        = Input::get('name');
+		$product->description = Input::get('description');
+		$product->save();
+		$notification = new Notification;
+		$notification->set('success', 'Product has been created successful!!');
+		Cache::put('notification', $notification, 10);
+		return Redirect::to('quality-control/product-list');
+	}
+
+	/**
+	 * Delete Product from ajax
+	 * @return Update database
+	 */
+	public function postDeleteProduct(){
+		$product_id = Input::get('product_id');
+		if (Product::find($product_id)) {
+			Product::find($product_id)->delete();
+			
+			$notification = new Notification;
+			$notification->set('success', 'Equipment has been deleted successful');
+
+			
+		} else {
+			$notification = new Notification;
+			$notification->set('danger', 'Equipment can not be deleted!!');
+		}
+		
+		Cache::put('notification', $notification, 10);
+	}
+
+	/**
+	 * Manage Product Attribute
+	 * @return View QUality_Control_View.product_attributes
+	 */
+	public function getProductAttributes(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Quality_Control_View.product_attributes', array('notification'=>$notification));
+	}
+
+	/**
+	 * Produc Attribute create new
+	 * @return update database
+	 */
+	public function postProductAttributes(){
+		$product_att           = new ProductAtt;
+		$product_att->name     = Input::get('name');
+		$product_att->type     = Input::get('type');
+		$product_att->order_no = Input::get('order_no');
+		$product_att->save();
+		$notification = new Notification;
+		$notification->set('success', 'Product Attribute has been created successful!!');
+		Cache::put('notification', $notification, 10);
+		return Redirect::to('quality-control/product-attributes');
+	}
+
+	/**
+	 * Delete Product Attribute from ajax
+	 * @return Update database
+	 */
+	public function postDeleteProductAttribute(){
+		$product_att_id = Input::get('product_att_id');
+		if (ProductAtt::find($product_att_id)) {
+			ProductAtt::find($product_att_id)->delete();
+			
+			$notification = new Notification;
+			$notification->set('success', 'Product attribute has been deleted successful');
+
+			
+		} else {
+			$notification = new Notification;
+			$notification->set('danger', 'Product attribute can not be deleted!!');
+		}
+		
+		Cache::put('notification', $notification, 10);
+	}
+
+	/**
+	 * Pass Product Attribute to models ajax
+	 * @return Model update databse
+	 */
+	public function postModifyProductAttribute(){
+		$product_att_id = Input::get('product_att_id');
+		$productAtt     = ProductAtt::find($product_att_id);
+		return View::make('QUality_Control_View.product_attribute_modify', array('productAtt'=>$productAtt));
+	}
+
+	public function postConfirmProductModifyAttribute($product_att_id){
+		
+		$product_att           = ProductAtt::find($product_att_id);
+		$product_att->name     = Input::get('name');
+		$product_att->type     = Input::get('type');
+		$product_att->order_no = Input::get('order_no');
+		$product_att->save();
+
+		return Redirect::to('quality-control/product-attributes');
+	}
+
+
+	/**
+	 * Product Reference
+	 * @param  integer $product_id Product ID
+	 * @return View             
+	 */
+	public function getProductReference($product_id){
+		$re_show      = ProductRef::where('product_id', '=', $product_id)->get();
+		$product      = Product::find($product_id);
+		$data = array(
+			"product"      => $product,
+			're_show'      => $re_show
+			);
+		return View::make('Quality_Control_View.product_reference', $data);
+	}
+
+	public function postProductReference($product_id){
+		$product_atts = (Input::get('attribute'));
+		if ($product_atts) {
+			ProductRef::where('product_id', '=', $product_id)->delete();
+			foreach ($product_atts as $attribute_id) {
+				$productRef                 = new ProductRef;
+				$productRef->product_id     = $product_id;
+				$productRef->product_att_id = $attribute_id;
+				$productRef->save();
+			}
+			$notification = new Notification;
+			$notification->set('success', 'Product references has been updated successful');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('quality-control/product-list');
+		} else echo "Update is not successful!!";
+	}
+
 }
