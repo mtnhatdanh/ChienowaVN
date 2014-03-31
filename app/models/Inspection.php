@@ -7,21 +7,8 @@ class Inspection extends Eloquent
     	return $this->belongsTo("Report","report_id");
     }
 
-    public function user(){
-    	return $this->belongsTo("User", "user_id");
-    }
-
-    public function isValid()
-    {
-        return Validator::make(
-            $this->toArray(),
-            array(
-				"report_id" =>"required|integer",
-				"user_id"   =>"required|integer",
-				"amount"    =>"required|integer",
-				"quality"   =>"required"
-            )
-        )->passes();
+    public function inspectionDetail(){
+    	return $this->hasMany("InspectionDetail", "inspection_id");
     }
 
 }

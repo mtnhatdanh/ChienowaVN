@@ -8,7 +8,7 @@ class ProductRef extends Eloquent
     }
 
     public function productAtt(){
-    	return $this->belongsTo("ProductAtt","product_id");
+    	return $this->belongsTo("ProductAtt","product_att_id");
     }
 
     public function toolRef(){

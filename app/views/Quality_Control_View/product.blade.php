@@ -35,7 +35,8 @@ Manage Products
 					<td>{{$product->description}}</td>
 					<td class="text-center">
 						<button type="button" id="{{$product->id}}" class="btn btn-link del_button" data-toggle="modal" data-target="#myDeleteModal">Del</button>
-						<a href="{{Asset('quality-control/product-reference/'.$product->id)}}"><button type="button" id="{{$product->id}}" class="btn btn-link ref_button">Reference</button></a>
+						<a href="{{Asset('quality-control/product-reference/'.$product->id)}}"><button type="button" class="btn btn-link ref_button">Reference</button></a>
+						<a href="{{Asset('quality-control/tool-reference/'.$product->id)}}"><button type="button" class="btn btn-link ref_button">Tool Ref</button></a>
 					</td>
 				</tr>
 				@endforeach

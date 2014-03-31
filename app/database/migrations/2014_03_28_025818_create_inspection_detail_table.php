@@ -16,8 +16,10 @@ class CreateInspectionDetailTable extends Migration {
 		Schema::create('inspection_details', function ($table) {
             $table->increments("id");
             $table->integer("inspection_id");
-            $table->integer('product_ref_id');
+            $table->integer('product_att_id');
             $table->string('value');
+            $table->string('item');
+            $table->integer('equipment_id');
             $table->timestamps();
         });
 	}

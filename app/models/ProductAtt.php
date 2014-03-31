@@ -8,6 +8,10 @@ class ProductAtt extends Eloquent
     	return $this->hasMany('ProductRef', 'product_id');
     }
 
+    public function inspectionDetail(){
+        return $this->hasMany('InspectionDetail', 'product_att_id');
+    }
+
     public static function check_product_att_exist($product_att_name) {
         if (ProductAtt::where('name', '=', $product_att_name)->count()>0) {
             return true;

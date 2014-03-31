@@ -7,5 +7,9 @@ class ToolRef extends Eloquent
     	return $this->belongsTo("ProductRef","product_ref_id");
     }
 
+    public function equipment(){
+    	return $this->belongsTo("Equipment","equipment_id");
+    }
+
 
 }

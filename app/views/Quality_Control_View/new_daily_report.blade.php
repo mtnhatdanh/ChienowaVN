@@ -164,57 +164,27 @@ $report_no = DB::table('information_schema.tables')
 		</div>
 	</div>
 	
-	<form action="" method="post" id="form-register">
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="panel panel-default">
-					<div class="panel-heading"><h3 class="panel-title">Inspection Report</h3></div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-sm-3 form-group">
-								<label for="user_id" class="control-label">Staff</label>
-								<select name="user_id" id="user_id" class="form-control">
-									<option value="-1">-- Select a staff --</option>
-									@foreach (User::where('id', '!=', 16)->get() as $user)
-									<option value="{{$user->id}}">{{$user->name}}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="col-sm-2 form-group">
-								<label for="inputAmount" class="control-label">Amount</label>
-								<input type="text" name="amount" id="amount" class="form-control" value="" required="required" placeholder="Amount..">
-							</div>
-							<div class="col-sm-1  form-group">
-								<label for="quality">Quality</label>
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" value="1" name="quality" id="quality">
-										OK
-									</label>
-								</div>
-							</div>
-							<div class="col-sm-6 form-group">
-								<label for="description" class="control-label">Description:</label>
-								<input type="text" name="description" id="description" class="form-control" placeholder="Description..">
-							</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h3 class="panel-title">Inspection Report</h3></div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-2">
+							<button id="button_inspectionModal" type="button" class="btn btn-block btn-default" data-toggle="modal" href='#inspection-modal'>New inspection</button>
 						</div>
-						<div class="row">
-								<div class="col-sm-2">
-									<button type="submit" class="btn btn-default" id="inspection_button">Add to Inspection table</button>
-								</div>
-						</div>
-					</div>
-					<div id="inspection_table">
-						@include('Quality_Control_View.inspection_table')
 					</div>
 				</div>
-		
+				<table class="table table-responsive table-condensed table-bordered"  id="inspection-result-table">
+					@include('Quality_Control_View.inspection_detail_table')
+				</table>
 			</div>
+	
 		</div>
-	</form>
+	</div>
 </div>
 
-<!-- Modal Validation -->
+<!-- Modal Calibration -->
 <div class="modal fade bs-example-modal-lg hidden-print" id="validation-modal">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -263,46 +233,31 @@ $report_no = DB::table('information_schema.tables')
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Modal New Inspection -->
+<div class="modal fade bs-example-modal-lg hidden-print" id="inspection-modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form id="new-inspection-form">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Inspection Model</h4>
+				</div>
+				<div class="modal-body">
+					<div id="div_inspection_detail">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">New Inspection</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
+				</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="visible-print" id="print_div"></div>
 
 <script type="text/javascript">
-	// Validation Form
-	$('#form-register').validate({
-		rules:{
-			user_id:{
-				required:true,
-				min:1,
-			},
-			amount:{
-				required:true,
-				min:1,
-				number:true,
-			},
-			description:{
-				required:true,
-				minlength:3,
-			}
-		},
-		messages:{
-			user_id:{
-				min:"You have to chose a staff!!",
-			}
-		},
-		submitHandler: function(form){
-			$.ajax({
-					url: '{{Asset("quality-control/inspection-table")}}',
-					type: 'post',
-					data: $(form).serialize(),
-					success: function (data) {
-						$('#inspection_table').html(data);
-						$('#user_id').val(-1);
-						$('#amount').val("");
-						$('#quality').removeAttr('checked');
-						$('#description').val("");
-					}
-				});
-		}
-	});
 
 	$('#form-report').validate({
 		rules:{
@@ -312,7 +267,7 @@ $report_no = DB::table('information_schema.tables')
 		}
 	});
 
-	// Inspection ajax
+	// Calibration ajax
 	$('#inspection_add_button').click(function(){
 		equipment_id      = $('#equipment_id').val();
 		before_inspection = $('#inputBefore_inspection').val();
@@ -366,6 +321,35 @@ $report_no = DB::table('information_schema.tables')
 			});
 	});
 	
+
+	// New Inspection handle
+	$('#button_inspectionModal').click(function(){
+		product_id  = $('#product_id').val();
+		$.ajax({
+				url: '{{Asset('quality-control/new-inspection-modal')}}',
+				type: 'post',
+				data: {product_id: product_id},
+				success: function (data) {
+					$('#div_inspection_detail').html(data);
+				}
+			});
+	});
+
+	$('#new-inspection-form').validate({
+		submitHandler: function(form) {
+			
+			$.ajax({
+				url: '{{Asset('quality-control/new-inspection-detail')}}',
+				type: 'post',
+				data: $(this).serialize(),
+				success: function (data) {
+					$('#inspection-result-table').html(data);
+					$('#inspection-modal').modal('hide')
+				}
+			});
+
+		}
+	});
 
 	
 

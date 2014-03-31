@@ -136,39 +136,49 @@ class QualityControlController extends Controller
 		}
 	}
 
+
 	/**
-	 * Inspection Table handle
-	 * @return View Inspection table
+	 * New Inspection Detail modal
+	 * @return form new Inspection detail
 	 */
-	public function postInspectionTable(){
+	public function postNewInspectionModal(){
+		$product_id = Input::get('product_id');
+		$product    = Product::find($product_id);
+		return View::make('QUality_Control_View.inspection_table', array('product'=>$product));
+	}
 
-		$rules = array(
-			"user_id"     =>"required|min:1",
-			"amount"      =>"required|min:1",
-			"description" => "required"
-			);
+	/**
+	 * new Inspection to Cache
+	 * @return Cache array
+	 */
+	public function postNewInspectionDetail(){
+		
+		$no = count(Input::get('product_att_id'));
+		$product_att_ids = Input::get('product_att_id');
+		$values          = Input::get('value');
+		$items           = Input::get('item');
+		$equipment_ids   = Input::get('equipment_id');
 
-		$validator = Validator::make(Input::all(), $rules);
+		$inspectionDetails = array();
 
-		if ($validator->fails()) {
-			return "Validator fails";
-		} else {
-			$inspection          = new Inspection;
-			$inspection->user_id = Input::get('user_id');
-			$inspection->amount  = Input::get('amount');
-			if(Input::get('quality')) $inspection->quality = 1; else $inspection->quality = 0;
-			$inspection->description = Input::get('description');
+		for ($i=0; $i < $no; $i++) { 
+			$inspectionDetail                 = new InspectionDetail;
+			$inspectionDetail->product_att_id = $product_att_ids[$i];
+			$inspectionDetail->value          = $values[$i];
+			$inspectionDetail->item           = $items[$i];
+			$inspectionDetail->equipment_id   = $equipment_ids[$i];
 
-			if (Cache::has('inspections')) {
-				$inspections = Cache::get('inspections');
-			} else {
-				$inspections = array();
-			}
-			$inspections[] = $inspection;
-			Cache::put('inspections', $inspections, 720);
-
-			return View::make('Quality_Control_View.inspection_table');
+			$inspectionDetails[] = $inspectionDetail;
 		}
+
+		if (Cache::has('inspectionDetailTable')) {
+			$inspectionDetailTable = Cache::get('inspectionDetailTable');
+		} else $inspectionDetailTable = array();
+		$inspectionDetailTable[] = $inspectionDetails;
+		Cache::put('inspectionDetailTable', $inspectionDetailTable, 720);
+
+		return View::make('Quality_Control_View.inspection_detail_table');
+		
 	}
 
 	/**
@@ -508,7 +518,12 @@ class QualityControlController extends Controller
 	public function postProductReference($product_id){
 		$product_atts = (Input::get('attribute'));
 		if ($product_atts) {
-			ProductRef::where('product_id', '=', $product_id)->delete();
+			$product = Product::find($product_id);
+			foreach ($product->productRef as $delProductRef) {
+				if ($delProductRef->toolRef) $delProductRef->toolRef->delete();
+				if ($delProductRef) $delProductRef->delete();
+			}
+			// ProductRef::where('product_id', '=', $product_id)->delete();
 			foreach ($product_atts as $attribute_id) {
 				$productRef                 = new ProductRef;
 				$productRef->product_id     = $product_id;
@@ -520,6 +535,59 @@ class QualityControlController extends Controller
 			Cache::put('notification', $notification, 10);
 			return Redirect::to('quality-control/product-list');
 		} else echo "Update is not successful!!";
+	}
+
+	/**
+	 * Tool Reference page
+	 * @param  integer $product_id Product ID
+	 * @return View            
+	 */
+	public function getToolReference($product_id) {
+		$product = Product::find($product_id);
+		$productRefs = ProductRef::join('product_atts', 'product_atts.id', '=', 'product_refs.product_att_id')
+						->select('product_refs.id', 'name')
+						->where('product_id', '=', $product_id)
+						->orderBy('order_no', 'asc')
+						->get();
+
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+
+		$data    = array('product'=>$product, 'notification'=>$notification, 'productRefs'=>$productRefs);
+
+		return View::make('Quality_Control_View.product_tool_reference', $data);
+	}
+
+	public function postToolReference($product_id){
+
+		$product     = Product::find($product_id);
+		foreach ($product->productRef as $productRef) {
+			$toolRef = $productRef->toolRef;
+			if($toolRef) $toolRef->delete();
+		}
+
+		$product_ref_ids = Input::get('product_ref_id');
+		$items           = Input::get('item');
+		$equipment_ids   = Input::get('equipment_id');
+
+		$num = count($product_ref_ids);
+
+		for ($i=0; $i < $num; $i++) {
+
+			$toolRef  = new ToolRef();
+
+			$toolRef->product_ref_id = $product_ref_ids[$i];
+			$toolRef->item           = $items[$i];
+			$toolRef->equipment_id   = $equipment_ids[$i];
+			$toolRef->save();
+		}
+
+		$notification = new Notification;
+		$notification->set('success', 'Tool reference  has been updated successful');
+		Cache::put('notification', $notification, 10);
+
+		return Redirect::to('quality-control/tool-reference/'.$product_id);
+
 	}
 
 }

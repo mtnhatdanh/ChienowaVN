@@ -144,23 +144,6 @@ Report::deleting(function($report){
 	}
 });
 
-// Model Event validation Inspection
-Inspection::creating(function($inspection){
-	if (!$inspection->isValid()) {
-		$notification = new Notification;
-    	$notification->set('danger', 'Can not create!!');
-    	Cache::put('notification', $notification, 10);
-    	return false;
-	}
-});
-Inspection::updating(function($inspection){
-	if (!$inspection->isValid()) {
-		$notification = new Notification;
-    	$notification->set('danger', 'Can not update!!');
-    	Cache::put('notification', $notification, 10);
-    	return false;
-	}
-});
 
 // Model Event prevent delete object while still have link
 

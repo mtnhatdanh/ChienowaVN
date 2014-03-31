@@ -274,10 +274,10 @@ Route::group(array("prefix"=>"excel-export"), function(){
 // test route
 Route::get('test', function(){
 	
-	$test = Report::find(3);
-	$result = $test->countEquipment();
-	print_r($result);
-	// Cache::forget('inspections');
-	// Cache::forget('calibrations');
+	// dd(DB::getQueryLog());
+	// 
+	print_r(Cache::get('inspectionDetailTable'));
+	Cache::forget('inspectionDetailTable');
+	
 });
 
