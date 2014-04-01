@@ -240,7 +240,7 @@ $report_no = DB::table('information_schema.tables')
 			<form id="new-inspection-form">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Inspection Model</h4>
+					<h4 class="modal-title">New Inspection</h4>
 				</div>
 				<div class="modal-body">
 					<div id="div_inspection_detail">
@@ -248,6 +248,28 @@ $report_no = DB::table('information_schema.tables')
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-primary">New Inspection</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
+				</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal Modify Inspection -->
+<div class="modal fade bs-example-modal-lg hidden-print" id="modify-inspection-modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form id="modify-inspection-form">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Modify Inspection</h4>
+				</div>
+				<div class="modal-body">
+					<div id="div-modify-inspection-detail">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Update Inspection</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
 				</div>
 			</form>
@@ -337,14 +359,29 @@ $report_no = DB::table('information_schema.tables')
 
 	$('#new-inspection-form').validate({
 		submitHandler: function(form) {
-			
 			$.ajax({
 				url: '{{Asset('quality-control/new-inspection-detail')}}',
 				type: 'post',
-				data: $(this).serialize(),
+				data: $(form).serialize(),
 				success: function (data) {
 					$('#inspection-result-table').html(data);
 					$('#inspection-modal').modal('hide')
+				}
+			});
+
+		}
+	});
+
+	// Modify Inspection form handle
+	$('#modify-inspection-form').validate({
+		submitHandler: function(form) {
+			$.ajax({
+				url: '{{Asset('quality-control/modify-inspection-detail')}}',
+				type: 'post',
+				data: $(form).serialize(),
+				success: function (data) {
+					$('#inspection-result-table').html(data);
+					$('#modify-inspection-modal').modal('hide')
 				}
 			});
 

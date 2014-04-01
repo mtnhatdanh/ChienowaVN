@@ -11,4 +11,8 @@ class InspectionDetail extends Eloquent
         return $this->belongsTo('ProductAtt', 'product_att_id');
     }
 
+    public function equipment(){
+    	return $this->belongsTo('Equipment', 'equipment_id');
+    }
+
 }

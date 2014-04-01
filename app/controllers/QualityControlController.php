@@ -185,16 +185,60 @@ class QualityControlController extends Controller
 	 * Delete Inspection Button handle
 	 * @return void
 	 */
-	public function postInspectionsHandle(){
-		$key = Input::get('key');
-		$inspections = Cache::get('inspections');
-		unset($inspections[$key]);
+	public function postInspectionsDetailHandle(){
+		$key  = Input::get('key');
+		$type = Input::get('type');
+		$inspectionDetailTable = Cache::get('inspectionDetailTable');
 
-		if (count($inspections)) {
-			Cache::put('inspections', $inspections, 720);
-		} else Cache::forget('inspections');
+		if ($type == 1) {
 
-		return View::make('Quality_Control_View.inspection_table');
+			unset($inspectionDetailTable[$key]);
+			if (count($inspectionDetailTable)) {
+					Cache::put('inspectionDetailTable', $inspectionDetailTable, 720);
+				} else Cache::forget('inspectionDetailTable');
+			return View::make('Quality_Control_View.inspection_detail_table');
+
+		} elseif ($type == 2) {
+			$inspectionDetails = $inspectionDetailTable[$key];
+			return View::make('Quality_Control_View.inspection_modify_table', array('inspectionDetails'=>$inspectionDetails, 'key'=>$key));
+		}
+
+	}
+
+	/**
+	 * Modify Inspection to Cache
+	 * @return Cache array
+	 */
+	public function postModifyInspectionDetail(){
+
+		$key             = Input::get('key');
+		
+		$no              = count(Input::get('product_att_id'));
+		$product_att_ids = Input::get('product_att_id');
+		$values          = Input::get('value');
+		$items           = Input::get('item');
+		$equipment_ids   = Input::get('equipment_id');
+
+		$inspectionDetails = array();
+
+		for ($i=0; $i < $no; $i++) { 
+			$inspectionDetail                 = new InspectionDetail;
+			$inspectionDetail->product_att_id = $product_att_ids[$i];
+			$inspectionDetail->value          = $values[$i];
+			$inspectionDetail->item           = $items[$i];
+			$inspectionDetail->equipment_id   = $equipment_ids[$i];
+
+			$inspectionDetails[] = $inspectionDetail;
+		}
+
+		
+		$inspectionDetailTable = Cache::get('inspectionDetailTable');
+		$inspectionDetailTable[$key] = $inspectionDetails;
+		
+		Cache::put('inspectionDetailTable', $inspectionDetailTable, 720);
+
+		return View::make('Quality_Control_View.inspection_detail_table');
+		
 	}
 
 	/**

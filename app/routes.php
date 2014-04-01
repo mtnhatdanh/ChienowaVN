@@ -276,8 +276,8 @@ Route::get('test', function(){
 	
 	// dd(DB::getQueryLog());
 	// 
-	print_r(Cache::get('inspectionDetailTable'));
-	Cache::forget('inspectionDetailTable');
+	$inspectionDetailTable = Cache::get('inspectionDetailTable');
+	print_r($inspectionDetailTable);
 	
 });
 
