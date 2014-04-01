@@ -29,6 +29,7 @@ class CreateDailyReportsTable extends Migration {
             $table->string('materials');
             $table->string('other');
             $table->string('material_grade');
+            $table->string('material_color');
             $table->string('material_lot_no');
             $table->boolean('judgement_grade');
             $table->boolean('judgement_color');

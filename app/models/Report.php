@@ -3,8 +3,16 @@ class Report extends Eloquent
 {
     public $table="daily_reports";
 
-    public function production(){
+    public function product(){
     	return $this->belongsTo("Product","product_id");
+    }
+
+    public function appStaff(){
+        return $this->belongsTo('User', 'app_staff_id');
+    }
+
+    public function measurementStaff(){
+        return $this->belongsTo('User', 'measurement_staff_id');
     }
 
     public function calibration(){
@@ -24,20 +32,6 @@ class Report extends Eloquent
                 "date"       =>"required|date"
             )
         )->passes();
-    }
-
-    public function sumInspection(){
-        $sum   = 0;
-        $sumOK = 0;
-        $sumNG = 0;
-        foreach ($this->inspection as $inspection) {
-            $sum += $inspection->amount;
-            if ($inspection->quality) {
-                $sumOK += $inspection->amount;
-            } else $sumNG =+ $inspection->amount;
-        }
-        $result = array('sum'=>$sum, 'sumOK'=>$sumOK, 'sumNG'=>$sumNG);
-        return $result;
     }
 
     public function countEquipment(){
