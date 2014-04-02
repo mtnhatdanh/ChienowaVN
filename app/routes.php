@@ -290,8 +290,7 @@ Route::get('test', function(){
 	
 	// dd(DB::getQueryLog());
 	// 
-	$inspectionDetailTable = Cache::get('inspectionDetailTable');
-	print_r($inspectionDetailTable);
+	return View::make('test');
 	
 });
 

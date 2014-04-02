@@ -62,7 +62,7 @@ $report_no = DB::table('information_schema.tables')
 						<div class="row form-group">
 							<div class="col-sm-3 form-group">
 								<label for="app_staff_id" class="control-label">APP'D</label>
-								<select name="app_staff_id" id="app_staff_id" class="form-control">
+								<select name="app_staff_id" id="selectApp_staff_id" class="form-control">
 									<option value="-1">-- Select a staff --</option>
 									@foreach (User::where('id', '!=', 16)->get() as $user)
 									<option value="{{$user->id}}">{{$user->name}}</option>
@@ -280,15 +280,14 @@ $report_no = DB::table('information_schema.tables')
 
 <script type="text/javascript">
 
-	// Print from via submit form
-
+	// validation main form
 	$('#form-report').validate({
 		rules:{
 			date:{
 				required:true,
 			},
 			judgement:{
-				min:-1,
+				min:0,
 			},
 			app_staff_id:{
 				min:1,
@@ -394,6 +393,7 @@ $report_no = DB::table('information_schema.tables')
 
 		}
 	});
+	
 
 	// Modify Inspection form handle
 	$('#modify-inspection-form').validate({

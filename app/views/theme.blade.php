@@ -26,10 +26,10 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <script src="{{Asset('js/jquery-1.11.0.min.js')}}"></script>
-    <script src="{{Asset('js/jquery-validate/jquery.validate.js')}}"></script>
     <script src="{{Asset('bootstrap-3.1.1/dist/js/bootstrap.min.js')}}"></script>
     <script src="{{Asset('js/jquery.autocomplete.js')}}"></script>
     <script src="{{Asset('js/function.js')}}"></script>
+    <script src="{{Asset('js/jquery-validate/jquery.validate.js')}}"></script>
 
     
   </head>
