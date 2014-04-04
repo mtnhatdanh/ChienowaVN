@@ -87,11 +87,10 @@ class QualityControlController extends Controller
 	 * @return Update database
 	 */
 	public function postNewDailyReport(){
+		
 		$product_id  = Input::get('product_id');
-		$date        = Input::get('date');
-		$description = Input::get('description');
 
-		if (!Cache::has('inspections') && !Cache::has('calibrations')) {
+		if (!Cache::has('inspectionDetailTable') && !Cache::has('calibrations')) {
 			$notification = new Notification;
 			$notification->set('danger', 'Not enough data to save!!');
 			Cache::put('notification', $notification, 10);
@@ -99,10 +98,26 @@ class QualityControlController extends Controller
 		} else {
 
 			// Create new Report with Inspections and Calibrations table
-			$report              = new Report;
-			$report->product_id  = $product_id;
-			$report->date        = $date;
-			$report->description = $description;
+			$report                       = new Report;
+			$report->product_id           = Input::get('product_id');
+			$report->date                 = Input::get('date');
+			$report->judgement            = Input::get('judgement');
+			$report->app_staff_id         = Input::get('app_staff_id');
+			$report->measurement_staff_id = Input::get('measurement_staff_id');
+			$report->equipment            = Input::get('equipment');
+			$report->rs_worker            = Input::get('rs_worker');
+			$report->molding              = Input::get('molding');
+			$report->slight_stop          = Input::get('slight_stop');
+			$report->metal_mold           = Input::get('metal_mold');
+			$report->method               = Input::get('method');
+			$report->materials            = Input::get("materials");
+			$report->other                = Input::get('other');
+			$report->material_grade       = Input::get('material_grade');
+			$report->material_lot_no      = Input::get('material_lot_no');
+			$report->judgement_grade      = Input::get('judgement_grade');
+			$report->material_color       = Input::get('material_color');
+			$report->judgement_color      = Input::get('judgement_color');
+			
 			$report->save();
 
 			$reportId = $report->id;
@@ -117,16 +132,25 @@ class QualityControlController extends Controller
 				}
 			}
 
-			if (Cache::has('inspections')) {
-				$inspections  = Cache::get('inspections');
+			if (Cache::has('inspectionDetailTable')) {
+				$inspections  = Cache::get('inspectionDetailTable');
 				foreach ($inspections as $inspection) {
-					$inspec = $inspection;
+					$inspec = new Inspection;
 					$inspec->report_id = $reportId;
+					
 					$inspec->save();
+					$inspecID = $inspec->id;
+
+					foreach ($inspection as $inspectionDetail) {
+						$inspectDetail = $inspectionDetail;
+						$inspectDetail->inspection_id = $inspecID;
+						$inspectDetail->save();
+					}
+					
 				}
 			}
 
-			Cache::forget('inspections');
+			Cache::forget('inspectionDetailTable');
 			Cache::forget('calibrations');
 
 			$notification = new Notification;

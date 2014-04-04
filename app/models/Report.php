@@ -28,8 +28,11 @@ class Report extends Eloquent
         return Validator::make(
             $this->toArray(),
             array(
-                "product_id" =>"required|integer",
-                "date"       =>"required|date"
+                "product_id"           => "required|integer",
+                "date"                 => "required|date",
+                "app_staff_id"         => "required|integer",
+                "judgement"            => "required|min:0",
+                "measurement_staff_id" => "required|min:1"
             )
         )->passes();
     }

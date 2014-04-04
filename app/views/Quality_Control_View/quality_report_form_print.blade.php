@@ -11,17 +11,26 @@ $no_columns            = count($inspectionDetailTable);
 $no_rows               = count($inspectionDetailTable[0]);
 ?>
 <style type="text/css">
-	td {
+	div#print_form td {
 		text-align: center;
 		vertical-align: middle;
+		border: 1px solid black!important;
 	}
-	th {
+	div#print_form th {
 		text-align: center;
+		border: 1px solid black!important;
 	}
-	td.signature-td {
+	div#print_form td.signature-td {
 		vertical-align: bottom!important;
 		height: 100px;
 	}
+	
+	/*div#print_form table.border-print {
+		border: 1px solid black!important;
+	}
+	div#print_form table.border-print th,td {
+		border: 1px solid black!important;
+	}*/
 </style>
 <div id="print_form" class="container visible-print">
 	<div class="row">
@@ -31,7 +40,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<table class="table table-responsive table-condensed table-bordered">
+			<table class="table table-responsive table-condensed table-bordered border-print">
 				<tr>
 					<td>NAME</td>
 					<td>CHIENOWA VIETNAM CO., LTD</td>
@@ -92,7 +101,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<table class="table table-responsive table-condensed table-bordered">
+			<table class="table table-responsive table-condensed table-bordered" id="inspection-print-table">
 				<tr>
 					<th>Item</th>
 					<th>Standard tolerance</th>
@@ -110,16 +119,213 @@ $no_rows               = count($inspectionDetailTable[0]);
 				for ($j=0; $j < $no_rows; $j++) { 
 				?>
 				<tr>
-					<td>{{$inspectionDetailTable[0][$j]->item}}</td>
-					<td>{{$inspectionDetailTable[0][$j]->productAtt->name}}</td>
+					<!-- Item column -->
+					<?php
+					if ($j>0 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
+					?>
+						<td rowspan="
+							<?php
+								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
+									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
+										case 2:
+											echo "2";
+											break;
+										case 5:
+											echo "3";
+											break;
+										case 7:
+											echo "3";
+											break;
+										case 8:
+											echo "3";
+											break;
+										case 11:
+											echo "6";
+											break;
+										case 12:
+											echo "2";
+											break;
+										case 13:
+											echo "2";
+											break;
+
+										default:
+											echo "1";
+											break;
+									}
+								} else echo "1";
+							?>
+						">
+							{{$inspectionDetailTable[0][$j]->item}}
+						</td>
+					<?php
+					} elseif($j == 0) {
+					?>
+						<td>{{$inspectionDetailTable[0][$j]->item}}</td>
+					<?php } ?>
+
+					
+					<!-- Tolerance column -->
+					<?php
+					if ($j>0 && $j!=2 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
+					?>
+						<td rowspan="
+							<?php
+								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
+									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
+										case 5:
+											echo "3";
+											break;
+										case 7:
+											echo "3";
+											break;
+										case 8:
+											echo "3";
+											break;
+										case 11:
+											echo "6";
+											break;
+										case 12:
+											echo "2";
+											break;
+										case 13:
+											echo "2";
+											break;
+
+										default:
+											echo "1";
+											break;
+									}
+								} else echo "1";
+							?>
+						">
+							@if($inspectionDetailTable[0][$j]->productAtt->order_no == 5) φ4 +0.1mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 7) φ27 +0.15mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 8) φ31.8 -0.15mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 11) φ8.9±0.1mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 12) No Short Shot appearance (Note 5)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 13) φ8.3 -0.2mm <br/> φ8.10mm through <br/> φ8.31mm stop
+							@else {{$inspectionDetailTable[0][$j]->productAtt->name}}
+							@endif
+						</td>
+					<?php
+					} elseif($j==0||$j==2) {
+					?>
+						<td>{{$inspectionDetailTable[0][$j]->productAtt->name}}</td>
+					<?php } ?>
+
+					<!-- Value from input product inspection -->
+
 					<?php
 					for ($i=0; $i < $no_columns; $i++) { 
 					?>
-					<td>{{$inspectionDetailTable[$i][$j]->value}}</td>	
+
+					<td class="text-left">
+						<?php
+						switch ($inspectionDetailTable[$i][$j]->product_att_id) {
+							case 10:
+								echo "MP1: ";
+								break;
+							case 24:
+								echo "MP1: ";
+								break;
+							case 27:
+								echo "MP1: ";
+								break;
+							case 20:
+								echo "MP2: ";
+								break;
+							case 25:
+								echo "MP2: ";
+								break;
+							case 28:
+								echo "MP2: ";
+								break;
+							case 22:
+								echo "MP3: ";
+								break;
+							case 26:
+								echo "MP3: ";
+								break;
+							case 29:
+								echo "MP3: ";
+								break;
+							case 16:
+								echo "L - MP1: ";
+								break;
+							case 30:
+								echo "L - MP2: ";
+								break;
+							case 31:
+								echo "L - MP3: ";
+								break;
+							case 34:
+								echo "R - MP1: ";
+								break;
+							case 35:
+								echo "R - MP2: ";
+								break;
+							case 36:
+								echo "R - MP3: ";
+								break;
+
+							default:
+								break;
+						}
+						?>
+						{{$inspectionDetailTable[$i][$j]->value}}
+
+					</td>	
 					<?php
 					}
 					?>
-					<td>{{$inspectionDetailTable[0][$j]->equipment->name}}</td>
+
+					<!-- Inspection tool column -->
+					<?php
+					if ($j>0 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
+					?>
+						<td rowspan="
+							<?php
+								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
+									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
+										case 2:
+											echo "2";
+											break;
+										case 5:
+											echo "3";
+											break;
+										case 7:
+											echo "3";
+											break;
+										case 8:
+											echo "3";
+											break;
+										case 11:
+											echo "6";
+											break;
+										case 12:
+											echo "2";
+											break;
+										case 13:
+											echo "2";
+											break;
+
+										default:
+											echo "1";
+											break;
+									}
+								} else echo "1";
+							?>
+						">
+							{{$inspectionDetailTable[0][$j]->equipment->name}}
+						</td>
+					<?php
+					} elseif($j == 0) {
+					?>
+						<td>{{$inspectionDetailTable[0][$j]->equipment->name}}</td>
+					<?php } ?>
+
+
 				</tr>
 				<?php
 				}

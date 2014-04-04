@@ -30,7 +30,7 @@ $report_no = DB::table('information_schema.tables')
 
 <div class="container hidden-print" id="content">
 
-	<form id="form-report" action="" method="post">
+	<form id="form-report" action="{{Asset('test')}}" method="post">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="panel panel-default">
@@ -236,7 +236,7 @@ $report_no = DB::table('information_schema.tables')
 <div class="modal fade bs-example-modal-lg hidden-print" id="inspection-modal">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<form id="new-inspection-form">
+			<form id="new-inspection-form" action="" method="post">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">New Inspection</h4>
@@ -257,21 +257,8 @@ $report_no = DB::table('information_schema.tables')
 <!-- Modal Modify Inspection -->
 <div class="modal fade bs-example-modal-lg hidden-print" id="modify-inspection-modal">
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<form id="modify-inspection-form">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Modify Inspection</h4>
-				</div>
-				<div class="modal-body">
-					<div id="div-modify-inspection-detail">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Update Inspection</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
-				</div>
-			</form>
+		<div class="modal-content" id="div-modify-inspection-detail">	
+			
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -348,22 +335,6 @@ $report_no = DB::table('information_schema.tables')
 				}
 			});
 	});
-
-	// Print Daily Report
-	// $('#report_print_button').click(function(){
-	// 	date        = $('#date').val();
-	// 	description = $('#description').val();
-	// 	product_id  = $('#product_id').val();
-	// 	$.ajax({
-	// 			url: '{{Asset('data/print-quality-report')}}',
-	// 			type: 'post',
-	// 			data: {date: date, description: description, product_id: product_id},
-	// 			success: function (data) {
-	// 				$('#print_div').html(data);
-	// 				window.print();
-	// 			}
-	// 		});
-	// });
 	
 
 	// New Inspection handle
@@ -380,37 +351,22 @@ $report_no = DB::table('information_schema.tables')
 	});
 
 	$('#new-inspection-form').validate({
-		submitHandler: function(form) {
-			$.ajax({
+		onsubmit:false
+	});
+
+	$('#new-inspection-form').submit(function(event){
+		event.preventDefault();
+		$.ajax({
 				url: '{{Asset('quality-control/new-inspection-detail')}}',
 				type: 'post',
-				data: $(form).serialize(),
+				data: $('#new-inspection-form').serialize(),
 				success: function (data) {
 					$('#inspection-result-table').html(data);
 					$('#inspection-modal').modal('hide')
 				}
 			});
-
-		}
 	});
 	
-
-	// Modify Inspection form handle
-	$('#modify-inspection-form').validate({
-		submitHandler: function(form) {
-			$.ajax({
-				url: '{{Asset('quality-control/modify-inspection-detail')}}',
-				type: 'post',
-				data: $(form).serialize(),
-				success: function (data) {
-					$('#inspection-result-table').html(data);
-					$('#modify-inspection-modal').modal('hide')
-				}
-			});
-
-		}
-	});
-
 	
 
 </script>

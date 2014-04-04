@@ -32,7 +32,7 @@ Manage Products Attributes
 				<?php $no = 0;?>
 				@foreach (ProductAtt::orderBy('order_no', 'asc')->get() as $product_att)
 				<tr>
-					<td class="text-center">{{++$no}}</td>
+					<td class="text-center">{{++$no}} - {{$product_att->id}}</td>
 					<td>{{$product_att->name}}</td>
 					<td>{{$product_att->type}}</td>
 					<td class="text-center">{{$product_att->order_no}}</td>

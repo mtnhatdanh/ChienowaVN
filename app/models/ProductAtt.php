@@ -23,7 +23,7 @@ class ProductAtt extends Eloquent
         return Validator::make(
             $this->toArray(),
             array(
-				"name"     => "required|unique:product_atts",
+				"name"     => "required",
 				"order_no" => "required|integer"
             )
         )->passes();

@@ -6,18 +6,21 @@ New Daily Report
 
 @section('content')
 <div class="container">
-    <form action="" id="test-form">
+    <form action="{{Asset('testA')}}" method="post" id="test-form">
         <div class="row">
-           <input type="text" name="test1" id="inputTest1" class="form-control">
+           <input type="text" name="test1" id="inputTest1" class="form-control" value="aaa">
            <input type="text" name="test2" id="inputTest2" class="form-control">
            <input type="text" name="test3" id="inputTest3" class="form-control">
            <input type="text" name="test4" id="inputTest4" class="form-control">
         </div>
+        <button>Submit</button>
     </form>
 </div>
 
 <script>
-    $('#test-form').validate();
+    $('#test-form').validate({
+      onsubmit:false
+    });
     $( "#inputTest1" ).rules( "add", {
         min:9.9,
         max:10
@@ -25,5 +28,10 @@ New Daily Report
     $( "#inputTest2" ).rules( "add", {
         min:100
     });
+    $('#test-form').submit(function(event){
+      event.preventDefault();
+      alert('abc');
+    });
+    $('#test-form').valid();
 </script>
 @endsection
