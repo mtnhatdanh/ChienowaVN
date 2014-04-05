@@ -312,6 +312,12 @@ Route::post('test', function(){
 
 	$data = array('report' => $report);
 	return View::make('Quality_Control_View.quality_report_form_print', $data);
+	// 
+	
+	// $abc = InspectionDetail::find(129);
+	// if ($abc->validWattyProduct()) {
+	// 	echo "OK";
+	// } else echo "not OK";
 	
 	
 });

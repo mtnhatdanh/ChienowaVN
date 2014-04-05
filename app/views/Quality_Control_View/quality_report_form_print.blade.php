@@ -25,12 +25,10 @@ $no_rows               = count($inspectionDetailTable[0]);
 		height: 100px;
 	}
 	
-	/*div#print_form table.border-print {
-		border: 1px solid black!important;
+	.bold {
+		font-weight: bold;
 	}
-	div#print_form table.border-print th,td {
-		border: 1px solid black!important;
-	}*/
+
 </style>
 <div id="print_form" class="container visible-print">
 	<div class="row">
@@ -220,7 +218,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 					for ($i=0; $i < $no_columns; $i++) { 
 					?>
 
-					<td class="text-left">
+					<td class="text-left @if (!$inspectionDetailTable[$i][$j]->validWattyProduct()) bold @endif">
 						<?php
 						switch ($inspectionDetailTable[$i][$j]->product_att_id) {
 							case 10:

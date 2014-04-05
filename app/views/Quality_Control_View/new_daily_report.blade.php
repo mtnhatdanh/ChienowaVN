@@ -30,7 +30,7 @@ $report_no = DB::table('information_schema.tables')
 
 <div class="container hidden-print" id="content">
 
-	<form id="form-report" action="{{Asset('test')}}" method="post">
+	<form id="form-report" action="{{Asset('quality-control/new-daily-report')}}" method="post">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="panel panel-default">
