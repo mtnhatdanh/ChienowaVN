@@ -10,48 +10,32 @@
 	<div class="col-sm-12">
 		<table class="table table-responsive table-condensed table-bordered">
 			<tr>
-				<th>No</th>
+				<th>Report No</th>
 				<th>Date</th>
-				<th class="text-right">OK</th>
-				<th class="text-right">NG</th>
-				<th class="text-right">SumAmount</th>
+				<th>Product</th>
+				<th>JUDGEMENT</th>
+				<th>Shot times</th>
 				<th>Equipments Used</th>
-				<th>Description</th>
+				<th>APP'D Staff</th>
+				<th>Measurement Staff</th>
 				<th>Action</th>
 			</tr>
-			<?php 
-			$no    = 0; 
-			$sumA  = 0;
-			$sumOK = 0;
-			$sumNG = 0;
-			?>
 			@foreach ($reports as $report)
-			<?php 
-			$sumInspection = $report->sumInspection();
-			$sumA          += $sumInspection['sum'];
-			$sumOK         += $sumInspection['sumOK'];
-			$sumNG         += $sumInspection['sumNG'];
-			?>
 			<tr>
-				<td class="text-center">{{++$no}}</td>
+				<td class="text-center">{{$report->id}}</td>
 				<td class="text-center">{{date('m/d/Y', strtotime($report->date))}}</td>
-				<td class="text-right">{{number_format($sumInspection['sumOK'], 0, '.', ',')}}</td>
-				<td class="text-right">{{number_format($sumInspection['sumNG'], 0, '.', ',')}}</td>
-				<td class="text-right">{{number_format($sumInspection['sum'], 0, '.', ',')}}</td>
+				<td class="text-center">{{$report->product->name}}</td>
+				<td class="text-center">@if ($report->judgement == 1) OK @else NG @endif</td>
+				<td class="text-center">{{$report->countInspection()}}</td>
 				<td class="text-center">{{$report->countEquipment()}}</td>
-				<td>{{$report->description}}</td>
+				<td>{{$report->appStaff->name}}</td>
+				<td>{{$report->measurementStaff->name}}</td>
 				<td class="text-center">
 					<a href="{{Asset('quality-control/modify-report/'.$report->id)}}"><button type="button" class="btn btn-link">Modify</button></a>
 					<button type="button" class="btn btn-link delete_button" id="{{$report->id}}" data-toggle="modal" data-target="#myModal">Del</button>
 				</td>
 			</tr>
 			@endforeach
-			<tr>
-				<td colspan="2" class="text-center"><strong>Sumary</strong></td>
-				<td class="text-right"><strong>{{number_format($sumOK, 0, '.', ',')}}</strong></td>
-				<td class="text-right"><strong>{{number_format($sumNG, 0, '.', ',')}}</strong></td>
-				<td class="text-right"><strong>{{number_format($sumA, 0, '.', ',')}}</strong></td>
-			</tr>
 		</table>
 	</div>
 </div>

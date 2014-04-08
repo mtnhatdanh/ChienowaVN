@@ -77,7 +77,7 @@ class QualityControlController extends Controller
 			);
 		Cache::forget('notification');
 		Cache::forget('calibrations');
-		Cache::forget('inspections');
+		Cache::forget('inspectionDetailTable');
 
 		return View::make('Quality_Control_View.new_daily_report', $data);
 	}
@@ -355,15 +355,24 @@ class QualityControlController extends Controller
 	public function postDeleteReport(){
 
 		$report_id = Input::get('report_id');
-		echo $report_id;
-		Calibration::where('report_id', '=', $report_id)->delete();
-		Inspection::where('report_id', '=', $report_id)->delete();
+		
 		$report = Report::find($report_id);
-		$report->delete();
+		
+		Calibration::where('report_id', '=', $report_id)->delete();
+		// if (count($report->calibration)) {
+		// 	foreach ($report->cablibration as $calibration) {
+		// 		$calibration->delete();
+		// 	}
+		// }
 
-		$notification = new Notification;
-		$notification->set('success', 'Delete report has been successful!!');
-		Cache::put('notification', $notification, 10);
+		if (count($report->inspection)) {
+			foreach ($report->inspection as $inspection) {
+				$inspection->delete();
+			}
+		}
+		// Inspection::where('report_id', '=', $report_id)->delete();
+		
+		$report->delete();
 
 		return Redirect::to('quality-control/manage-daily-report');
 		
@@ -378,11 +387,24 @@ class QualityControlController extends Controller
 		$report = Report::find($report_id);
 
 		$calibrations = $report->calibration;
-		$inspections = $report->inspection;
-		Cache::put('calibrations', $calibrations, 720);
-		Cache::put('inspections', $inspections, 720);
+		$inspections  = $report->inspection;
+		$inspectionDetailTable = array();
 
-		$data = array('report'=>$report);
+		foreach ($inspections as $inspection) {
+			$inspectionArray = array();
+			foreach ($inspection->inspectionDetail as $inspectionDetail) {
+				$inspectionArray[] = $inspectionDetail;
+			}
+			$inspectionDetailTable[] = $inspectionArray;
+		}
+
+		Cache::put('calibrations', $calibrations, 720);
+		Cache::put('inspectionDetailTable', $inspectionDetailTable , 720);
+
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+
+		$data = array('report'=>$report, 'notification'=>$notification);
 
 		return View::make('Quality_Control_View.modify_daily_report', $data);
 
@@ -397,31 +419,54 @@ class QualityControlController extends Controller
 	public function postModifyReport($report_id){
 
 		$product_id  = Input::get('product_id');
-		$date        = Input::get('date');
-		$description = Input::get('description');
 
-		if (!Cache::has('inspections') && !Cache::has('calibrations')) {
+		if (!Cache::has('inspectionDetailTable') && !Cache::has('calibrations')) {
 			$notification = new Notification;
 			$notification->set('danger', 'Not enough data to save!!');
 			Cache::put('notification', $notification, 10);
-			return Redirect::to('quality-control/manage-daily-report');
+			return Redirect::to('quality-control/modify-report/'.$report_id);
 		} else {
 
-			// Update Report with Inspections and Calibrations table
-			$report              = Report::find($report_id);
-			$report->product_id  = $product_id;
-			$report->date        = $date;
-			$report->description = $description;
+			// Delete old data of Calibration
+			Calibration::where('report_id', '=', $report_id)->delete();
+
+			// Delete old data of Inspection
+			$report                       = Report::find($report_id);
+
+			$inspections = $report->inspection;
+			foreach ($inspections as $inspection) {
+				$inspection->delete();
+			}
+
+			// Modify Report with Inspections and Calibrations table
+
+			$report->product_id           = Input::get('product_id');
+			$report->date                 = Input::get('date');
+			$report->judgement            = Input::get('judgement');
+			$report->app_staff_id         = Input::get('app_staff_id');
+			$report->measurement_staff_id = Input::get('measurement_staff_id');
+			$report->equipment            = Input::get('equipment');
+			$report->rs_worker            = Input::get('rs_worker');
+			$report->molding              = Input::get('molding');
+			$report->slight_stop          = Input::get('slight_stop');
+			$report->metal_mold           = Input::get('metal_mold');
+			$report->method               = Input::get('method');
+			$report->materials            = Input::get("materials");
+			$report->other                = Input::get('other');
+			$report->material_grade       = Input::get('material_grade');
+			$report->material_lot_no      = Input::get('material_lot_no');
+			$report->judgement_grade      = Input::get('judgement_grade');
+			$report->material_color       = Input::get('material_color');
+			$report->judgement_color      = Input::get('judgement_color');
+			
 			$report->save();
 
-			Calibration::where('report_id', '=', $report_id)->delete();
-			Inspection::where('report_id', '=', $report_id)->delete();
-
+			
 
 			if (Cache::has('calibrations')) {
 				$calibrations = Cache::get('calibrations');
 				foreach ($calibrations as $calibration) {
-					$calib = new Calibration;
+					$calib                    = new Calibration;
 					$calib->report_id         = $report_id;
 					$calib->equipment_id      = $calibration->equipment_id;
 					$calib->before_inspection = $calibration->before_inspection;
@@ -430,26 +475,35 @@ class QualityControlController extends Controller
 				}
 			}
 
-			if (Cache::has('inspections')) {
-				$inspections  = Cache::get('inspections');
+			if (Cache::has('inspectionDetailTable')) {
+				$inspections  = Cache::get('inspectionDetailTable');
 				foreach ($inspections as $inspection) {
-					$inspec              = new Inspection;
-					$inspec->report_id   = $report_id;
-					$inspec->user_id     = $inspection->user_id;
-					$inspec->amount      = $inspection->amount;
-					$inspec->quality     = $inspection->quality;
-					$inspec->description = $inspection->description;
+					$inspec = new Inspection;
+					$inspec->report_id = $report_id;
+					
 					$inspec->save();
+					$inspecID = $inspec->id;
+
+					foreach ($inspection as $inspectionDetail) {
+						$inspectDetail = new InspectionDetail;
+						$inspectDetail->inspection_id  = $inspecID;
+						$inspectDetail->product_att_id = $inspectionDetail->product_att_id;
+						$inspectDetail->value          = $inspectionDetail->value;
+						$inspectDetail->item           = $inspectionDetail->item;
+						$inspectDetail->equipment_id   = $inspectionDetail->equipment_id;
+						$inspectDetail->save();
+					}
+					
 				}
 			}
 
-			Cache::forget('inspections');
+			Cache::forget('inspectionDetailTable');
 			Cache::forget('calibrations');
 
 			$notification = new Notification;
-			$notification->set('success', 'Report update successful!!');
+			$notification->set('success', 'Report save successful!!');
 			Cache::put('notification', $notification, 10);
-			return Redirect::to('quality-control/manage-daily-report');
+			return Redirect::to('quality-control/modify-report/'.$report_id);
 		}
 	}
 

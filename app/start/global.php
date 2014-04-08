@@ -135,14 +135,14 @@ Report::updating(function($report){
 });
 
 // Model Event prevent delete Report while still have link
-Report::deleting(function($report){
-	if (count($report->calibration)||count($report->inspection)) {
-		$notification = new Notification;
-		$notification->set('danger', 'Can not delete this report!!');
-		Cache::put('notification', $notification, 10);
-		return false;
-	}
-});
+// Report::deleting(function($report){
+// 	if (count($report->calibration)||count($report->inspection)) {
+// 		$notification = new Notification;
+// 		$notification->set('danger', count($report->calibration).'-'.count($report->inspection));
+// 		Cache::put('notification', $notification, 10);
+// 		return false;
+// 	}
+// });
 
 
 // Model Event prevent delete object while still have link
@@ -203,5 +203,15 @@ ProductAtt::updating(function($ProductAtt){
     	$notification->set('danger', 'Can not update!!');
     	Cache::put('notification', $notification, 10);
     	return false;
+	}
+});
+
+// Delete InspectionDetail when delete Inspection
+Inspection::deleting(function($inspection){
+	if (count($inspection->inspectionDetail)) {
+		foreach ($inspection->inspectionDetail as $inspectionDetail) {
+			$del = InspectionDetail::find($inspectionDetail->id);
+			$del->delete();
+		}
 	}
 });

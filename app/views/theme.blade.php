@@ -101,6 +101,8 @@
                 <li><a href="{{Asset('report/transactions')}}">Transactions</a></li>
                 <li class="divider"></li>
                 <li><a href="{{Asset('report/expense')}}">Expense report</a></li>
+                <li class="divider"></li>
+                <li><a href="{{Asset('report/quality-control')}}">Quality Control Report</a></li>
               </ul>
             </li>
 

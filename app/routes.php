@@ -286,32 +286,34 @@ Route::group(array("prefix"=>"excel-export"), function(){
 });
 
 // test route
-Route::post('test', function(){
+Route::get('test', function(){
 
-	$report = new Report();
+	print_r(Cache::get('calibrations'));
 
-	$report->product_id           = Input::get('product_id');
-	$report->date                 = Input::get('date');
-	$report->judgement            = Input::get('judgement');
-	$report->app_staff_id         = Input::get('app_staff_id');
-	$report->measurement_staff_id = Input::get('measurement_staff_id');
-	$report->equipment            = Input::get('equipment');
-	$report->rs_worker            = Input::get('rs_worker');
-	$report->molding              = Input::get('molding');
-	$report->slight_stop          = Input::get('slight_stop');
-	$report->metal_mold           = Input::get('metal_mold');
-	$report->method               = Input::get('method');
-	$report->materials            = Input::get('materials');
-	$report->other                = Input::get('other');
-	$report->material_grade       = Input::get('material_grade');
-	$report->material_color       = Input::get('material_color');
-	$report->material_lot_no      = Input::get('material_lot_no');
-	$report->judgement_grade      = Input::get('judgement_grade');
-	$report->judgement_color      = Input::get('judgement_color');
+	// $report = new Report();
+
+	// $report->product_id           = Input::get('product_id');
+	// $report->date                 = Input::get('date');
+	// $report->judgement            = Input::get('judgement');
+	// $report->app_staff_id         = Input::get('app_staff_id');
+	// $report->measurement_staff_id = Input::get('measurement_staff_id');
+	// $report->equipment            = Input::get('equipment');
+	// $report->rs_worker            = Input::get('rs_worker');
+	// $report->molding              = Input::get('molding');
+	// $report->slight_stop          = Input::get('slight_stop');
+	// $report->metal_mold           = Input::get('metal_mold');
+	// $report->method               = Input::get('method');
+	// $report->materials            = Input::get('materials');
+	// $report->other                = Input::get('other');
+	// $report->material_grade       = Input::get('material_grade');
+	// $report->material_color       = Input::get('material_color');
+	// $report->material_lot_no      = Input::get('material_lot_no');
+	// $report->judgement_grade      = Input::get('judgement_grade');
+	// $report->judgement_color      = Input::get('judgement_color');
 
 
-	$data = array('report' => $report);
-	return View::make('Quality_Control_View.quality_report_form_print', $data);
+	// $data = array('report' => $report);
+	// return View::make('Quality_Control_View.quality_report_form_print', $data);
 	// 
 	
 	// $abc = InspectionDetail::find(129);

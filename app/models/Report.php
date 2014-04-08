@@ -42,5 +42,9 @@ class Report extends Eloquent
         return $result;
     }
 
+    public function countInspection(){
+        return count($this->inspection);
+    }
+
 
 }

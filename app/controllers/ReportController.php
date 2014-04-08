@@ -101,4 +101,12 @@ class ReportController extends Controller
 
 	}
 
+	/**
+	 * Quality Control report
+	 * @return View
+	 */
+	public function getQualityControl(){
+		return View::make('Report_View.quality_control');
+	}
+
 }
