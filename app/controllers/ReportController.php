@@ -109,4 +109,20 @@ class ReportController extends Controller
 		return View::make('Report_View.quality_control');
 	}
 
+	public function postQualityControl(){
+
+		$from_day   = Input::get('from_day');
+		$to_day     = Input::get('to_day');
+		$product_id = Input::get('product_id');
+
+		$reports = Report::whereBetween('date', array($from_day, $to_day))
+					->where('product_id', '=', $product_id)
+					->orderBy('date', 'asc')->get();
+
+		Cache::forget('calibrations');
+		Cache::forget('inspections');
+
+		return View::make('Report_View.quality_control_table', array('reports'=>$reports));
+	}
+
 }

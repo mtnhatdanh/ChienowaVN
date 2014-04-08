@@ -323,12 +323,12 @@ $report_no = DB::table('information_schema.tables')
 	// Print Calibration Equipments
 	
 	$('#print_calibration').click(function(){
-		date        = $('#date').val();
-		description = $('#description').val();
+		date      = $('#date').val();
+		report_no = {{$report_no}};
 		$.ajax({
 				url: '{{Asset('data/print-calibrations')}}',
 				type: 'post',
-				data: {date: date, description: description},
+				data: {date: date, report_no: report_no},
 				success: function (data) {
 					$('#print_div').html(data);
 					window.print();

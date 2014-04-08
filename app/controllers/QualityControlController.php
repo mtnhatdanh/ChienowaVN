@@ -329,6 +329,8 @@ class QualityControlController extends Controller
 	public function getManageDailyReport(){
 		$notification = Cache::get('notification');
 		Cache::forget('notification');
+		Cache::forget('calibrations');
+		Cache::forget('inspectionDetailTable');
 		return View::make('Quality_Control_View.manage_daily_report', array('notification'=>$notification));
 	}
 

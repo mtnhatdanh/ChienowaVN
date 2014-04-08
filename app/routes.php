@@ -151,37 +151,67 @@ Route::group(array("prefix"=>"data"), function(){
 
 	// Ajax for Calibration Equipments print button
 	Route::post('print-calibrations', function(){
-		$date        = Input::get('date');
-		$description = Input::get('description');
+		if (Input::has('report_id')) {
+			$report       = Report::find(Input::get('report_id'));
+			$date         = $report->date;
+			$report_no    = $report->id;
+			$calibrations = $report->calibration;
+			$calibArray = array();
+			foreach ($calibrations as $calibration) {
+				$calibArray[] = $calibration;
+			}
+			Cache::put('calibrations', $calibArray, 720);
+		} else {
+			$date      = Input::get('date');
+			$report_no = Input::get('report_no');
+		}
 		$data = array(
-			'date'        => $date,
-			'description' => $description
+			'date'      => $date,
+			'report_no' => $report_no
 			);
 		return View::make('Quality_Control_View.calibrations_form_print', $data);
 	});
 
 	// Ajax for Daily Quality Control print button
 	Route::post('print-quality-report', function(){
-		$report = new Report();
 
-		$report->product_id           = Input::get('product_id');
-		$report->date                 = Input::get('date');
-		$report->judgement            = Input::get('judgement');
-		$report->app_staff_id         = Input::get('app_staff_id');
-		$report->measurement_staff_id = Input::get('measurement_staff_id');
-		$report->equipment            = Input::get('equipment');
-		$report->rs_worker            = Input::get('rs_worker');
-		$report->molding              = Input::get('molding');
-		$report->slight_stop          = Input::get('slight_stop');
-		$report->metal_mold           = Input::get('metal_mold');
-		$report->method               = Input::get('method');
-		$report->materials            = Input::get('materials');
-		$report->other                = Input::get('other');
-		$report->material_grade       = Input::get('material_grade');
-		$report->material_color       = Input::get('material_color');
-		$report->material_lot_no      = Input::get('material_lot_no');
-		$report->judgement_grade      = Input::get('judgement_grade');
-		$report->judgement_color      = Input::get('judgement_color');
+		if (Input::has('report_id')) {
+			$report = Report::find(Input::get('report_id'));
+
+			$inspections  = $report->inspection;
+			$inspectionDetailTable = array();
+
+			foreach ($inspections as $inspection) {
+				$inspectionArray = array();
+				foreach ($inspection->inspectionDetail as $inspectionDetail) {
+					$inspectionArray[] = $inspectionDetail;
+				}
+				$inspectionDetailTable[] = $inspectionArray;
+			}
+			Cache::put('inspectionDetailTable', $inspectionDetailTable , 720);
+
+		} else {
+			$report = new Report();
+
+			$report->product_id           = Input::get('product_id');
+			$report->date                 = Input::get('date');
+			$report->judgement            = Input::get('judgement');
+			$report->app_staff_id         = Input::get('app_staff_id');
+			$report->measurement_staff_id = Input::get('measurement_staff_id');
+			$report->equipment            = Input::get('equipment');
+			$report->rs_worker            = Input::get('rs_worker');
+			$report->molding              = Input::get('molding');
+			$report->slight_stop          = Input::get('slight_stop');
+			$report->metal_mold           = Input::get('metal_mold');
+			$report->method               = Input::get('method');
+			$report->materials            = Input::get('materials');
+			$report->other                = Input::get('other');
+			$report->material_grade       = Input::get('material_grade');
+			$report->material_color       = Input::get('material_color');
+			$report->material_lot_no      = Input::get('material_lot_no');
+			$report->judgement_grade      = Input::get('judgement_grade');
+			$report->judgement_color      = Input::get('judgement_color');
+		}
 
 
 		$data = array('report' => $report);

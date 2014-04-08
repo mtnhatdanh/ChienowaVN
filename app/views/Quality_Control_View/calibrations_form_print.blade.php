@@ -10,8 +10,8 @@
 	</div>
 	<div class="row text-center">
 		<h3>Equipments Calibration</h3>
-		<span>Date: {{date('m/d/Y', strtotime($date))}}</span><br/>
-		<span>Description: {{$description}}</span>
+		<span>Report number: {{$report_no}}</span><br/>
+		<span>Date: {{date('m/d/Y', strtotime($date))}}</span>
 	</div>
 	<br/>
 	<div class="row">
