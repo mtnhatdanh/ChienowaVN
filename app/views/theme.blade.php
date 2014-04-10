@@ -56,6 +56,7 @@
               <ul class="dropdown-menu">
                 <li><a href="{{Asset('user/manage-user')}}">Manage Users</a></li>
                 <li class="hidden-xs"><a href="{{Asset('user/create-user')}}">Create user</a></li>
+                <li class="hidden-xs"><a href="{{Asset('user/staff-rank')}}">Staff Rank</a></li>
               </ul>
             </li>
             <li class="dropdown @if(Session::get('active_menu')=='inventory') active @endif hidden-xs">

@@ -19,6 +19,10 @@ class User extends Eloquent
         return $this->hasMany("Inspection", "user_id");
     }
 
+    public function staffRank(){
+        return $this->hasOne('StaffRank', 'user_id');
+    }
+
     public static function check_signin($username, $password){
     	$check = User::where("username", "=", $username)->where("password", "=", $password)->count();
     	if ($check>0) return true;

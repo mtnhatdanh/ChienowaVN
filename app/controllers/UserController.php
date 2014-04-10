@@ -112,4 +112,34 @@ class UserController extends Controller
 		} else echo "Validation fails";
 
 	}
+
+	/**
+	 * Staff Rank
+	 * @return View
+	 */
+	public function getStaffRank(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('User_View.staff-rank', array('notification'=>$notification));
+	}
+
+	public function postStaffRank(){
+		$staffRank              = new StaffRank;
+		$staffRank->user_id     = Input::get('user_id');
+		$staffRank->skill_rank  = implode(' ', Input::get('skill_rank'));
+		$staffRank->description = Input::get('description');
+		$staffRank->save();
+
+		$notification = new Notification;
+		$notification->set('success', 'Create Staff Rank successfully!!');
+		return View::make('User_View.staff-rank', array('notification'=>$notification));
+	}
+
+	public function postDeleteStaffRank(){
+		$staffRank = StaffRank::find(Input::get('staffRank_id'));
+		$staffRank->delete();
+		$notification = new Notification;
+		$notification->set('success', 'Delete Staff Rank successfully!!');
+		return View::make('User_View.staff-rank', array('notification'=>$notification));
+	}
 }

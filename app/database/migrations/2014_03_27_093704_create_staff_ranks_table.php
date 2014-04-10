@@ -15,8 +15,8 @@ class CreateStaffRanksTable extends Migration {
 		//Create staff_ranks table
 		Schema::create('staff_ranks', function ($table) {
             $table->increments("id");
-            $table->integer("user_id");
-            $table->integer('rank');
+            $table->integer("user_id")->unique();
+            $table->string('skill_rank');
             $table->string('description');
             $table->timestamps();
         });

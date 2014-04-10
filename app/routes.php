@@ -102,6 +102,12 @@ Route::group(array("prefix"=>"check"), function(){
 			return "false";
 		} else return "true";
 	});
+	// Check valid staff Rank ID exits
+	Route::post('check-staffRank', function(){
+		if (StaffRank::checkStaffRankExist(Input::get('user_id'))) {
+			return "false";
+		} else return 'true';
+	});
 });
 
 //Get data to lookup
