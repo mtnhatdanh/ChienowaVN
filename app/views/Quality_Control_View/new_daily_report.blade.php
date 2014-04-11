@@ -64,8 +64,10 @@ $report_no = DB::table('information_schema.tables')
 								<label for="app_staff_id" class="control-label">APP'D</label>
 								<select name="app_staff_id" id="selectApp_staff_id" class="form-control">
 									<option value="-1">-- Select a staff --</option>
-									@foreach (User::where('id', '!=', 16)->get() as $user)
-									<option value="{{$user->id}}">{{$user->name}}</option>
+									@foreach (StaffRank::get() as $staffRank)
+									@if (in_array(2, explode(' ', $staffRank->skill_rank)))
+									<option value="{{$staffRank->user->id}}">{{$staffRank->user->name}}</option>
+									@endif
 									@endforeach
 								</select>
 							</div>
@@ -73,8 +75,10 @@ $report_no = DB::table('information_schema.tables')
 								<label for="measurement_staff_id" class="control-label">Measurement</label>
 								<select name="measurement_staff_id" id="measurement_staff_id" class="form-control">
 									<option value="-1">-- Select a staff --</option>
-									@foreach (User::where('id', '!=', 16)->get() as $user)
-									<option value="{{$user->id}}">{{$user->name}}</option>
+									@foreach (StaffRank::get() as $staffRank)
+									@if (in_array(1, explode(' ', $staffRank->skill_rank)))
+									<option value="{{$staffRank->user->id}}">{{$staffRank->user->name}}</option>
+									@endif
 									@endforeach
 								</select>
 							</div>
