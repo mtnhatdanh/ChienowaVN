@@ -104,18 +104,13 @@ class QualityControlController extends Controller
 			$report->judgement            = Input::get('judgement');
 			$report->app_staff_id         = Input::get('app_staff_id');
 			$report->measurement_staff_id = Input::get('measurement_staff_id');
-			$report->equipment            = Input::get('equipment');
-			$report->rs_worker            = Input::get('rs_worker');
-			$report->molding              = Input::get('molding');
-			$report->slight_stop          = Input::get('slight_stop');
-			$report->metal_mold           = Input::get('metal_mold');
-			$report->method               = Input::get('method');
-			$report->materials            = Input::get("materials");
-			$report->other                = Input::get('other');
-			$report->material_grade       = Input::get('material_grade');
-			$report->material_lot_no      = Input::get('material_lot_no');
+			$report->part_no              = Input::get('part_no');
+			$report->part_name            = Input::get('part_name');
+			$report->lot_no               = Input::get('lot_no');
+			$report->delivery_date        = Input::get('delivery_date');
+			$report->sample_qty           = Input::get('sample_qty');
+			$report->inspection_qty       = Input::get('inspection_qty');
 			$report->judgement_grade      = Input::get('judgement_grade');
-			$report->material_color       = Input::get('material_color');
 			$report->judgement_color      = Input::get('judgement_color');
 			
 			$report->save();
@@ -165,10 +160,24 @@ class QualityControlController extends Controller
 	 * New Inspection Detail modal
 	 * @return form new Inspection detail
 	 */
-	public function postNewInspectionModal(){
+	public function postInspectionModal(){
 		$product_id = Input::get('product_id');
+		$cav_key    = Input::get('cav_key');
 		$product    = Product::find($product_id);
-		return View::make('QUality_Control_View.inspection_table', array('product'=>$product));
+
+		$inspectionDetailTable = Cache::get('inspectionDetailTable');
+
+
+		if (!isset($inspectionDetailTable[$cav_key])) {
+			return View::make('Quality_Control_View.inspection_table', array('product'=>$product, 'cav_key'=>$cav_key));
+			
+		} else {
+			// return Response::json('error', 400);
+			$inspectionDetails = $inspectionDetailTable[$cav_key];
+			return View::make('Quality_Control_View.inspection_modify_table', array('inspectionDetails'=>$inspectionDetails, 'cav_key'=>$cav_key));
+		}
+
+		
 	}
 
 	/**
@@ -177,7 +186,9 @@ class QualityControlController extends Controller
 	 */
 	public function postNewInspectionDetail(){
 		
-		$no = count(Input::get('product_att_id'));
+		$cav_key         = Input::get('cav_key');
+
+		$no              = count(Input::get('product_att_id'));
 		$product_att_ids = Input::get('product_att_id');
 		$values          = Input::get('value');
 		$items           = Input::get('item');
@@ -198,10 +209,10 @@ class QualityControlController extends Controller
 		if (Cache::has('inspectionDetailTable')) {
 			$inspectionDetailTable = Cache::get('inspectionDetailTable');
 		} else $inspectionDetailTable = array();
-		$inspectionDetailTable[] = $inspectionDetails;
+		$inspectionDetailTable[$cav_key] = $inspectionDetails;
 		Cache::put('inspectionDetailTable', $inspectionDetailTable, 720);
 
-		return View::make('Quality_Control_View.inspection_detail_table');
+		return View::make('QUality_Control_View.inspection_detail_table');
 		
 	}
 
@@ -235,7 +246,7 @@ class QualityControlController extends Controller
 	 */
 	public function postModifyInspectionDetail(){
 
-		$key             = Input::get('key');
+		$cav_key         = Input::get('cav_key');
 		
 		$no              = count(Input::get('product_att_id'));
 		$product_att_ids = Input::get('product_att_id');
@@ -257,11 +268,11 @@ class QualityControlController extends Controller
 
 		
 		$inspectionDetailTable = Cache::get('inspectionDetailTable');
-		$inspectionDetailTable[$key] = $inspectionDetails;
+		$inspectionDetailTable[$cav_key] = $inspectionDetails;
 		
 		Cache::put('inspectionDetailTable', $inspectionDetailTable, 720);
 
-		return View::make('Quality_Control_View.inspection_detail_table');
+		return View::make('QUality_Control_View.inspection_detail_table');
 		
 	}
 

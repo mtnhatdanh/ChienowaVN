@@ -14,7 +14,7 @@
 						<th>Inspection tool</th>
 					</tr>
 					<?php $no=0; ?>
-					<input type="hidden" name="key" value="{{$key}}">
+					<input type="hidden" name="cav_key" value="{{$cav_key}}">
 					@foreach ($inspectionDetails as $inspectionDetail)
 					<tr>
 						<td>{{$inspectionDetail->productAtt->name}}<input type="hidden" name="product_att_id[]" value="{{$inspectionDetail->product_att_id}}"></td>
@@ -48,8 +48,8 @@
 				type: 'post',
 				data: $('#modify_inspection_form').serialize(),
 				success: function (data) {
+					$('#inspection-modal').modal('hide');
 					$('#inspection-result-table').html(data);
-					$('#modify-inspection-modal').modal('hide')
 				}
 			});
 	});

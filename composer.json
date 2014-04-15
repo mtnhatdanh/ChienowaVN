@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-		"maatwebsite/excel": "dev-master"
+		"maatwebsite/excel": "dev-master",
+		"anahkiasen/former": "dev-master",
+		"laravelbook/ardent": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
@@ -33,5 +35,8 @@
 	"config": {
 		"preferred-install": "dist"
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "stable",
+	"require-dev": {
+		"way/generators": "2.*"
+	}
 }

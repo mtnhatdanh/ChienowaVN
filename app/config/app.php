@@ -107,6 +107,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Way\Generators\GeneratorsServiceProvider',
+		'Former\FormerServiceProvider',
 
 	),
 
@@ -174,6 +176,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 		'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
+		'Former' => 'Former\Facades\Former',
 
 	),
 

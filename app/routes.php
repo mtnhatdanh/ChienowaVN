@@ -324,7 +324,15 @@ Route::group(array("prefix"=>"excel-export"), function(){
 // test route
 Route::get('test', function(){
 
-	print_r(Cache::get('calibrations'));
+	Former::populate(Position::all());
+
+	echo Former::select('position_name')->option();
+
+	
+
+
+
+
 
 	// $report = new Report();
 

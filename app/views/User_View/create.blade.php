@@ -12,69 +12,50 @@ Chienowa Vietnam - Create User
 </div>
 
 <div  id="content">
-	<form action="{{Asset('user/create-user')}}" method="post" class="form-horizontal" id="form-register">
+	{{Former::open()->action(asset('user/create-user'))->id('form-register')}}
+	<!-- <form action="{{Asset('user/create-user')}}" method="post" class="form-horizontal" id="form-register"> -->
 		<div class="container">
-			<div class="form-group">
-				<label for="name" class="col-sm-2 control-label">Name</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="name" name="name" placeholder="Enter your name..">
+			<div class="row form-group">
+				<div class="col-sm-3">
+					{{Former::text('name')->addClass('form-control')->placeholder('Enter your name..')}}
+				</div>
+				<div class="col-sm-3">
+					{{Former::select('position_id')->class('form-control')->fromQuery(Position::get(), 'position_name', 'id')->label('Position')}}
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="position" class="col-sm-2 control-label">Position</label>
-				<div class="col-sm-4">
-					<select name="position_id" id="position_id" class="form-control">
-						@foreach (Position::get() as $position)
-						<option <?php if($position->id==4) echo "selected"; ?> value="{{$position->id}}">{{$position->position_name}}</option>
-						@endforeach
-					</select>
+			<div class="row form-group">
+				<div class="col-sm-3">
+					{{Former::text('username')->class('form-control')->placeholder('Enter your username..')}}
+				</div>
+				<div class="col-sm-3">
+					{{Former::password('password')->class('form-control')->placeholder('Enter your password')}}
+				</div>
+				<div class="col-sm-3">
+					{{Former::password('password_confirmation')->class('form-control')->placeholder('Re-enter your password')}}
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="username" class="col-sm-2 control-label">Username</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="username" name="username" placeholder="Enter your username..">
+			<div class="row form-group">
+				<div class="col-sm-3">
+					{{Former::text('mobile')->class('form-control')->placeholder('Enter your mobile..')}}
+				</div>
+				<div class="col-sm-3">
+					{{Former::text('email')->class('form-control')->placeholder('Enter your email..')}}
+				</div>
+				<div class="col-sm-6">
+					{{Former::text('address')->class('form-control')->placeholder('Enter your address..')}}
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="password" class="col-sm-2 control-label">Password</label>
-				<div class="col-sm-4">
-					<input type="password" class="form-control" id="password" name="password" placeholder="Enter your password..">
+			<div class="row form-group">
+				<div class="col-md-2">
+					<button type="submit" class="btn btn-primary">Create new user</button>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="password_confirmation" class="col-sm-2 control-label">Re-Password</label>
-				<div class="col-sm-4">
-					<input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Re-enter your password..">
+				<div class="col-md-1">
+					<a href="{{Asset('user/manage-user')}}"><button type="button" class="btn btn-default">Back</button></a>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="mobile" class="col-sm-2 control-label">Mobile</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter your mobile..">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">Email</label>
-				<div class="col-sm-4">
-					<input type="email" class="form-control" id="email" name="email" placeholder="Enter your email..">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="address" class="col-sm-2 control-label">Address</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="address" name="address" placeholder="Enter your address..">
-				</div>
-			</div>
-			<div class="col-md-2 col-md-offset-2">
-				<button type="submit" class="btn btn-primary">Create new user</button>
-				
-			</div>
-			<div class="col-md-1">
-				<a href="{{Asset('user/manage-user')}}"><button type="button" class="btn btn-default">Back</button></a>
 			</div>
 		</div>
-	</form>
+	<!-- </form> -->
+	{{Former::close()}}
 </div>
 
 <script type="text/javascript">
@@ -109,7 +90,7 @@ Chienowa Vietnam - Create User
 				remote:"This username already exists.",
 			}
 		}
-	})
+	});
 </script>
 
 @endsection

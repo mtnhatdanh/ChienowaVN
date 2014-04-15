@@ -1,28 +1,58 @@
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-responsive table-condensed table-bordered">
-			<tr>
-				<th>Standard tolerance</th>
-				<th>Value Test</th>
-				<th class="text-center">Item</th>
-				<th>Inspection tool</th>
-			</tr>
-			<?php $no=0; ?>
-			@foreach ($product->productRef as $productRef)
-			<tr>
-				<td>{{$productRef->productAtt->name}}<input type="hidden" name="product_att_id[]" value="{{$productRef->product_att_id}}"></td>
-				<td><input type="text" name="value[{{$no}}]" id="productAtt-{{$productRef->product_att_id}}" class="form-control"></td>
-				<td class="text-center">{{$productRef->toolRef->item}}<input type="hidden" name="item[]" value="{{$productRef->toolRef->item}}" /></td>
-				<td>{{$productRef->toolRef->equipment->name}}<input type="hidden" name="equipment_id[]" value="{{$productRef->toolRef->equipment_id}}"></td>
-			</tr>
-			<?php $no++; ?>
-			@endforeach
-		</table>
+<form id="new-inspection-form" action="" method="post">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">New Inspection</h4>
 	</div>
-</div>
+	<div class="modal-body">
+		{{Former::hidden('cav_key')->value($cav_key)}}
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table table-responsive table-condensed table-bordered">
+					<tr>
+						<th>Standard tolerance</th>
+						<th>Value Test</th>
+						<th class="text-center">Item</th>
+						<th>Inspection tool</th>
+					</tr>
+					<?php $no=0; ?>
+					@foreach ($product->productRef as $productRef)
+					<tr>
+						<td>{{$productRef->productAtt->name}}<input type="hidden" name="product_att_id[]" value="{{$productRef->product_att_id}}"></td>
+						<td><input type="text" name="value[{{$no}}]" id="productAtt-{{$productRef->product_att_id}}" class="form-control"></td>
+						<td class="text-center">{{$productRef->toolRef->item}}<input type="hidden" name="item[]" value="{{$productRef->toolRef->item}}" /></td>
+						<td>{{$productRef->toolRef->equipment->name}}<input type="hidden" name="equipment_id[]" value="{{$productRef->toolRef->equipment_id}}"></td>
+					</tr>
+					<?php $no++; ?>
+					@endforeach
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">Save Inspection</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
+	</div>
+</form>
 <input type="hidden" id="OK-input" value="OK">
 
 <script>
+
+	$('#new-inspection-form').validate({
+		onsubmit:false
+	});
+
+	$('#new-inspection-form').submit(function(event){
+		event.preventDefault();
+		$.ajax({
+				url: '{{Asset('quality-control/new-inspection-detail')}}',
+				type: 'post',
+				data: $('#new-inspection-form').serialize(),
+				success: function (data) {
+					$('#inspection-modal').modal('hide');
+					$('#inspection-result-table').html(data);
+				}
+			});
+	});
 
 	$( "input#productAtt-5" ).rules( "add", {
 		min:9.9,

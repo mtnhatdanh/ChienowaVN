@@ -1,48 +1,40 @@
-@if(Cache::has('inspectionDetailTable'))
-	<tr>
-		<th class="text-center">Inspected Product</th>
-		<th class="text-center">Action</th>
-	</tr>
-	<?php $no = 0;?>
-	@if(count(Cache::get('inspectionDetailTable')))
-	@foreach (Cache::get('inspectionDetailTable') as $key=>$inspectionDetail)
-	<tr>
-		<td class="text-center">Product NO: {{++$no}}</td>
-		<td class="text-center">
-			<button class="btn btn-link del-inspection-detail-button" id="{{$key}}">Del</button>
-			<button class="btn btn-link modify-inspection-detail-button" id="{{$key}}" data-toggle="modal" href='#modify-inspection-modal'>Modify</button>
-		</td>
-	</tr>
-	
-	@endforeach
+<?php 
+$inspectionDetailTable = Cache::get('inspectionDetailTable');
+?>
+<tr>
+	<th class="text-center">Inspection Name</th>
+	<th class="text-center">Status</th>
+</tr>
+<tr>
+	<td class="text-center"><button class="btn btn-link cav-button" id="0" data-toggle="modal" data-target="#inspection-modal">cav1</button></td>
+	<td class="text-center" id="cav0">@if (isset($inspectionDetailTable[0])) <span class="label label-success">Has data</span> @else <span class="label label-danger">No data</span> @endif</td>
+</tr>
+<tr>
+	<td class="text-center"><button class="btn btn-link cav-button" id="1" data-toggle="modal" data-target="#inspection-modal">cav1</button></td>
+	<td class="text-center" id="cav1">@if (isset($inspectionDetailTable[1])) <span class="label label-success">Has data</span> @else <span class="label label-danger">No data</span> @endif</td>
+</tr>
+<tr>
+	<td class="text-center"><button class="btn btn-link cav-button" id="2" data-toggle="modal" data-target="#inspection-modal">cav2</button></td>
+	<td class="text-center" id="cav2">@if (isset($inspectionDetailTable[2])) <span class="label label-success">Has data</span> @else <span class="label label-danger">No data</span> @endif</td>
+</tr>
+<tr>
+	<td class="text-center"><button class="btn btn-link cav-button" id="3" data-toggle="modal" data-target="#inspection-modal">cav2</button></td>
+	<td class="text-center" id="cav3">@if (isset($inspectionDetailTable[3])) <span class="label label-success">Has data</span> @else <span class="label label-danger">No data</span> @endif</td>
+</tr>
 
-	<script>
-	// Delete inspection detail ajax
-	$('.del-inspection-detail-button').click(function(){
-		key = $(this).attr('id');
-	 	$.ajax({
-	 			url: '{{Asset('quality-control/inspections-detail-handle')}}',
-	 			type: 'post',
-	 			data: {type: 1, key: key},
-	 			success: function (data) {
-	 				$('#inspection-result-table').html(data);
-	 			}
- 		});
+
+<script>
+	// New Inspection handle
+	$('button.cav-button').click(function(){
+		cav_key    = $(this).attr('id');
+		product_id = $('#product_id').val();
+		$.ajax({
+				url: '{{Asset('quality-control/inspection-modal')}}',
+				type: 'post',
+				data: {product_id: product_id, cav_key: cav_key},
+				success: function (data) {
+					$('#div_inspection_detail').html(data);
+				}
+			});
 	});
-
-	// Modify inspection detail ajax
-	$('.modify-inspection-detail-button').click(function(){
-		key = $(this).attr('id');
-	 	$.ajax({
-	 			url: '{{Asset('quality-control/inspections-detail-handle')}}',
-	 			type: 'post',
-	 			data: {type: 2, key: key},
-	 			success: function (data) {
-	 				$('#div-modify-inspection-detail').html(data);
-	 			}
- 		});
-	});
-	</script>
-
-	@endif
-@endif
+</script>

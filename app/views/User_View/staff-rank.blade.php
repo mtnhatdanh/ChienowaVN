@@ -55,7 +55,7 @@ Staff Rank
 <div class="modal fade bs-example-modal-lg" id="new-staffRank">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<form action="{{Asset('user/staff-rank')}}" method="post" id="form-staffRank">
+			{{Former::open()->action(Asset('user/staff-rank'))->id('form-staffRank')}}
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">New Staff Rank</h4>
@@ -63,13 +63,7 @@ Staff Rank
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-sm-4">
-							<label for="inputUser">Staff Name</label>
-							<select name="user_id" id="inputUser" class="form-control">
-								<option value="-1">-- Select Staff --</option>
-								@foreach (User::where('id', '!=', 16)->get() as $user)
-								<option value="{{$user->id}}">{{$user->name}}</option>
-								@endforeach
-							</select>
+							{{Former::select('user_id')->class('form-control')->label('Staff Name')->fromQuery(User::where('id', '!=', 16)->get(), 'name', 'id')->placeholder('-- Select a staff name --')}}
 						</div>
 					</div>
 					<div class="row">
@@ -107,9 +101,8 @@ Staff Rank
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-12 form-group">
-							<label for="inputDescription" class="control-label">Description</label>
-							<input type="text" name="description" id="inputDescription" class="form-control">
+						<div class="col-sm-12">
+							{{Former::text('description')->addClass('form-control')}}
 						</div>
 					</div>
 				</div>
@@ -117,10 +110,12 @@ Staff Rank
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-primary">Save changes</button>
 				</div>
-			</form>
+			{{Former::close()}}
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
 
 <!-- Delete staff rank modal -->
 <div class="modal fade" id="delete-confirm">
