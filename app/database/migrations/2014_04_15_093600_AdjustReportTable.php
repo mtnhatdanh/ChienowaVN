@@ -25,6 +25,7 @@ class AdjustReportTable extends Migration {
 		    $table->string('lot_no');
 		    $table->date('delivery_date');
 		    $table->integer('sample_qty');
+		    $table->integer('total_qty');
 		    $table->integer('inspection_qty');
 		});
 	}

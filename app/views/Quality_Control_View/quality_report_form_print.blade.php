@@ -42,77 +42,82 @@ $no_rows               = count($inspectionDetailTable[0]);
 				<tr>
 					<td>NAME</td>
 					<td>CHIENOWA VIETNAM CO., LTD</td>
-					<td>Shot date</td>
-					<td>{{date('m/d/Y', strtotime($report->date))}}</td>
+					<td>Sample quantity</td>
+					<td>{{$report->sample_qty}}</td>
 				</tr>
 				<tr>
-					<td>No</td>
-					<td>{{$report_no}}</td>
-					<td>Product Name</td>
-					<td>{{$report->product->name}}</td>
+					<td>Parts No.</td>
+					<td>{{$report->part_no}}</td>
+					<td>Total quantity</td>
+					<td>{{$report->total_qty}}</td>
 				</tr>
 				<tr>
-					<td colspan="4">Abnormality report</td>
+					<td>Parts name</td>
+					<td>{{$report->part_name}}</td>
+					<td rowspan="4">Product inspections qty</td>
+					<td rowspan="4">{{$report->inspection_qty}}</td>
 				</tr>
 				<tr>
-					<td class="text-left">Equipment</td>
-					<td class="text-left">{{$report->equipment}}</td>
-					<td class="text-left">Resulted from workers</td>
-					<td class="text-left">{{$report->rs_worker}}</td>
-				</tr>
-				<tr>
-					<td class="text-left">Molding machine</td>
-					<td class="text-left">{{$report->molding}}</td>
-					<td class="text-left">Slight stop</td>
-					<td class="text-left">{{$report->slight_stop}}</td>
-				</tr>
-				<tr>
-					<td class="text-left">Metal mold</td>
-					<td class="text-left">{{$report->metal_mold}}</td>
-					<td class="text-left">Method</td>
-					<td class="text-left">{{$report->method}}</td>
-				</tr>
-				<tr>
-					<td class="text-left">Materials</td>
-					<td class="text-left">{{$report->materials}}</td>
-					<td class="text-left">Other</td>
-					<td class="text-left">{{$report->other}}</td>
-				</tr>
-				<tr>
-					<td colspan="2">MATERIAL</td>
 					<td>Lot No.</td>
+					<td>{{$report->lot_no}}</td>
+				</tr>
+				<tr>
+					<td>Delivery date</td>
+					<td>{{date('m/d/Y', strtotime($report->delivery_date))}}</td>
+				</tr>
+			</table>
+			<table class="table table-responsive table-condensed table-bordered border-print">
+				<tr>
+					<td></td>
+					<td>NAME</td>
+					<td colspan="2">STANDARD - TYPE - COLOR</td>
+					<td>JUDGEMENT</td>
 					<td>JUDGEMENT</td>
 				</tr>
 				<tr>
+					<td rowspan="2">1</td>
+					<td rowspan="2">Plastic stem</td>
 					<td>Grade</td>
-					<td>{{$report->material_grade}}</td>
-					<td rowspan="2">{{$report->material_lot_no}}</td>
+					<td>Asahi PPS(RG-40JA)</td>
 					<td>@if ($report->judgement_grade) OK @else NG @endif</td>
+					<td>
+						{{Former::checkbox('OK')}}/{{Former::checkbox('NG')}}
+					</td>
 				</tr>
 				<tr>
 					<td>Color</td>
-					<td>{{$report->material_color}}</td>
+					<td>Brown</td>
 					<td>@if ($report->judgement_color) OK @else NG @endif</td>
+					<td>{{Former::checkbox('OK')}}/{{Former::checkbox('NG')}}</td>
 				</tr>
 			</table>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<table class="table table-responsive table-condensed table-bordered" id="inspection-print-table">
+			<table class="table table-responsive table-bordered" id="inspection-print-table">
+				<!-- table header -->
 				<tr>
-					<th>Item</th>
-					<th>Standard tolerance</th>
+					<th rowspan="2">Item</th>
+					<th rowspan="2">Standard tolerance</th>
+					<th colspan="{{$no_columns}}">Measured value</th>
+					<th colspan="2">Purchasing inspection</th>
+					
+					<th rowspan="2">Inspection tool</th>
+				</tr>
+				<tr>
 					<?php
 					for ($i=0; $i < $no_columns; $i++) { 
 					?>
-					<th>Product No: {{$i+1}}</th>
+					<th width="200px">@if($i==0 || $i==1) cav1 @else cav2 @endif</th>
 					<?php
 					}
 					?>
-					<th>Inspection tool</th>
+					<th width="200px">cav1</th>
+					<th width="200px">cav2</th>
 				</tr>
 
+				<!-- table container -->
 				<?php
 				for ($j=0; $j < $no_rows; $j++) { 
 				?>
@@ -125,25 +130,22 @@ $no_rows               = count($inspectionDetailTable[0]);
 							<?php
 								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
 									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
-										case 2:
+										case 4:
 											echo "2";
-											break;
-										case 5:
-											echo "3";
 											break;
 										case 7:
 											echo "3";
 											break;
-										case 8:
+										case 9:
 											echo "3";
 											break;
-										case 11:
+										case 15:
 											echo "6";
 											break;
-										case 12:
+										case 16:
 											echo "2";
 											break;
-										case 13:
+										case 17:
 											echo "2";
 											break;
 
@@ -165,28 +167,25 @@ $no_rows               = count($inspectionDetailTable[0]);
 					
 					<!-- Tolerance column -->
 					<?php
-					if ($j>0 && $j!=2 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
+					if ($j>0 && $j!=4 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
 					?>
 						<td rowspan="
 							<?php
 								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
 									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
-										case 5:
-											echo "3";
-											break;
 										case 7:
 											echo "3";
 											break;
-										case 8:
+										case 9:
 											echo "3";
 											break;
-										case 11:
+										case 15:
 											echo "6";
 											break;
-										case 12:
+										case 16:
 											echo "2";
 											break;
-										case 13:
+										case 17:
 											echo "2";
 											break;
 
@@ -197,17 +196,16 @@ $no_rows               = count($inspectionDetailTable[0]);
 								} else echo "1";
 							?>
 						">
-							@if($inspectionDetailTable[0][$j]->productAtt->order_no == 5) φ4 +0.1mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 7) φ27 +0.15mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 8) φ31.8 -0.15mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 11) φ8.9±0.1mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 12) No Short Shot appearance (Note 5)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 13) φ8.3 -0.2mm <br/> φ8.10mm through <br/> φ8.31mm stop
+							@if($inspectionDetailTable[0][$j]->productAtt->order_no == 7) φ4 +0.1mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 9) φ27 +0.15mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 15) φ8.9±0.1mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 16) No Short Shot appearance (Note 5)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 17) φ8.3 -0.2mm <br/> φ8.10mm through <br/> φ8.31mm stop
 							@else {{$inspectionDetailTable[0][$j]->productAtt->name}}
 							@endif
 						</td>
 					<?php
-					} elseif($j==0||$j==2) {
+					} elseif($j==0||$j==4) {
 					?>
 						<td>{{$inspectionDetailTable[0][$j]->productAtt->name}}</td>
 					<?php } ?>
@@ -224,28 +222,19 @@ $no_rows               = count($inspectionDetailTable[0]);
 							case 10:
 								echo "MP1: ";
 								break;
-							case 24:
-								echo "MP1: ";
-								break;
-							case 27:
-								echo "MP1: ";
-								break;
 							case 20:
-								echo "MP2: ";
-								break;
-							case 25:
-								echo "MP2: ";
-								break;
-							case 28:
 								echo "MP2: ";
 								break;
 							case 22:
 								echo "MP3: ";
 								break;
-							case 26:
-								echo "MP3: ";
+							case 24:
+								echo "MP1: ";
 								break;
-							case 29:
+							case 25:
+								echo "MP2: ";
+								break;
+							case 26:
 								echo "MP3: ";
 								break;
 							case 16:
@@ -266,6 +255,18 @@ $no_rows               = count($inspectionDetailTable[0]);
 							case 36:
 								echo "R - MP3: ";
 								break;
+							case 32:
+								echo "A: ";
+								break;
+							case 50:
+								echo "B: ";
+								break;
+							case 17:
+								echo "pass: ";
+								break;
+							case 33:
+								echo "stop: ";
+								break;
 
 							default:
 								break;
@@ -277,6 +278,9 @@ $no_rows               = count($inspectionDetailTable[0]);
 					<?php
 					}
 					?>
+					<!-- Purchasing inspection column -->
+					<td></td>
+					<td></td>
 
 					<!-- Inspection tool column -->
 					<?php
@@ -286,25 +290,22 @@ $no_rows               = count($inspectionDetailTable[0]);
 							<?php
 								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
 									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
-										case 2:
+										case 4:
 											echo "2";
-											break;
-										case 5:
-											echo "3";
 											break;
 										case 7:
 											echo "3";
 											break;
-										case 8:
+										case 9:
 											echo "3";
 											break;
-										case 11:
+										case 15:
 											echo "6";
 											break;
-										case 12:
+										case 16:
 											echo "2";
 											break;
-										case 13:
+										case 17:
 											echo "2";
 											break;
 

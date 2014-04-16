@@ -9,10 +9,13 @@
     <title>@yield('title')</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{Asset('bootstrap-3.1.1/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    {{HTML::style('bootstrap-3.1.1/dist/css/bootstrap.min.css')}}
 
     <!-- Custom styles for this template -->
-    <link href="{{Asset('css/custom.css')}}" rel="stylesheet">
+    {{HTML::style('css/custom.css')}}
+
+    <!-- Load CSS for print -->
+    <link rel="stylesheet" type="text/css" media="print" href="{{asset('css/print.css')}}" />
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -25,11 +28,11 @@
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <script src="{{Asset('js/jquery-1.11.0.min.js')}}"></script>
-    <script src="{{Asset('bootstrap-3.1.1/dist/js/bootstrap.min.js')}}"></script>
-    <script src="{{Asset('js/jquery.autocomplete.js')}}"></script>
-    <script src="{{Asset('js/function.js')}}"></script>
-    <script src="{{Asset('js/jquery-validate/jquery.validate.js')}}"></script>
+    {{HTML::script('js/jquery-1.11.0.min.js')}}
+    {{HTML::script('bootstrap-3.1.1/dist/js/bootstrap.min.js')}}
+    {{HTML::script('js/jquery.autocomplete.js')}}
+    {{HTML::script('js/function.js')}}
+    {{HTML::script('js/jquery-validate/jquery.validate.js')}}
 
     
   </head>

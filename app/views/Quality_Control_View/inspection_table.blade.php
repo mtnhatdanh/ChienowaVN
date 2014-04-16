@@ -62,6 +62,22 @@
 			max: "OK value: 9.9-10"
 		}
 	});
+	$( "input#productAtt-41" ).rules( "add", {
+		min:0.7,
+		max:0.9,
+		messages: {
+			min: "OK value: 0.7-0.9",
+			max: "OK value: 0.7-0.9"
+		}
+	});
+	$( "input#productAtt-42" ).rules( "add", {
+		min:2.4,
+		max:2.6,
+		messages: {
+			min: "OK value: 2.4-2.6",
+			max: "OK value: 2.4-2.6"
+		}
+	});
 	$( "input#productAtt-6" ).rules( "add", {
 		min:4.2,
 		max:4.4,
@@ -156,29 +172,27 @@
 			max: "OK value: 31.65-31.8"
 		}
 	});
-	$( "input#productAtt-28" ).rules( "add", {
-		min:31.65,
-		max:31.8,
-		messages: {
-			min: "OK value: 31.65-31.8",
-			max: "OK value: 31.65-31.8"
-		}
-	});
-	$( "input#productAtt-29" ).rules( "add", {
-		min:31.65,
-		max:31.8,
-		messages: {
-			min: "OK value: 31.65-31.8",
-			max: "OK value: 31.65-31.8"
-		}
-	});
-	$( "input#productAtt-14" ).rules( "add", {
+	$( "input#productAtt-43" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
 			equalTo: "OK value: OK"
 		}
 	});
 	$( "input#productAtt-15" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAtt-44" ).rules( "add", {
+		min:41.7,
+		max:41.85,
+		messages: {
+			min: "OK value: 41.7-41.85",
+			max: "OK value: 41.7-41.85"
+		}
+	});
+	$( "input#productAtt-45" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
 			equalTo: "OK value: OK"
@@ -238,7 +252,51 @@
 			equalTo: "OK value: OK"
 		}
 	});
-	$( "input#productAtt-37" ).rules( "add", {
+	$( "input#productAtt-50" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAtt-17" ).rules( "add", {
+		min:8.1,
+		max:8.3,
+		messages: {
+			min: "OK value: 8.1-8.3",
+			max: "OK value: 8.1-8.3"
+		}
+	});
+	$( "input#productAtt-33" ).rules( "add", {
+		min:8.1,
+		max:8.3,
+		messages: {
+			min: "OK value: 8.1-8.3",
+			max: "OK value: 8.1-8.3"
+		}
+	});
+	$( "input#productAtt-18" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAtt-46" ).rules( "add", {
+		min:1.3,
+		max:1.5,
+		messages: {
+			min: "OK value: 1.3-1.5",
+			max: "OK value: 1.3-1.5"
+		}
+	});
+	$( "input#productAtt-47" ).rules( "add", {
+		min:0.85,
+		max:1.05,
+		messages: {
+			min: "OK value: 0.85-1.05",
+			max: "OK value: 0.85-1.05"
+		}
+	});
+	$( "input#productAtt-48" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
 			equalTo: "OK value: OK"
@@ -252,5 +310,11 @@
 			max: "OK value: 19.5-20.5"
 		}
 	});
-	
+	$( "input#productAtt-49" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+
 </script>

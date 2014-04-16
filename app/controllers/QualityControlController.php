@@ -109,6 +109,7 @@ class QualityControlController extends Controller
 			$report->lot_no               = Input::get('lot_no');
 			$report->delivery_date        = Input::get('delivery_date');
 			$report->sample_qty           = Input::get('sample_qty');
+			$report->total_qty            = Input::get('total_qty');
 			$report->inspection_qty       = Input::get('inspection_qty');
 			$report->judgement_grade      = Input::get('judgement_grade');
 			$report->judgement_color      = Input::get('judgement_color');

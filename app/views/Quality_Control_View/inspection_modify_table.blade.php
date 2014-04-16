@@ -66,6 +66,26 @@
 	});
 	$( "input#productAttM-5" ).valid();
 
+	$( "input#productAttM-41" ).rules( "add", {
+		min:0.7,
+		max:0.9,
+		messages: {
+			min: "OK value: 0.7-0.9",
+			max: "OK value: 0.7-0.9"
+		}
+	});
+	$( "input#productAttM-41" ).valid();
+
+	$( "input#productAttM-42" ).rules( "add", {
+		min:2.4,
+		max:2.6,
+		messages: {
+			min: "OK value: 2.4-2.6",
+			max: "OK value: 2.4-2.6"
+		}
+	});
+	$( "input#productAttM-42" ).valid();
+	
 	$( "input#productAttM-6" ).rules( "add", {
 		min:4.2,
 		max:4.4,
@@ -75,7 +95,7 @@
 		}
 	});
 	$( "input#productAttM-6" ).valid();
-
+	
 	$( "input#productAttM-7" ).rules( "add", {
 		min:4.2,
 		max:4.4,
@@ -85,7 +105,7 @@
 		}
 	});
 	$( "input#productAttM-7" ).valid();
-
+	
 	$( "input#productAttM-8" ).rules( "add", {
 		min:19.85,
 		max:20.15,
@@ -95,7 +115,7 @@
 		}
 	});
 	$( "input#productAttM-8" ).valid();
-
+	
 	$( "input#productAttM-9" ).rules( "add", {
 		min:3.4,
 		max:3.6,
@@ -105,7 +125,7 @@
 		}
 	});
 	$( "input#productAttM-9" ).valid();
-
+	
 	$( "input#productAttM-10" ).rules( "add", {
 		min:4,
 		max:4.1,
@@ -115,7 +135,7 @@
 		}
 	});
 	$( "input#productAttM-10" ).valid();
-
+	
 	$( "input#productAttM-20" ).rules( "add", {
 		min:4,
 		max:4.1,
@@ -125,7 +145,7 @@
 		}
 	});
 	$( "input#productAttM-20" ).valid();
-
+	
 	$( "input#productAttM-22" ).rules( "add", {
 		min:4,
 		max:4.1,
@@ -135,7 +155,7 @@
 		}
 	});
 	$( "input#productAttM-22" ).valid();
-
+	
 	$( "input#productAttM-23" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
@@ -143,7 +163,7 @@
 		}
 	});
 	$( "input#productAttM-23" ).valid();
-
+	
 	$( "input#productAttM-24" ).rules( "add", {
 		min:27,
 		max:27.15,
@@ -153,7 +173,7 @@
 		}
 	});
 	$( "input#productAttM-24" ).valid();
-
+	
 	$( "input#productAttM-25" ).rules( "add", {
 		min:27,
 		max:27.15,
@@ -163,7 +183,7 @@
 		}
 	});
 	$( "input#productAttM-25" ).valid();
-
+	
 	$( "input#productAttM-26" ).rules( "add", {
 		min:27,
 		max:27.15,
@@ -173,7 +193,7 @@
 		}
 	});
 	$( "input#productAttM-26" ).valid();
-
+	
 	$( "input#productAttM-27" ).rules( "add", {
 		min:31.65,
 		max:31.8,
@@ -183,35 +203,15 @@
 		}
 	});
 	$( "input#productAttM-27" ).valid();
-
-	$( "input#productAttM-28" ).rules( "add", {
-		min:31.65,
-		max:31.8,
-		messages: {
-			min: "OK value: 31.65-31.8",
-			max: "OK value: 31.65-31.8"
-		}
-	});
-	$( "input#productAttM-28" ).valid();
-
-	$( "input#productAttM-29" ).rules( "add", {
-		min:31.65,
-		max:31.8,
-		messages: {
-			min: "OK value: 31.65-31.8",
-			max: "OK value: 31.65-31.8"
-		}
-	});
-	$( "input#productAttM-29" ).valid();
-
-	$( "input#productAttM-14" ).rules( "add", {
+	
+	$( "input#productAttM-43" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
 			equalTo: "OK value: OK"
 		}
 	});
-	$( "input#productAttM-14" ).valid();
-
+	$( "input#productAttM-43" ).valid();
+	
 	$( "input#productAttM-15" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
@@ -219,7 +219,25 @@
 		}
 	});
 	$( "input#productAttM-15" ).valid();
-
+	
+	$( "input#productAttM-44" ).rules( "add", {
+		min:41.7,
+		max:41.85,
+		messages: {
+			min: "OK value: 41.7-41.85",
+			max: "OK value: 41.7-41.85"
+		}
+	});
+	$( "input#productAttM-44" ).valid();
+	
+	$( "input#productAttM-45" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAttM-45" ).valid();
+	
 	$( "input#productAttM-16" ).rules( "add", {
 		min:8.8,
 		max:9,
@@ -229,7 +247,7 @@
 		}
 	});
 	$( "input#productAttM-16" ).valid();
-
+	
 	$( "input#productAttM-30" ).rules( "add", {
 		min:8.8,
 		max:9,
@@ -239,7 +257,7 @@
 		}
 	});
 	$( "input#productAttM-30" ).valid();
-
+	
 	$( "input#productAttM-31" ).rules( "add", {
 		min:8.8,
 		max:9,
@@ -249,7 +267,7 @@
 		}
 	});
 	$( "input#productAttM-31" ).valid();
-
+	
 	$( "input#productAttM-34" ).rules( "add", {
 		min:8.8,
 		max:9,
@@ -259,7 +277,7 @@
 		}
 	});
 	$( "input#productAttM-34" ).valid();
-
+	
 	$( "input#productAttM-35" ).rules( "add", {
 		min:8.8,
 		max:9,
@@ -269,7 +287,7 @@
 		}
 	});
 	$( "input#productAttM-35" ).valid();
-
+	
 	$( "input#productAttM-36" ).rules( "add", {
 		min:8.8,
 		max:9,
@@ -279,7 +297,7 @@
 		}
 	});
 	$( "input#productAttM-36" ).valid();
-
+	
 	$( "input#productAttM-32" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
@@ -287,15 +305,71 @@
 		}
 	});
 	$( "input#productAttM-32" ).valid();
-
-	$( "input#productAttM-37" ).rules( "add", {
+	
+	$( "input#productAttM-50" ).rules( "add", {
 		equalTo: "#OK-input",
 		messages: {
 			equalTo: "OK value: OK"
 		}
 	});
-	$( "input#productAttM-37" ).valid();
-
+	$( "input#productAttM-50" ).valid();
+	
+	$( "input#productAttM-17" ).rules( "add", {
+		min:8.1,
+		max:8.3,
+		messages: {
+			min: "OK value: 8.1-8.3",
+			max: "OK value: 8.1-8.3"
+		}
+	});
+	$( "input#productAttM-17" ).valid();
+	
+	$( "input#productAttM-33" ).rules( "add", {
+		min:8.1,
+		max:8.3,
+		messages: {
+			min: "OK value: 8.1-8.3",
+			max: "OK value: 8.1-8.3"
+		}
+	});
+	$( "input#productAttM-33" ).valid();
+	
+	$( "input#productAttM-18" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAttM-18" ).valid();
+	
+	$( "input#productAttM-46" ).rules( "add", {
+		min:1.3,
+		max:1.5,
+		messages: {
+			min: "OK value: 1.3-1.5",
+			max: "OK value: 1.3-1.5"
+		}
+	});
+	$( "input#productAttM-46" ).valid();
+	
+	$( "input#productAttM-47" ).rules( "add", {
+		min:0.85,
+		max:1.05,
+		messages: {
+			min: "OK value: 0.85-1.05",
+			max: "OK value: 0.85-1.05"
+		}
+	});
+	$( "input#productAttM-47" ).valid();
+	
+	$( "input#productAttM-48" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAttM-48" ).valid();
+	
 	$( "input#productAttM-19" ).rules( "add", {
 		min:19.5,
 		max:20.5,
@@ -305,7 +379,15 @@
 		}
 	});
 	$( "input#productAttM-19" ).valid();
-
+	
+	$( "input#productAttM-49" ).rules( "add", {
+		equalTo: "#OK-input",
+		messages: {
+			equalTo: "OK value: OK"
+		}
+	});
+	$( "input#productAttM-49" ).valid();
+	
 
 	
 </script>
