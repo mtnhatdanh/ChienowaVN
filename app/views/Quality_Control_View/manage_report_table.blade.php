@@ -14,10 +14,10 @@
 				<th>Date</th>
 				<th>Product</th>
 				<th>JUDGEMENT</th>
-				<th>Shot times</th>
-				<th>Equipments Used</th>
-				<th>APP'D Staff</th>
-				<th>Measurement Staff</th>
+				<th>Parts No.</th>
+				<th>Parts Name</th>
+				<th>Lot No.</th>
+				<th>Delivery date</th>
 				<th>Action</th>
 			</tr>
 			@foreach ($reports as $report)
@@ -26,10 +26,10 @@
 				<td class="text-center">{{date('m/d/Y', strtotime($report->date))}}</td>
 				<td class="text-center">{{$report->product->name}}</td>
 				<td class="text-center">@if ($report->judgement == 1) OK @else NG @endif</td>
-				<td class="text-center">{{$report->countInspection()}}</td>
-				<td class="text-center">{{$report->countEquipment()}}</td>
-				<td>{{$report->appStaff->name}}</td>
-				<td>{{$report->measurementStaff->name}}</td>
+				<td class="text-center">{{$report->part_no}}</td>
+				<td class="text-center">{{$report->part_name}}</td>
+				<td class="text-center">{{$report->lot_no}}</td>
+				<td class="text-center">{{date('m/d/Y', strtotime($report->delivery_date))}}</td>
 				<td class="text-center">
 					<a href="{{Asset('quality-control/modify-report/'.$report->id)}}"><button type="button" class="btn btn-link">Modify</button></a>
 					<button type="button" class="btn btn-link delete_button" id="{{$report->id}}" data-toggle="modal" data-target="#myModal">Del</button>

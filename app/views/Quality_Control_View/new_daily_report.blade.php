@@ -30,7 +30,7 @@ $report_no = DB::table('information_schema.tables')
 
 <div class="container hidden-print" id="content">
 	
-	{{Former::rawOpen()->id('form-report')->action(asset('quality/new-daily-report'))}}
+	{{Former::rawOpen()->id('form-report')->action(asset('quality-control/new-daily-report'))}}
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="panel panel-default">
@@ -133,7 +133,7 @@ $report_no = DB::table('information_schema.tables')
 							</td>
 						</tr>
 						<tr>
-							<td>Inspection Product Quantity</td>
+							<td>Products Sent Qty</td>
 							<td>
 								{{Former::text('inspection_qty')->class('form-control')}}
 							</td>

@@ -12,36 +12,35 @@
 			<tr>
 				<th>Report No</th>
 				<th>Date</th>
-				<th>Product</th>
 				<th>JUDGEMENT</th>
-				<th>Shot times</th>
-				<th>Equipments Used</th>
-				<th>APP'D Staff</th>
-				<th>Measurement Staff</th>
+				<th>Parts No.</th>
+				<th>Parts Name</th>
+				<th>Lot No.</th>
+				<th>Delivery date</th>
+				<th class="text-right">Sample Quantity</th>
 				<th>Print</th>
 			</tr>
-			<?php $sumShot = 0;?>
+			<?php $sumSampleQty = 0;?>
 			@foreach ($reports as $report)
 			<tr>
 				<td class="text-center">{{$report->id}}</td>
 				<td class="text-center">{{date('m/d/Y', strtotime($report->date))}}</td>
-				<td class="text-center">{{$report->product->name}}</td>
 				<td class="text-center">@if ($report->judgement == 1) OK @else NG @endif</td>
-				<td class="text-center">{{$report->countInspection()}}</td>
-				<td class="text-center">{{$report->countEquipment()}}</td>
-				<td>{{$report->appStaff->name}}</td>
-				<td>{{$report->measurementStaff->name}}</td>
+				<td class="text-center">{{$report->part_no}}</td>
+				<td class="text-center">{{$report->part_name}}</td>
+				<td class="text-center">{{$report->lot_no}}</td>
+				<td class="text-center">{{date('m/d/Y', strtotime($report->delivery_date))}}</td>
+				<td class="text-right">{{$report->sample_qty}}</td>
 				<td class="text-center">
 					<button type="button" class="btn btn-link print_report_button" id="{{$report->id}}"><span class="glyphicon glyphicon-print"></span> Report</button>
 					<button type="button" class="btn btn-link print_calibration_button" id="{{$report->id}}"><span class="glyphicon glyphicon-print"></span> Calib Equipment</button>
 				</td>
 			</tr>
-			<?php $sumShot+=$report->countInspection();?>
+			<?php $sumSampleQty += $report->sample_qty; ?>
 			@endforeach
 			<tr>
-				<td colspan="4"></td>
-				<td class="text-center"><strong>{{$sumShot}}</strong></td>
-				<td colspan="4"></td>
+				<td colspan="7"></td>
+				<td class="text-right">{{$sumSampleQty}}</td>
 			</tr>
 		</table>
 	</div>

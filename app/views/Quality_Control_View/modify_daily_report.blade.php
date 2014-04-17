@@ -21,8 +21,8 @@ Modify Daily Report
 </div>
 
 <div class="container hidden-print" id="content">
-
-	<form id="form-report" action="{{Asset('quality-control/modify-report/'.$report->id)}}" method="post">
+	
+	{{Former::rawOpen()->id('form-report')->action(Asset('quality-control/modify-report/'.$report->id))}}
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="panel panel-default">
@@ -85,91 +85,83 @@ Modify Daily Report
 						</div>
 		
 					</div>
-		
+
+
+					<?php Former::populate($report);?>
 					<table class="table table-responsive table-condensed table-bordered">
-						<thead>
-							<tr>
-								<th class="text-center" colspan="4">ABNORMALITY REPORT</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Equipment</td>
-								<td><input type="text" name="equipment" value="{{$report->equipment}}" id="inputEquipment" class="form-control"></td>
-								<td>Resulted from workers</td>
-								<td><input type="text" name="rs_worker" value="{{$report->rs_worker}}" id="inputRs_worker" class="form-control"></td>
-							</tr>
-							<tr>
-								<td>Molding machine</td>
-								<td><input type="text" name="molding" value="{{$report->molding}}" id="inputMolding" class="form-control"></td>
-								<td>Slight Stop</td>
-								<td><input type="text" name="slight_stop" value="{{$report->slight_stop}}" id="inputSlight_stop" class="form-control"></td>
-							</tr>
-							<tr>
-								<td>Metal mold</td>
-								<td><input type="text" name="metal_mold" value="{{$report->metal_mold}}" id="inputMetal_mold" class="form-control"></td>
-								<td>Method</td>
-								<td><input type="text" name="method" value="{{$report->method}}" id="inputMethod" class="form-control"></td>
-							</tr>
-							<tr>
-								<td>Materials</td>
-								<td><input type="text" name="materials" value="{{$report->materials}}" id="inputMaterials" class="form-control"></td>
-								<td>Other</td>
-								<td><input type="text" name="other" value="{{$report->other}}" id="inputOther" class="form-control"></td>
-							</tr>
-							<tr>
-								<th class="text-center" colspan="2">MATERIAL</th>
-								<th class="text-center">LOT NO.</th>
-								<th class="text-center">Judement Material</th>
-							</tr>
-							<tr>
-								<td>Grade</td>
-								<td><input type="text" name="material_grade" value="{{$report->material_grade}}" id="inputMaterial_grade" class="form-control"></td>
-								<td rowspan="2" class="text-center"><input class="form-control" type="text" name="material_lot_no" value="{{$report->material_lot_no}}" id="inputMaterial_lot_no" size="5"></td>
-								<td class="text-center">
-									<label class="radio-inline">
-										<input type="radio" name="judgement_grade" id="judgement_grade1" value="1" @if($report->judgement_grade == 1) checked @endif>OK
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="judgement_grade" id="judgement_grade2" value="0" @if($report->judgement_grade == 0) checked @endif>NG
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<td>Color</td>
-								<td><input type="text" name="material_color" value="{{$report->material_color}}" id="inputMaterial_color" class="form-control"></td>
-								<td class="text-center">
-									<label class="radio-inline">
-										<input type="radio" name="judgement_color" id="judgement_color1" value="1" @if($report->judgement_color == 1) checked @endif>OK
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="judgement_color" id="judgement_color2" value="0" @if($report->judgement_color == 0) checked @endif>NG
-									</label>
-								</td>
-							</tr>
-		
-						</tbody>
+						<tr>
+							<th class="text-center" colspan="4">GENERAL INFORMATION</th>
+						</tr>
+						<tr>
+							<td>Part No.</td>
+							<td>
+								{{Former::text('part_no')->class('form-control')}}
+							</td>
+							<td>Part name</td>
+							<td>
+								{{Former::text('part_name')->class('form-control')}}
+							</td>
+						</tr>
+						<tr>
+							<td>Lot No.</td>
+							<td>
+								{{Former::text('lot_no')->class('form-control')}}
+							</td>
+							<td>Delivery Date</td>
+							<td>
+								{{Former::date('delivery_date')->class('form-control')}}
+							</td>
+						</tr>
+						<tr>
+							<td>Sample Quantity</td>
+							<td>
+								{{Former::text('sample_qty')->class('form-control')}}
+							</td>
+							<td>Total Quantity</td>
+							<td>
+								{{Former::text('total_qty')->class('form-control')}}
+							</td>
+						</tr>
+						<tr>
+							<td>Products Sent Qty</td>
+							<td>
+								{{Former::text('inspection_qty')->class('form-control')}}
+							</td>
+						</tr>
+						<tr>
+							<th class="text-center" colspan="4">STANDARD JUDGEMENT</th>
+						</tr>
+						<tr>
+							<td>Judgement Grade</td>
+							<td class="text-center">
+								<label class="radio-inline">
+									<input type="radio" name="judgement_grade" id="judgement_grade1" value="1" @if ($report->judgement_grade == 1) checked @endif>OK
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="judgement_grade" id="judgement_grade2" value="0" @if ($report->judgement_grade == 0) checked @endif>NG
+								</label>
+							</td>
+							<td>Judgement Color</td>
+							<td class="text-center">
+								<label class="radio-inline">
+									<input type="radio" name="judgement_color" id="judgement_color1" value="1" @if ($report->judgement_color == 1) checked @endif>OK
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="judgement_color" id="judgement_color2" value="0" @if ($report->judgement_color == 0) checked @endif>NG
+								</label>
+							</td>
+						</tr>
 					</table>
 				</div>
 			</div>
 		</div>
-	</form>
+	{{Former::close()}}
 	
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="panel panel-default">
-				<div class="panel-heading"><h3 class="panel-title">Inspection Report</h3></div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-sm-2">
-							<button id="button_inspectionModal" type="button" class="btn btn-block btn-default" data-toggle="modal" href='#inspection-modal'>New inspection</button>
-						</div>
-					</div>
-				</div>
-				<table class="table table-responsive table-condensed table-bordered"  id="inspection-result-table">
-					@include('Quality_Control_View.inspection_detail_table')
-				</table>
-			</div>
+			<table class="table table-responsive table-condensed table-bordered"  id="inspection-result-table">
+				@include('Quality_Control_View.inspection_detail_table')
+			</table>
 	
 		</div>
 	</div>
@@ -228,32 +220,13 @@ Modify Daily Report
 <div class="modal fade bs-example-modal-lg hidden-print" id="inspection-modal">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<form id="new-inspection-form" action="" method="post">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">New Inspection</h4>
-				</div>
-				<div class="modal-body">
-					<div id="div_inspection_detail">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">New Inspection</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
-				</div>
-			</form>
+			
+			<div id="div_inspection_detail"></div>
+				
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<!-- Modal Modify Inspection -->
-<div class="modal fade bs-example-modal-lg hidden-print" id="modify-inspection-modal">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content" id="div-modify-inspection-detail">	
-			
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <div class="visible-print" id="print_div"></div>
 
@@ -315,50 +288,18 @@ Modify Daily Report
 	// Print Calibration Equipments
 	
 	$('#print_calibration').click(function(){
-		date        = $('#date').val();
-		description = $('#description').val();
+		date      = $('#date').val();
+		report_no = {{$report->id}};
 		$.ajax({
 				url: '{{Asset('data/print-calibrations')}}',
 				type: 'post',
-				data: {date: date, description: description},
+				data: {date: date, report_no: report_no},
 				success: function (data) {
 					$('#print_div').html(data);
 					window.print();
 				}
 			});
 	});
-	
-
-	// New Inspection handle
-	$('#button_inspectionModal').click(function(){
-		product_id  = $('#product_id').val();
-		$.ajax({
-				url: '{{Asset('quality-control/new-inspection-modal')}}',
-				type: 'post',
-				data: {product_id: product_id},
-				success: function (data) {
-					$('#div_inspection_detail').html(data);
-				}
-			});
-	});
-
-	$('#new-inspection-form').validate({
-		onsubmit:false
-	});
-
-	$('#new-inspection-form').submit(function(event){
-		event.preventDefault();
-		$.ajax({
-				url: '{{Asset('quality-control/new-inspection-detail')}}',
-				type: 'post',
-				data: $('#new-inspection-form').serialize(),
-				success: function (data) {
-					$('#inspection-result-table').html(data);
-					$('#inspection-modal').modal('hide')
-				}
-			});
-	});
-	
 	
 
 </script>

@@ -370,7 +370,7 @@ class QualityControlController extends Controller
 
 		$report_id = Input::get('report_id');
 		
-		$report = Report::find($report_id);
+		$report    = Report::find($report_id);
 		
 		Calibration::where('report_id', '=', $report_id)->delete();
 		// if (count($report->calibration)) {
@@ -445,7 +445,7 @@ class QualityControlController extends Controller
 			Calibration::where('report_id', '=', $report_id)->delete();
 
 			// Delete old data of Inspection
-			$report                       = Report::find($report_id);
+			$report = Report::find($report_id);
 
 			$inspections = $report->inspection;
 			foreach ($inspections as $inspection) {
@@ -455,22 +455,19 @@ class QualityControlController extends Controller
 			// Modify Report with Inspections and Calibrations table
 
 			$report->product_id           = Input::get('product_id');
+			$report->product_id           = Input::get('product_id');
 			$report->date                 = Input::get('date');
 			$report->judgement            = Input::get('judgement');
 			$report->app_staff_id         = Input::get('app_staff_id');
 			$report->measurement_staff_id = Input::get('measurement_staff_id');
-			$report->equipment            = Input::get('equipment');
-			$report->rs_worker            = Input::get('rs_worker');
-			$report->molding              = Input::get('molding');
-			$report->slight_stop          = Input::get('slight_stop');
-			$report->metal_mold           = Input::get('metal_mold');
-			$report->method               = Input::get('method');
-			$report->materials            = Input::get("materials");
-			$report->other                = Input::get('other');
-			$report->material_grade       = Input::get('material_grade');
-			$report->material_lot_no      = Input::get('material_lot_no');
+			$report->part_no              = Input::get('part_no');
+			$report->part_name            = Input::get('part_name');
+			$report->lot_no               = Input::get('lot_no');
+			$report->delivery_date        = Input::get('delivery_date');
+			$report->sample_qty           = Input::get('sample_qty');
+			$report->total_qty            = Input::get('total_qty');
+			$report->inspection_qty       = Input::get('inspection_qty');
 			$report->judgement_grade      = Input::get('judgement_grade');
-			$report->material_color       = Input::get('material_color');
 			$report->judgement_color      = Input::get('judgement_color');
 			
 			$report->save();

@@ -11,7 +11,11 @@ $no_columns            = count($inspectionDetailTable);
 $no_rows               = count($inspectionDetailTable[0]);
 ?>
 <style type="text/css">
+	div#print_form {
+		font-size: 9px;
+	}
 	div#print_form td {
+		padding: 1px;
 		text-align: center;
 		vertical-align: middle;
 		border: 1px solid black!important;
@@ -22,7 +26,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 	}
 	div#print_form td.signature-td {
 		vertical-align: bottom!important;
-		height: 100px;
+		height: 80px;
 	}
 	
 	.bold {
@@ -54,7 +58,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 				<tr>
 					<td>Parts name</td>
 					<td>{{$report->part_name}}</td>
-					<td rowspan="4">Product inspections qty</td>
+					<td rowspan="4">Products sent qty</td>
 					<td rowspan="4">{{$report->inspection_qty}}</td>
 				</tr>
 				<tr>
@@ -72,7 +76,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 					<td>NAME</td>
 					<td colspan="2">STANDARD - TYPE - COLOR</td>
 					<td>JUDGEMENT</td>
-					<td>JUDGEMENT</td>
+					<td style="border-left: 3px double black!important">JUDGEMENT</td>
 				</tr>
 				<tr>
 					<td rowspan="2">1</td>
@@ -80,7 +84,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 					<td>Grade</td>
 					<td>Asahi PPS(RG-40JA)</td>
 					<td>@if ($report->judgement_grade) OK @else NG @endif</td>
-					<td>
+					<td style="border-left: 3px double black!important">
 						{{Former::checkbox('OK')}}/{{Former::checkbox('NG')}}
 					</td>
 				</tr>
@@ -88,7 +92,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 					<td>Color</td>
 					<td>Brown</td>
 					<td>@if ($report->judgement_color) OK @else NG @endif</td>
-					<td>{{Former::checkbox('OK')}}/{{Former::checkbox('NG')}}</td>
+					<td style="border-left: 3px double black!important">{{Former::checkbox('OK')}}/{{Former::checkbox('NG')}}</td>
 				</tr>
 			</table>
 		</div>
@@ -101,7 +105,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 					<th rowspan="2">Item</th>
 					<th rowspan="2">Standard tolerance</th>
 					<th colspan="{{$no_columns}}">Measured value</th>
-					<th colspan="2">Purchasing inspection</th>
+					<th colspan="2" style="border-left: 3px double black!important">Purchasing inspection</th>
 					
 					<th rowspan="2">Inspection tool</th>
 				</tr>
@@ -109,12 +113,12 @@ $no_rows               = count($inspectionDetailTable[0]);
 					<?php
 					for ($i=0; $i < $no_columns; $i++) { 
 					?>
-					<th width="200px">@if($i==0 || $i==1) cav1 @else cav2 @endif</th>
+					<th>@if($i==0 || $i==1) cav1 @else cav2 @endif</th>
 					<?php
 					}
 					?>
-					<th width="200px">cav1</th>
-					<th width="200px">cav2</th>
+					<th style="border-left: 3px double black!important">cav1</th>
+					<th>cav2</th>
 				</tr>
 
 				<!-- table container -->
@@ -220,40 +224,40 @@ $no_rows               = count($inspectionDetailTable[0]);
 						<?php
 						switch ($inspectionDetailTable[$i][$j]->product_att_id) {
 							case 10:
-								echo "MP1: ";
+								echo "1: ";
 								break;
 							case 20:
-								echo "MP2: ";
+								echo "2: ";
 								break;
 							case 22:
-								echo "MP3: ";
+								echo "3: ";
 								break;
 							case 24:
-								echo "MP1: ";
+								echo "1: ";
 								break;
 							case 25:
-								echo "MP2: ";
+								echo "2: ";
 								break;
 							case 26:
-								echo "MP3: ";
+								echo "3: ";
 								break;
 							case 16:
-								echo "L - MP1: ";
+								echo "L-1: ";
 								break;
 							case 30:
-								echo "L - MP2: ";
+								echo "L-2: ";
 								break;
 							case 31:
-								echo "L - MP3: ";
+								echo "L-3: ";
 								break;
 							case 34:
-								echo "R - MP1: ";
+								echo "R-1: ";
 								break;
 							case 35:
-								echo "R - MP2: ";
+								echo "R-2: ";
 								break;
 							case 36:
-								echo "R - MP3: ";
+								echo "R-3: ";
 								break;
 							case 32:
 								echo "A: ";
@@ -279,7 +283,7 @@ $no_rows               = count($inspectionDetailTable[0]);
 					}
 					?>
 					<!-- Purchasing inspection column -->
-					<td></td>
+					<td style="border-left: 3px double black!important"></td>
 					<td></td>
 
 					<!-- Inspection tool column -->
