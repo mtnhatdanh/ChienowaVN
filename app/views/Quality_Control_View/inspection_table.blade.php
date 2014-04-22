@@ -18,7 +18,18 @@
 					@foreach ($product->productRef as $productRef)
 					<tr>
 						<td>{{$productRef->productAtt->name}}<input type="hidden" name="product_att_id[]" value="{{$productRef->product_att_id}}"></td>
-						<td><input type="text" name="value[{{$no}}]" id="productAtt-{{$productRef->product_att_id}}" class="form-control"></td>
+						<td class="text-center">
+							@if ($productRef->productAtt->type == 'boolean')
+							<label class="radio-inline">
+								<input class="EntTab" type="radio" name="value[{{$no}}]" value="OK" checked>OK
+							</label>
+							<label class="radio-inline">
+								<input class="EntTab" type="radio" name="value[{{$no}}]" value="NG">NG
+							</label>
+							@else
+							<input type="text" name="value[{{$no}}]" id="productAtt-{{$productRef->product_att_id}}" class="form-control EntTab">
+							@endif
+						</td>
 						<td class="text-center">{{$productRef->toolRef->item}}<input type="hidden" name="item[]" value="{{$productRef->toolRef->item}}" /></td>
 						<td>{{$productRef->toolRef->equipment->name}}<input type="hidden" name="equipment_id[]" value="{{$productRef->toolRef->equipment_id}}"></td>
 					</tr>
@@ -33,14 +44,28 @@
 		<button type="button" class="btn btn-default" data-dismiss="modal" id="inspection-modal-close">Close</button>
 	</div>
 </form>
-<input type="hidden" id="OK-input" value="OK">
 
 <script>
 
+	// Simulate tab key when enter is pressed           
+	$('.EntTab').bind('keypress', function(event){
+	    if(event.which === 13){
+	        if(event.shiftKey){
+	            $.tabPrev();
+	        }
+	        else{
+	            $.tabNext();
+	        }
+	        return false;
+	    }
+	});
+
+	// submitform
 	$('#new-inspection-form').validate({
 		onsubmit:false
 	});
 
+	
 	$('#new-inspection-form').submit(function(event){
 		event.preventDefault();
 		$.ajax({
@@ -54,267 +79,19 @@
 			});
 	});
 
-	$( "input#productAtt-5" ).rules( "add", {
-		min:9.9,
-		max:10,
+	
+	// Validate value input
+	<?php
+	$validTableA = Config::get('validInspection.validTableA');
+	?>
+	@foreach ($validTableA as $productAtt_id=>$validArray)
+	$( "input#productAtt-{{$productAtt_id}}" ).rules( "add", {
+		min:{{$validArray['min']}},
+		max:{{$validArray['max']}},
 		messages: {
-			min: "OK value: 9.9-10",
-			max: "OK value: 9.9-10"
+			min: "OK value: {{$validArray['min']}}-{{$validArray['max']}}",
+			max: "OK value: {{$validArray['min']}}-{{$validArray['max']}}"
 		}
 	});
-	$( "input#productAtt-41" ).rules( "add", {
-		min:0.7,
-		max:0.9,
-		messages: {
-			min: "OK value: 0.7-0.9",
-			max: "OK value: 0.7-0.9"
-		}
-	});
-	$( "input#productAtt-42" ).rules( "add", {
-		min:2.4,
-		max:2.6,
-		messages: {
-			min: "OK value: 2.4-2.6",
-			max: "OK value: 2.4-2.6"
-		}
-	});
-	$( "input#productAtt-6" ).rules( "add", {
-		min:4.2,
-		max:4.4,
-		messages: {
-			min: "OK value: 4.2-4.4",
-			max: "OK value: 4.2-4.4"
-		}
-	});
-	$( "input#productAtt-7" ).rules( "add", {
-		min:4.2,
-		max:4.4,
-		messages: {
-			min: "OK value: 4.2-4.4",
-			max: "OK value: 4.2-4.4"
-		}
-	});
-	$( "input#productAtt-8" ).rules( "add", {
-		min:19.85,
-		max:20.15,
-		messages: {
-			min: "OK value: 19.85-20.15",
-			max: "OK value: 19.85-20.15"
-		}
-	});
-	$( "input#productAtt-9" ).rules( "add", {
-		min:3.4,
-		max:3.6,
-		messages: {
-			min: "OK value: 3.4-3.6",
-			max: "OK value: 3.4-3.6"
-		}
-	});
-	$( "input#productAtt-10" ).rules( "add", {
-		min:4,
-		max:4.1,
-		messages: {
-			min: "OK value: 4-4.1",
-			max: "OK value: 4-4.1"
-		}
-	});
-	$( "input#productAtt-20" ).rules( "add", {
-		min:4,
-		max:4.1,
-		messages: {
-			min: "OK value: 4-4.1",
-			max: "OK value: 4-4.1"
-		}
-	});
-	$( "input#productAtt-22" ).rules( "add", {
-		min:4,
-		max:4.1,
-		messages: {
-			min: "OK value: 4-4.1",
-			max: "OK value: 4-4.1"
-		}
-	});
-	$( "input#productAtt-23" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-24" ).rules( "add", {
-		min:27,
-		max:27.15,
-		messages: {
-			min: "OK value: 27-27.15",
-			max: "OK value: 27-27.15"
-		}
-	});
-	$( "input#productAtt-25" ).rules( "add", {
-		min:27,
-		max:27.15,
-		messages: {
-			min: "OK value: 27-27.15",
-			max: "OK value: 27-27.15"
-		}
-	});
-	$( "input#productAtt-26" ).rules( "add", {
-		min:27,
-		max:27.15,
-		messages: {
-			min: "OK value: 27-27.15",
-			max: "OK value: 27-27.15"
-		}
-	});
-	$( "input#productAtt-27" ).rules( "add", {
-		min:31.65,
-		max:31.8,
-		messages: {
-			min: "OK value: 31.65-31.8",
-			max: "OK value: 31.65-31.8"
-		}
-	});
-	$( "input#productAtt-43" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-15" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-44" ).rules( "add", {
-		min:41.7,
-		max:41.85,
-		messages: {
-			min: "OK value: 41.7-41.85",
-			max: "OK value: 41.7-41.85"
-		}
-	});
-	$( "input#productAtt-45" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-16" ).rules( "add", {
-		min:8.8,
-		max:9,
-		messages: {
-			min: "OK value: 8.8-9",
-			max: "OK value: 8.8-9"
-		}
-	});
-	$( "input#productAtt-30" ).rules( "add", {
-		min:8.8,
-		max:9,
-		messages: {
-			min: "OK value: 8.8-9",
-			max: "OK value: 8.8-9"
-		}
-	});
-	$( "input#productAtt-31" ).rules( "add", {
-		min:8.8,
-		max:9,
-		messages: {
-			min: "OK value: 8.8-9",
-			max: "OK value: 8.8-9"
-		}
-	});
-	$( "input#productAtt-34" ).rules( "add", {
-		min:8.8,
-		max:9,
-		messages: {
-			min: "OK value: 8.8-9",
-			max: "OK value: 8.8-9"
-		}
-	});
-	$( "input#productAtt-35" ).rules( "add", {
-		min:8.8,
-		max:9,
-		messages: {
-			min: "OK value: 8.8-9",
-			max: "OK value: 8.8-9"
-		}
-	});
-	$( "input#productAtt-36" ).rules( "add", {
-		min:8.8,
-		max:9,
-		messages: {
-			min: "OK value: 8.8-9",
-			max: "OK value: 8.8-9"
-		}
-	});
-	$( "input#productAtt-32" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-50" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-17" ).rules( "add", {
-		min:8.1,
-		max:8.3,
-		messages: {
-			min: "OK value: 8.1-8.3",
-			max: "OK value: 8.1-8.3"
-		}
-	});
-	$( "input#productAtt-33" ).rules( "add", {
-		min:8.1,
-		max:8.3,
-		messages: {
-			min: "OK value: 8.1-8.3",
-			max: "OK value: 8.1-8.3"
-		}
-	});
-	$( "input#productAtt-18" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-46" ).rules( "add", {
-		min:1.3,
-		max:1.5,
-		messages: {
-			min: "OK value: 1.3-1.5",
-			max: "OK value: 1.3-1.5"
-		}
-	});
-	$( "input#productAtt-47" ).rules( "add", {
-		min:0.85,
-		max:1.05,
-		messages: {
-			min: "OK value: 0.85-1.05",
-			max: "OK value: 0.85-1.05"
-		}
-	});
-	$( "input#productAtt-48" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-	$( "input#productAtt-19" ).rules( "add", {
-		min:19.5,
-		max:20.5,
-		messages: {
-			min: "OK value: 19.5-20.5",
-			max: "OK value: 19.5-20.5"
-		}
-	});
-	$( "input#productAtt-49" ).rules( "add", {
-		equalTo: "#OK-input",
-		messages: {
-			equalTo: "OK value: OK"
-		}
-	});
-
+	@endforeach
 </script>

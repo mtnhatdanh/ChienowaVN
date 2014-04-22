@@ -34,6 +34,9 @@
     {{HTML::script('js/function.js')}}
     {{HTML::script('js/jquery-validate/jquery.validate.js')}}
 
+    <!-- Jquery for tab -->
+    {{HTML::script('js/jquery.tabbable.min.js')}}
+
     
   </head>
 
