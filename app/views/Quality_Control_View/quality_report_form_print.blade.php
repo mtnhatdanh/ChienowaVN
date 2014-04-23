@@ -134,22 +134,25 @@ $no_rows               = count($inspectionDetailTable[0]);
 							<?php
 								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
 									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
-										case 4:
+										case 2:
 											echo "2";
+											break;
+										case 5:
+											echo "3";
 											break;
 										case 7:
 											echo "3";
 											break;
-										case 9:
+										case 8:
 											echo "3";
 											break;
-										case 15:
+										case 11:
 											echo "6";
 											break;
-										case 16:
+										case 12:
 											echo "2";
 											break;
-										case 17:
+										case 13:
 											echo "2";
 											break;
 
@@ -171,25 +174,28 @@ $no_rows               = count($inspectionDetailTable[0]);
 					
 					<!-- Tolerance column -->
 					<?php
-					if ($j>0 && $j!=4 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
+					if ($j>0 && $j!=2 && $inspectionDetailTable[0][$j]->productAtt->order_no != $inspectionDetailTable[0][$j-1]->productAtt->order_no) {
 					?>
 						<td rowspan="
 							<?php
 								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
 									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
+										case 5:
+											echo "3";
+											break;
 										case 7:
 											echo "3";
 											break;
-										case 9:
+										case 8:
 											echo "3";
 											break;
-										case 15:
+										case 11:
 											echo "6";
 											break;
-										case 16:
+										case 12:
 											echo "2";
 											break;
-										case 17:
+										case 13:
 											echo "2";
 											break;
 
@@ -200,16 +206,17 @@ $no_rows               = count($inspectionDetailTable[0]);
 								} else echo "1";
 							?>
 						">
-							@if($inspectionDetailTable[0][$j]->productAtt->order_no == 7) φ4 +0.1mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 9) φ27 +0.15mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 15) φ8.9±0.1mm (Note 12)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 16) No Short Shot appearance (Note 5)
-							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 17) φ8.3 -0.2mm <br/> φ8.10mm through <br/> φ8.31mm stop
+							@if($inspectionDetailTable[0][$j]->productAtt->order_no == 5) φ4 +0.1mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 7) φ27 +0.15mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 8) φ31.8 -0.15mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 11) φ8.9±0.1mm (Note 12)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 12) No Short Shot appearance (Note 5)
+							@elseif($inspectionDetailTable[0][$j]->productAtt->order_no == 13) φ8.3 -0.2mm <br/> φ8.10mm through <br/> φ8.31mm stop
 							@else {{$inspectionDetailTable[0][$j]->productAtt->name}}
 							@endif
 						</td>
 					<?php
-					} elseif($j==0||$j==4) {
+					} elseif($j==0||$j==2) {
 					?>
 						<td>{{$inspectionDetailTable[0][$j]->productAtt->name}}</td>
 					<?php } ?>
@@ -239,6 +246,15 @@ $no_rows               = count($inspectionDetailTable[0]);
 								echo "2: ";
 								break;
 							case 26:
+								echo "3: ";
+								break;
+							case 27:
+								echo "1: ";
+								break;
+							case 51:
+								echo "2: ";
+								break;
+							case 52:
 								echo "3: ";
 								break;
 							case 16:
@@ -294,25 +310,28 @@ $no_rows               = count($inspectionDetailTable[0]);
 							<?php
 								if ($j<28 && $inspectionDetailTable[0][$j]->productAtt->order_no == $inspectionDetailTable[0][$j+1]->productAtt->order_no) {
 									switch ($inspectionDetailTable[0][$j]->productAtt->order_no) {
-										case 4:
+										case 2:
 											echo "2";
+											break;
+										case 5:
+											echo "3";
 											break;
 										case 7:
 											echo "3";
 											break;
-										case 9:
+										case 8:
 											echo "3";
 											break;
-										case 15:
+										case 11:
 											echo "6";
 											break;
-										case 16:
+										case 12:
 											echo "2";
 											break;
-										case 17:
+										case 13:
 											echo "2";
 											break;
-
+										
 										default:
 											echo "1";
 											break;
