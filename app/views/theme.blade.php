@@ -99,6 +99,13 @@
               </ul>
             </li>
 
+            <li class="dropdown @if(Session::get('active_menu')=='orders') active @endif">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orders<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{Asset('orders/supplier-manage')}}">Manage Suppliers</a></li>
+              </ul>
+            </li>
+
             <li class="dropdown @if(Session::get('active_menu')=='report') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>
               <ul class="dropdown-menu">

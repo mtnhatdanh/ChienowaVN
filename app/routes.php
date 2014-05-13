@@ -55,6 +55,7 @@ Route::group(array('before'=>'check_signin'), function(){
 	Route::controller('report', 'ReportController');
 	Route::controller('expense', 'ExpenseController');
 	Route::controller('quality-control', 'QualityControlController');
+	Route::controller('orders', 'OrdersController');
 });
 
 //Check for validation jquery
@@ -102,9 +103,15 @@ Route::group(array("prefix"=>"check"), function(){
 			return "false";
 		} else return "true";
 	});
-	// Check valid staff Rank ID exits
+	// Check valid staff Rank ID exist
 	Route::post('check-staffRank', function(){
 		if (StaffRank::checkStaffRankExist(Input::get('user_id'))) {
+			return "false";
+		} else return "true";
+	});
+	// Check valid Supplier name exist
+	Route::post('check-supplier', function(){
+		if (Supplier::checkSupplierExist(Input::get('name'))) {
 			return "false";
 		} else return "true";
 	});
