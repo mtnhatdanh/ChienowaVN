@@ -103,6 +103,8 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orders<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="{{Asset('orders/supplier-manage')}}">Manage Suppliers</a></li>
+                <li><a href="{{Asset('orders/quotation-create')}}">Create Quotation</a></li>
+                <li><a href="{{Asset('orders/quotation-manage')}}">Manage Quotation</a></li>
               </ul>
             </li>
 

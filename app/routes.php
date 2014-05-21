@@ -11,6 +11,8 @@
 |
 */
 
+Queue::getIron()->ssl_verifypeer = false;
+
 Route::get('/', function()
 {
 	return Redirect::to('signin');
@@ -114,6 +116,12 @@ Route::group(array("prefix"=>"check"), function(){
 		if (Supplier::checkSupplierExist(Input::get('name'))) {
 			return "false";
 		} else return "true";
+	});
+	// Check valid Supplier name for new Quotaion, new Order
+	Route::post('check-supplier-exist', function(){
+		if (Supplier::checkSupplierExist(Input::get('supplier_name'))) {
+			return "true";
+		} else return "false";
 	});
 });
 
@@ -326,47 +334,29 @@ Route::group(array("prefix"=>"excel-export"), function(){
 	});
 });
 
+Route::post('queue/push', function(){
+	return Queue::marshal();
+});
+
+
+Route::get('test-complete', function(){
+	return View::make('test-complete');
+});
+
 // test route
 Route::get('test', function(){
 
-	return View::make('test');
+	// $quotation_id = 1;
 
-	
+	// Mail::later(50, 'Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message){
+	// 	$message->to('minhgiang0801@outlook.com', 'Minh Giang Outlook')->subject('Test mail from Chienowa Server!!');
+	// });
 
+	Queue::push(function($job){
+		File::append(app_path().'/queue.txt', 'Test Queue Laravel'.PHP_EOL);
+		$job->delete();
+	});
 
-
-
-
-	// $report = new Report();
-
-	// $report->product_id           = Input::get('product_id');
-	// $report->date                 = Input::get('date');
-	// $report->judgement            = Input::get('judgement');
-	// $report->app_staff_id         = Input::get('app_staff_id');
-	// $report->measurement_staff_id = Input::get('measurement_staff_id');
-	// $report->equipment            = Input::get('equipment');
-	// $report->rs_worker            = Input::get('rs_worker');
-	// $report->molding              = Input::get('molding');
-	// $report->slight_stop          = Input::get('slight_stop');
-	// $report->metal_mold           = Input::get('metal_mold');
-	// $report->method               = Input::get('method');
-	// $report->materials            = Input::get('materials');
-	// $report->other                = Input::get('other');
-	// $report->material_grade       = Input::get('material_grade');
-	// $report->material_color       = Input::get('material_color');
-	// $report->material_lot_no      = Input::get('material_lot_no');
-	// $report->judgement_grade      = Input::get('judgement_grade');
-	// $report->judgement_color      = Input::get('judgement_color');
-
-
-	// $data = array('report' => $report);
-	// return View::make('Quality_Control_View.quality_report_form_print', $data);
-	// 
-	
-	// $abc = InspectionDetail::find(129);
-	// if ($abc->validWattyProduct()) {
-	// 	echo "OK";
-	// } else echo "not OK";
-	
+	return "ok";
 	
 });

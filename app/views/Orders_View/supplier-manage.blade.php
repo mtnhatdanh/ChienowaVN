@@ -30,23 +30,42 @@ Supplier Manage
 				<tr>
 					<th>No</th>
 					<th>Name</th>
-					<th>Address</th>
+					<th>Main Product</th>
+					<th class="text-center">Rating</th>
 					<th>Email</th>
 					<th>Phone</th>
-					<th>Website</th>
-					<th class="text-center">Representative</th>
 					<th class="text-center">Action</th>
 				</tr>
 				<?php $no = 0;?>
 				@foreach (Supplier::get() as $supplier)
 				<tr>
 					<td>{{++$no}}</td>
-					<td>{{$supplier->name}}</td>
-					<td>{{$supplier->address}}</td>
+					<td>
+						{{$supplier->name}}
+						<button id="{{$supplier->id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button>
+					</td>
+					<td>{{$supplier->main_product}}</td>
+					<td class="text-center">
+						<span class="rating">
+						    <input type="radio" class="rating-input"
+						        id="rating-input-2-5" value="5" readonly="readonly" @if ($supplier->rating == 5) checked @endif>
+						    <label for="rating-input-2-5" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-2-4"  value="4" readonly="readonly" @if ($supplier->rating == 4) checked @endif>
+						    <label for="rating-input-2-4" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-2-3" value="3" readonly="readonly" @if ($supplier->rating == 3) checked @endif>
+						    <label for="rating-input-2-3" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-2-2"  value="2" readonly="readonly" @if ($supplier->rating == 2) checked @endif>
+						    <label for="rating-input-2-2" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-2-1" value="1" readonly="readonly" @if ($supplier->rating == 1) checked @endif>
+						    <label for="rating-input-2-1" class="rating-star"></label>
+						</span>
+					</td>
 					<td>{{$supplier->email}}</td>
 					<td>{{$supplier->phone}}</td>
-					<td>{{$supplier->website}}</td>
-					<td class="text-center">{{$supplier->representative}} <button id="{{$supplier->id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button></td>
 					<td class="text-center">
 						<button id="{{$supplier->id}}" class="btn btn-link modify-button">Modify</button>
 						<button id="{{$supplier->id}}" class="btn btn-link delete-button">Delete</button>
@@ -79,6 +98,9 @@ Supplier Manage
 						{{Former::text('email')->class('form-control')->placeholder('Email')}}
 					</div>
 					<div class="col-sm-4">
+						{{Former::text('main_product')->class('form-control')->placeholder('Main Product')}}
+					</div>
+					<div class="col-sm-4">
 						{{Former::text('phone')->class('form-control')->placeholder('Phone')}}
 					</div>
 					<div class="col-sm-4">
@@ -89,6 +111,29 @@ Supplier Manage
 					</div>
 					<div class="col-sm-4">
 						{{Former::text('website')->class('form-control')->placeholder('Website')}}
+					</div>
+				</div>
+				<br/>
+				<div class="row">
+					<div class="col-sm-4">
+						<strong>Rating</strong><br/>
+						<span class="rating">
+						    <input type="radio" class="rating-input"
+						        id="rating-input-1-5" name="rating" value="5">
+						    <label for="rating-input-1-5" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-1-4" name="rating"  value="4">
+						    <label for="rating-input-1-4" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-1-3" name="rating" value="3">
+						    <label for="rating-input-1-3" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-1-2" name="rating"  value="2">
+						    <label for="rating-input-1-2" class="rating-star"></label>
+						    <input type="radio" class="rating-input"
+						        id="rating-input-1-1" name="rating" value="1">
+						    <label for="rating-input-1-1" class="rating-star"></label>
+						</span>
 					</div>
 				</div>
 				<div class="row">
@@ -106,13 +151,13 @@ Supplier Manage
 </div><!-- /.modal -->
 {{Former::close()}}
 
-<!-- Representative infomation modal -->
+<!-- Supplier infomation modal -->
 <div class="modal fade" id="modal-info">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Representative Infomation</h4>
+				<h4 class="modal-title">Supplier Infomation</h4>
 			</div>
 			<div class="modal-body">
 				<div id="representative-info"></div>
