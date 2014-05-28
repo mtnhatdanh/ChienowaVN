@@ -346,17 +346,18 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
+	echo date('Y-m-d');
 	// $quotation_id = 1;
 
 	// Mail::later(50, 'Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message){
 	// 	$message->to('minhgiang0801@outlook.com', 'Minh Giang Outlook')->subject('Test mail from Chienowa Server!!');
 	// });
 
-	Queue::push(function($job){
-		File::append(app_path().'/queue.txt', 'Test Queue Laravel'.PHP_EOL);
-		$job->delete();
-	});
+	// Queue::push(function($job){
+	// 	File::append(app_path().'/queue.txt', 'Test Queue Laravel'.PHP_EOL);
+	// 	$job->delete();
+	// });
 
-	return "ok";
+	// return "ok";
 	
 });

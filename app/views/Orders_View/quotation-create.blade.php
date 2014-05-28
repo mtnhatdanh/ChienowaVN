@@ -28,7 +28,7 @@ Quotation Create
 			{{Former::select('user_id')->options(array(Session::get('user')->id=>Session::get('user')->name))->label('User')->class('form-control')}}
 		</div>
 		<div class="col-sm-3">
-			{{Former::date('date')->class('form-control')}}
+			{{Former::date('date')->class('form-control')->value(date('Y-m-d'))}}
 		</div>
 		<div class="form-group col-sm-6">
 			<label for="supplier_name" class="control-label">Supplier name</label>

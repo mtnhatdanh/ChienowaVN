@@ -121,6 +121,42 @@ class OrdersController extends Controller
 	}
 
 	/**
+	 * Quotation Manage post
+	 * @return ajax view
+	 */
+	public function postQuotationManage(){
+		$from_date = Input::get('from_date');
+		$to_date   = Input::get('to_date');
+		$status    = Input::get('status');
+
+		$quotations = Quotation::where('status', '=', $status);
+						
+		if ($from_date != '') {
+			$quotations = $quotations->where('date', '>=', $from_date);
+		}
+		if ($to_date!= '') {
+			$quotations = $quotations->where('date', '<=', $to_date);
+		}
+
+		$quotations = $quotations->get();
+
+		return View::make('Orders_View.quotation-ajax', array('quotations'=>$quotations));
+	}
+
+	/**
+	 * Quotation Status Change ajax
+	 * @return Update database
+	 */
+	public function postQuotationChangeStatus(){
+		$quotation         = Quotation::find(Input::get('quotation_id'));
+		$quotation->status = Input::get('status');
+		$success           = $quotation->save();
+		if ($success) {
+			echo 'OK';
+		} else {echo 'error';}
+	}
+
+	/**
 	 * Quotation Create
 	 * @return View quotation
 	 */
@@ -196,7 +232,7 @@ class OrdersController extends Controller
 			$diff = abs(strtotime($quotation->due_date) - strtotime($quotation->date));
 
 			Mail::later($diff, 'Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message){
-				$message->to('minhgiang0801@outlook.com', 'Minh Giang Outlook')->subject('Quotation statement from Chienowa!!');
+				$message->to('hoainfo@chienowa.agri-wave.com', 'Hoa Chienowa')->subject('Quotation statement from Chienowa!!');
 			});
 
 			$notification = new Notification;
