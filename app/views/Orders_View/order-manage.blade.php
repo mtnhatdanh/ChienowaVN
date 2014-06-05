@@ -1,7 +1,7 @@
 @extends("theme")
 
 @section('title')
-Quotation Manage
+Order Manage
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@ Quotation Manage
 
 <div class="container">
 	<div class="page-header">
-		<h1>Manage Quotation</h1>
+		<h1>Order Quotation</h1>
 	</div>
 	@include('notification')
 </div>
@@ -44,7 +44,7 @@ Quotation Manage
 		if(from_date > to_date) alert('Wrong Input!!');
 		else {
 			$.ajax({
-				url: '{{asset("orders/quotation-manage")}}',
+				url: '{{asset("orders/order-manage")}}',
 				type: 'POST',
 				data: {status: status, from_date: from_date, to_date: to_date},
 			})

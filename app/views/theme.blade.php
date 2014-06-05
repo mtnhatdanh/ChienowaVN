@@ -102,9 +102,14 @@
             <li class="dropdown @if(Session::get('active_menu')=='orders') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orders<b class="caret"></b></a>
               <ul class="dropdown-menu">
+                <li class="dropdown-header">Quotations</li>
                 <li><a href="{{Asset('orders/supplier-manage')}}">Manage Suppliers</a></li>
                 <li><a href="{{Asset('orders/quotation-create')}}">Create Quotation</a></li>
                 <li><a href="{{Asset('orders/quotation-manage')}}">Manage Quotation</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Orders</li>
+                <li><a href="{{Asset('orders/order-create')}}">Create Orders</a></li>
+                <li><a href="{{Asset('orders/order-manage')}}">Manage Orders</a></li>
               </ul>
             </li>
 

@@ -338,6 +338,29 @@ Route::post('queue/push', function(){
 	return Queue::marshal();
 });
 
+/**
+* Queue class for order send mail
+*/
+class SendEmailOrder
+{
+	public function fire($job, $data) {
+
+		$order_id = $data['order_id'];
+		$order    = Order::find($order_id);
+
+		if ($order->status == 0) {
+			Mail::queue('Mail_View.order-mail', array('order_id'=>$order_id), function($message){
+				$message->to('hoainfo@chienowa.agri-wave.com', 'Hoa Chienowa')
+				->cc('minhgiang0801@outlook.com', 'Minh Giang')
+				->subject('Remind Order statement from Chienowa!!');
+			});
+		}
+
+		$job->delete();
+	}
+
+}
+
 
 Route::get('test-complete', function(){
 	return View::make('test-complete');
@@ -346,12 +369,11 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
-	echo date('Y-m-d');
-	// $quotation_id = 1;
+	// echo date('Y-m-d');
 
-	// Mail::later(50, 'Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message){
-	// 	$message->to('minhgiang0801@outlook.com', 'Minh Giang Outlook')->subject('Test mail from Chienowa Server!!');
-	// });
+	Queue::later(10, 'SendEmailOrder', array('order_id'=>1));
+	
+
 
 	// Queue::push(function($job){
 	// 	File::append(app_path().'/queue.txt', 'Test Queue Laravel'.PHP_EOL);

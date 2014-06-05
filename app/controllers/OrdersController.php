@@ -241,9 +241,100 @@ class OrdersController extends Controller
 			return Redirect::to('orders/quotation-create');
 
 		} else {
-			return Response::json($quotation->errors(), 400);
+			return Response::json('error', 400);
 		}
 
+	}
+
+	/**
+	 * Orders/order-create
+	 * @return View Order-create
+	 */
+	public function getOrderCreate(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.order-create', array('notification'=>$notification));					
+	}
+
+	/**
+	 * post orders/order-create
+	 * @return Update database
+	 */
+	public function postOrderCreate(){
+		$order                = new Order;
+		$order->user_id       = Input::get('user_id');
+		$order->date          = Input::get('date');
+		$order->supplier_id   = Input::get('supplier_id');
+		$order->order_product = Input::get('product');
+		$order->due_date      = Input::get('due_date');
+		$order->delivery_date = Input::get('delivery_date');
+		$order->status        = Input::get('status');
+		$order->note          = Input::get('note');
+
+		$success = $order->save();
+
+		if ($success) {
+			$order_id = $order->id;
+			Mail::queue('Mail_View.order-mail', array('order_id'=>$order_id), function($message){
+				$message->to('hoainfo@chienowa.agri-wave.com', 'Hoa Chienowa')
+				->cc('minhgiang0801@outlook.com', 'Minh Giang')
+				->subject('Remind Order statement from Chienowa!!');
+			});
+
+			$diff       = abs(strtotime($order->due_date) - strtotime($order->date));
+			$before1day = $diff - 86400;
+			$after1day  = $diff + 86400;
+
+			// Send email 1 day before Due_date
+			if ($before1day>0) {
+				Queue::later($before1day, 'SendEmailOrder', array('order_id'=>$order_id));
+			}
+
+			// Send email 1 day after Due_date
+			Queue::later($after1day, 'SendEmailOrder', array('order_id'=>$order_id));
+			
+			
+			$notification = new Notification;
+			$notification->set('success', 'Create new Order successfully!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/order-create');
+
+		} else {
+			return Response::json('error', 400);
+		}
+	}
+
+	/**
+	 * Order Manage
+	 * @return View order-manage
+	 */
+	public function getOrderManage(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.order-manage', array('notification'=>$notification));
+	}
+
+	/**
+	 * Quotation Manage post
+	 * @return ajax view
+	 */
+	public function postOrderManage(){
+		$from_date = Input::get('from_date');
+		$to_date   = Input::get('to_date');
+		$status    = Input::get('status');
+
+		$orders = Order::where('status', '=', $status);
+						
+		if ($from_date != '') {
+			$orders = $orders->where('date', '>=', $from_date);
+		}
+		if ($to_date!= '') {
+			$orders = $orders->where('date', '<=', $to_date);
+		}
+
+		$orders = $orders->get();
+
+		return View::make('Orders_View.order-ajax', array('orders'=>$orders));
 	}
 	
 }
