@@ -336,5 +336,48 @@ class OrdersController extends Controller
 
 		return View::make('Orders_View.order-ajax', array('orders'=>$orders));
 	}
+
+	/**
+	 * Delete Order
+	 * @return Update database
+	 */
+	public function postOrderDelete(){
+		$order = Order::find(Input::get('order_id'));
+		$order->delete();
+		$notification        = new Notification;
+		$notification->type  = "success";
+		$notification->value = "You have just deleted order!!";
+		Cache::put('notification', $notification, 10);
+		return Redirect::to('orders/order-manage');
+	}
+
+	/**
+	 * Order Modify ajax
+	 * @return View ajax
+	 */
+	public function postOrderModify(){
+		$order = Order::find(Input::get('order_id'));
+		return View::make('Orders_View.order-modify-ajax', array('order'=>$order));
+	}
+
+	/**
+	 * Order Modify Confirm from ajax
+	 * @return Update Database
+	 */
+	public function postOrderModifyConfirm(){
+		$order                = Order::find(Input::get('order_id'));
+		$order->status        = Input::get('status');
+		$order->delivery_date = Input::get('delivery_date');
+		$order->note          = Input::get('note');
+		$success = $order->save();
+		if ($success) {
+			$notification = new Notification;
+			$notification->set('success', 'You have just updated Order!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/order-manage'); 
+		} else {
+			return Response::json('error', 400);
+		}
+	}
 	
 }
