@@ -100,7 +100,7 @@
             </li>
 
             <li class="dropdown @if(Session::get('active_menu')=='orders') active @endif">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orders<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orders & Requests<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Quotations</li>
                 <li><a href="{{Asset('orders/supplier-manage')}}">Manage Suppliers</a></li>
@@ -110,6 +110,10 @@
                 <li class="dropdown-header">Orders</li>
                 <li><a href="{{Asset('orders/order-create')}}">Create Orders</a></li>
                 <li><a href="{{Asset('orders/order-manage')}}">Manage Orders</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Local Request</li>
+                <li><a href="{{Asset('orders/request-create')}}">Create Request</a></li>
+                <li><a href="{{Asset('orders/request-manage')}}">Request belong to you</a></li>
               </ul>
             </li>
 

@@ -6,14 +6,6 @@ Quotation Create
 
 @section('content')
 
-<style>
-	.autocomplete-suggestions { border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); }
-	.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
-	.autocomplete-selected { background: #F0F0F0; }
-	.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-</style>
-
-
 <div class="container">
 	<div class="page-header">
 		<h1>Create new Quotation</h1>
@@ -44,17 +36,8 @@ Quotation Create
 				{{Former::hidden('supplier_id')->id('supplier_id')}}
 			</div>
 		</div>
-		<div class="col-sm-3">
-			{{Former::text('Product')->class('form-control')}}
-		</div>
-		<div class="col-sm-3">
-			{{Former::date('Due_date')->class('form-control')}}
-		</div>
-		<div class="col-sm-3">
-			<?php
-			$status = array('on-process', 'completed');
-			?>
-			{{Former::select('status')->options($status)->class('form-control')}}
+		<div class="col-sm-6">
+			{{Former::text('Product')->class('form-control')->placeholder('Product name')}}
 		</div>
 		<div class="col-sm-12">
 			{{Former::textarea('note')->class('form-control')->placeholder('Note')}}

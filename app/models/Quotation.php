@@ -8,8 +8,7 @@ class Quotation extends Ardent
         'user_id'     =>'required|integer',
         'date'        =>'required|date',
         'supplier_id' =>'required|integer',
-        'product'     =>'required',
-        'due_date'    =>'required|date',
+        'product'     =>'required'
         );
 
     public static $relationsData = array(

@@ -51,7 +51,7 @@ $quotation = Quotation::find($quotation_id);
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-header">
-                    <h1>Quotation <small>mail</small></h1>
+                    <h1>Quotation <small>remind mail</small></h1>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@ $quotation = Quotation::find($quotation_id);
         <div class="row">
             <div class="col-sm-12">
                 <p>
-                    This is a automatic mail. Please don't reply this email.
+                    This is a automatic remind email. Please don't reply this email.
                 </p>
             </div>
         </div>
@@ -74,8 +74,6 @@ $quotation = Quotation::find($quotation_id);
             <div class="col-sm-4">
                 {{$quotation->user->name}}
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-2">
                 <strong>Date</strong>
             </div>
@@ -90,21 +88,11 @@ $quotation = Quotation::find($quotation_id);
             <div class="col-sm-4">
                 {{$quotation->supplier->name}}
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-2">
                 <strong>Product</strong>
             </div>
             <div class="col-sm-4">
                 {{$quotation->product}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">
-                <strong>Due Date</strong>
-            </div>
-            <div class="col-sm-4">
-                {{$quotation->due_date}}
             </div>
         </div>
         <div class="row">

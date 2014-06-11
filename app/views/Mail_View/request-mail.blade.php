@@ -1,5 +1,5 @@
 <?php
-$order = Order::find($order_id);
+$request = RequestLC::find($request_id);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,7 @@ $order = Order::find($order_id);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Order mail</title>
+    <title>Quotation mail</title>
 
     <!-- Bootstrap core CSS -->
     {{HTML::style('bootstrap-3.1.1/dist/css/bootstrap.min.css')}}
@@ -51,7 +51,7 @@ $order = Order::find($order_id);
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-header">
-                    <h1>Order <small>mail</small></h1>
+                    <h1>Request <small> remind mail</small></h1>
                 </div>
             </div>
         </div>
@@ -69,10 +69,16 @@ $order = Order::find($order_id);
     <div class="container">
         <div class="row">
             <div class="col-sm-2">
-                <strong>User:</strong>
+                <strong>Request from:</strong>
             </div>
             <div class="col-sm-4">
-                {{$order->user->name}}
+                {{$request->user->name}}
+            </div>
+            <div class="col-sm-2">
+                <strong>Incharge Staff</strong>
+            </div>
+            <div class="col-sm-4">
+                {{$request->inchargeStaff->name}}
             </div>
         </div>
         <div class="row">
@@ -80,36 +86,34 @@ $order = Order::find($order_id);
                 <strong>Date</strong>
             </div>
             <div class="col-sm-4">
-                {{$order->date}}
+                {{$request->date}}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">
-                <strong>Supplier name</strong>
-            </div>
-            <div class="col-sm-4">
-                {{$order->supplier->name}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">
-                <strong>Product</strong>
-            </div>
-            <div class="col-sm-4">
-                {{$order->order_product}}
-            </div>
-        </div>
-        <div class="row">
             <div class="col-sm-2">
                 <strong>Due Date</strong>
             </div>
             <div class="col-sm-4">
-                {{$order->due_date}}
+                {{$request->due_date}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <strong>Date still avaiable</strong>
+            </div>
+            <div class="col-sm-4">
+                {{(strtotime($request->due_date)-strtotime(date('Y-m-d')))/86400;}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <strong>Request content</strong>
+            </div>
+            <div class="col-sm-4">
+                {{$request->request_content}}
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <strong>Note: </strong>{{$order->note}}
+                <strong>Note: </strong>{{$request->note}}
             </div>
         </div>
     </div>

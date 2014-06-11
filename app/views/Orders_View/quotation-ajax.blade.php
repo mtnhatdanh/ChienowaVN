@@ -11,8 +11,10 @@
 				<th>Supplier</th>
 				<th>Product</th>
 				<th>Date</th>
-				<th>Due Date</th>
-				<th class="text-center">Over date</th>
+				@if ($status == 1)
+				<th class="text-center">Completed date</th>
+				<th class="text-center">Used date</th>
+				@endif
 				<th class="text-center">Status</th>
 			</tr>
 			@foreach ($quotations as $quotation)
@@ -23,14 +25,17 @@
 					<button type="button" id="{{$quotation->supplier->id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button>
 				</td>
 				<td>{{$quotation->product}}</td>
-				<td>{{$quotation->date}}</td>
-				<td>{{$quotation->due_date}}</td>
+				<td>{{date('m-d-Y', strtotime($quotation->date))}}</td>
+
+				@if ($quotation->status == 1)
+				<td class="text-center">{{date('m-d-Y', strtotime($quotation->completed_date))}}</td>
 				<?php
-				$present_date = date('Y-m-d');
-				$secs = strtotime($quotation->due_date)-strtotime($present_date);
+				$secs = strtotime($quotation->completed_date)-strtotime($quotation->date);
 				$days = $secs/86400;
 				?>
-				<td class="text-center"><span class="label @if ($days>0) label-success @else label-danger @endif">{{$days}}</span></td>
+				<td class="text-center"><span class="label label-success">{{$days}}</span></td>
+				@endif
+
 				<td class="text-center">
 					<?php
 					$status = array('on-process', 'completed');

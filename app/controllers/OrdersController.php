@@ -140,7 +140,7 @@ class OrdersController extends Controller
 
 		$quotations = $quotations->get();
 
-		return View::make('Orders_View.quotation-ajax', array('quotations'=>$quotations));
+		return View::make('Orders_View.quotation-ajax', array('quotations'=>$quotations, 'status'=>$status));
 	}
 
 	/**
@@ -150,7 +150,13 @@ class OrdersController extends Controller
 	public function postQuotationChangeStatus(){
 		$quotation         = Quotation::find(Input::get('quotation_id'));
 		$quotation->status = Input::get('status');
+
+		if (Input::get('status') == 1) {
+			$quotation->completed_date = date('Y-m-d');
+		}
+
 		$success           = $quotation->save();
+		
 		if ($success) {
 			echo 'OK';
 		} else {echo 'error';}
@@ -217,22 +223,20 @@ class OrdersController extends Controller
 		$quotation->date        = Input::get('date');
 		$quotation->supplier_id = Input::get('supplier_id');
 		$quotation->product     = Input::get('Product');
-		$quotation->due_date    = Input::get('Due_date');
-		$quotation->status      = Input::get('status');
+		$quotation->status      = 0;
 		$quotation->note        = Input::get('note');
 
 		$success = $quotation->save();
+		$quotation_id = $quotation->id;
+
+		$user_email = User::find(Input::get('user_id'))->email;
 
 		$data = array('quotation'=>$quotation);
 
 		if ($success) {
 
-			$quotation_id = $quotation->id;
-
-			$diff = abs(strtotime($quotation->due_date) - strtotime($quotation->date));
-
-			Mail::later($diff, 'Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message){
-				$message->to('hoainfo@chienowa.agri-wave.com', 'Hoa Chienowa')->subject('Quotation statement from Chienowa!!');
+			Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
+				$message->to($user_email, 'Chienowa Vietnam Staff')->subject('Quotation statement from Chienowa!!');
 			});
 
 			$notification = new Notification;
@@ -287,11 +291,11 @@ class OrdersController extends Controller
 
 			// Send email 1 day before Due_date
 			if ($before1day>0) {
-				Queue::later($before1day, 'SendEmailOrder', array('order_id'=>$order_id));
+				Queue::later($before1day, 'SendEmail', array('order_id'=>$order_id));
 			}
 
 			// Send email 1 day after Due_date
-			Queue::later($after1day, 'SendEmailOrder', array('order_id'=>$order_id));
+			Queue::later($after1day, 'SendEmail', array('order_id'=>$order_id));
 			
 			
 			$notification = new Notification;
@@ -378,6 +382,102 @@ class OrdersController extends Controller
 		} else {
 			return Response::json('error', 400);
 		}
+	}
+
+	/**
+	 * orders/request-create
+	 * @return View request-create
+	 */
+	public function getRequestCreate(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.request-create', array('notification'=>$notification));
+	}
+
+	/**
+	 * get data from Request Create
+	 * @return Update database
+	 */
+	public function postRequestCreate(){
+		$request = new RequestLC;
+		$request->user_id           = Input::get('user_id');
+		$request->date              = Input::get('date');
+		$request->incharge_staff_id = Input::get('incharge_staff_id');
+		$request->due_date          = Input::get('due_date');
+		$request->request_content   = Input::get('request_content');
+		$request->note              = Input::get('note');
+
+		$success = $request->save();
+
+		$request_id = $request->id;
+
+		$notification = new Notification;
+
+		if ($success) {
+
+			Queue::push('SendEmail@requestLC', array('request_id'=>$request_id));
+
+			$diff       = abs(strtotime($request->due_date) - strtotime(date('Y-m-d')));
+			$before1day = $diff - 86400;
+			$after1day  = $diff + 86400;
+
+			if ($before1day) {
+				Queue::later($before1day, 'SendEmail@requestLC', array('request_id'=>$request_id));
+			}
+			
+			if ($diff) {
+				Queue::later($diff, 'SendEmail@requestLC', array('request_id'=>$request_id));
+			}
+			
+			if ($after1day) {
+				Queue::later($after1day, 'SendEmail@requestLC', array('request_id'=>$request_id));
+			}
+			
+
+			$notification->set('success', 'You have just created new Request!!');
+
+		} else {
+			$notification->set('danger', 'Fail!!');
+		}
+		Cache::put('notification', $notification, 10);
+		return Redirect::to('orders/request-create');
+	}
+
+	/**
+	 * Request Manage
+	 * @return View
+	 */
+	public function getRequestManage(){
+		$user_id = Session::get('user')->id;
+		$user    = User::find($user_id);
+
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.request-manage', array('notification'=>$notification, 'user'=>$user));
+	}
+
+	/**
+	 * Request Manage ajax
+	 * @return View ajax
+	 */
+	public function postRequestManage(){
+
+		$from_date = Input::get('from_date');
+		$to_date   = Input::get('to_date');
+		$status    = Input::get('status');
+
+		$requests = RequestLC::where('status', '=', $status);
+						
+		if ($from_date != '') {
+			$requests = $requests->where('date', '>=', $from_date);
+		}
+		if ($to_date!= '') {
+			$requests = $requests->where('date', '<=', $to_date);
+		}
+
+		$requests = $requests->get();
+
+		return View::make('request_View.request-ajax', array('requests'=>$requests));
 	}
 	
 }

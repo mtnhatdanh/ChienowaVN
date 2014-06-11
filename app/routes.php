@@ -341,7 +341,7 @@ Route::post('queue/push', function(){
 /**
 * Queue class for order send mail
 */
-class SendEmailOrder
+class SendEmail
 {
 	public function fire($job, $data) {
 
@@ -359,6 +359,29 @@ class SendEmailOrder
 		$job->delete();
 	}
 
+	// Send email for Request Local function
+	public function requestLC($job, $data) {
+		
+		$request_id  = $data['request_id'];
+
+		$request     = RequestLC::find($request_id);
+		$user_email  = $request->user->email;
+		$staff_email = $request->inchargeStaff->email;
+		
+		
+
+		if ($request->status == 0) {
+
+			Mail::queue('Mail_View.request-mail', array('request_id'=>$request_id), function($message) use ($user_email, $staff_email){
+				$message->to($staff_email, 'Staff Chienowa Vietnam')
+				->cc($user_email, 'Chienowa Vietnam')
+				->subject('Remind Local Request statement from Chienowa!!');
+			});
+		}
+
+		$job->delete();
+	}
+
 }
 
 
@@ -369,9 +392,24 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
-	// echo date('Y-m-d');
+	// Queue::push('SendEmail@requestLC', array('request_id'=>7));
+	// echo "ok";
+	// 
+	
 
-	Queue::later(10, 'SendEmailOrder', array('order_id'=>1));
+	
+	Queue::push('SendEmail@requestLC', array('request_id'=>10));
+
+	return View::make('Mail_View.request-mail', array('request_id'=>10));
+		
+	// return View::make('Mail_View.request-mail', array('request_id'=>1));		
+
+	// $request->save();
+
+	// print_r($request);
+
+	// $user = User::find(10);
+	// print_r($user);
 	
 
 
