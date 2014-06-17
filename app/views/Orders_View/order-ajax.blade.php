@@ -1,5 +1,5 @@
 <style>
-	table#quotation-table td {
+	table#order-table td {
 		vertical-align: middle;
 	}
 </style>
@@ -9,7 +9,7 @@
 			<tr>
 				<th>User</th>
 				<th>Supplier</th>
-				<th>Product</th>
+				<th class="text-center">Order Detail</th>
 				<th>Date</th>
 				<th>Due Date</th>
 				<th class="text-center">Over date</th>
@@ -23,18 +23,18 @@
 					{{$order->supplier->name}}
 					<button type="button" id="{{$order->supplier->id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button>
 				</td>
-				<td>{{$order->order_product}}</td>
-				<td>{{$order->date}}</td>
-				<td>{{$order->due_date}}</td>
+				<td class="text-center"><button type="button" class="btn btn-link order-product-button" id="{{$order->id}}" data-toggle="modal" href='#order-products-modal'>Order Products</button></td>
+				<td>{{date('m-d-Y', strtotime($order->date))}}</td>
+				<td>{{date('m-d-Y', strtotime($order->due_date))}}</td>
 				<?php
 				$present_date = date('Y-m-d');
-				$secs = strtotime($order->due_date)-strtotime($present_date);
-				$days = $secs/86400;
+				$secs         = strtotime($order->due_date)-strtotime($present_date);
+				$days         = $secs/86400;
 				?>
 				<td class="text-center"><span class="label @if ($days>0) label-success @else label-danger @endif">{{$days}}</span></td>
 				<td class="text-center">@if ($order->status == 1) Completed @else On-process @endif</td>
 				<td class="text-center">
-					<button type="button" class="btn btn-default modify-button" id="{{$order->id}}" data-toggle="modal" href='#modify-modal'>Modify</button>
+					<a href="{{asset("orders/order-modify/".$order->id)}}"><button type="button" class="btn btn-default modify-button">Modify</button></a>
 					<button type="button" class="btn btn-default delete-button" id="{{$order->id}}" data-toggle="modal" href='#delete-modal'>Delete</button>
 				</td>
 			</tr>
@@ -42,6 +42,25 @@
 		</table>
 	</div>
 </div>
+
+<!-- Order Products modal -->
+<div class="modal fade" id="order-products-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Modal title</h4>
+			</div>
+			<div class="modal-body">
+				<div id="order-products-result"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- Supplier infomation modal -->
 <div class="modal fade" id="modal-info">
@@ -83,27 +102,6 @@
 </div><!-- /.modal -->
 {{Former::close()}}
 
-<!-- Modify order modal -->
-{{Former::open()->action(asset('orders/order-modify-confirm'))}}
-<div class="modal fade bs-example-modal-lg" id="modify-modal">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Modify order</h4>
-			</div>
-			<div class="modal-body">
-				<div id="modify-div"></div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary">Save changes</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{Former::close()}}
-
 <script type="text/javascript">
 
 	// Info button
@@ -128,23 +126,17 @@
 
 	});
 
-	// Delete button
-	$('.delete-button').click(function(){
-		order_id = $(this).attr('id');
-		$('#order_id').val(order_id);
-	});
-
-	// Modify button
-	$('.modify-button').click(function(){
+	// Order Products button
+	$('.order-product-button').click(function(){
 		order_id = $(this).attr('id');
 		$.ajax({
-			url: '{{asset("orders/order-modify")}}',
+			url: '{{asset("orders/order-product-show")}}',
 			type: 'post',
 			data: {order_id: order_id},
 		})
 		.done(function(data) {
+			$('#order-products-result').html(data);
 			console.log("success");
-			$('#modify-div').html(data);
 		})
 		.fail(function() {
 			console.log("error");
@@ -153,6 +145,12 @@
 			console.log("complete");
 		});
 		
+	});
+
+	// Delete button
+	$('.delete-button').click(function(){
+		order_id = $(this).attr('id');
+		$('#order_id').val(order_id);
 	});
 	
 </script>

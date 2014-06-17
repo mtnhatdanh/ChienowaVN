@@ -1,5 +1,6 @@
 <?php
-$order = Order::find($order_id);
+$order        = Order::find($order_id);
+$orderDetails = $order->orderDetails;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,18 +47,14 @@ $order = Order::find($order_id);
                 </p>
             </div>
         </div>
-    </div>
-    <div class="container">
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-header">
-                    <h1>Order <small>mail</small></h1>
+                    <h1>Order <small>remind email</small></h1>
                 </div>
             </div>
         </div>
-    </div>
-    <br/>
-    <div class="container">
+        <br/>
         <div class="row">
             <div class="col-sm-12">
                 <p>
@@ -65,8 +62,6 @@ $order = Order::find($order_id);
                 </p>
             </div>
         </div>
-    </div>
-    <div class="container">
         <div class="row">
             <div class="col-sm-2">
                 <strong>User:</strong>
@@ -74,16 +69,6 @@ $order = Order::find($order_id);
             <div class="col-sm-4">
                 {{$order->user->name}}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">
-                <strong>Date</strong>
-            </div>
-            <div class="col-sm-4">
-                {{$order->date}}
-            </div>
-        </div>
-        <div class="row">
             <div class="col-sm-2">
                 <strong>Supplier name</strong>
             </div>
@@ -91,15 +76,14 @@ $order = Order::find($order_id);
                 {{$order->supplier->name}}
             </div>
         </div>
+        
         <div class="row">
             <div class="col-sm-2">
-                <strong>Product</strong>
+                <strong>Date</strong>
             </div>
             <div class="col-sm-4">
-                {{$order->order_product}}
+                {{$order->date}}
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-2">
                 <strong>Due Date</strong>
             </div>
@@ -110,6 +94,35 @@ $order = Order::find($order_id);
         <div class="row">
             <div class="col-sm-12">
                 <strong>Note: </strong>{{$order->note}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>No</th>
+                        <th>Order product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Sum</th>
+                    </tr>
+                    <?php $no = 0; $sum = 0 ?>
+                    @foreach ($orderDetails as $orderDetail)
+                    <?php $total = $orderDetail->price * $orderDetail->quantity; ?>
+                    <tr>
+                        <td>{{++$no}}</td>
+                        <td>{{$orderDetail->orderProduct->name}}</td>
+                        <td>{{number_format($orderDetail->price, 0, '.', ',')}}</td>
+                        <td>{{$orderDetail->quantity}}</td>
+                        <td>{{number_format($total, 0, '.', ',')}}</td>
+                    </tr>
+                    <?php $sum+=$total; ?>
+                    @endforeach
+                    <tr>
+                        <td colspan="4"></td>
+                        <td>{{number_format($sum, 0, '.', ',')}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

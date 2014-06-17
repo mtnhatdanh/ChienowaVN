@@ -156,7 +156,7 @@ class OrdersController extends Controller
 		}
 
 		$success           = $quotation->save();
-		
+
 		if ($success) {
 			echo 'OK';
 		} else {echo 'error';}
@@ -255,6 +255,7 @@ class OrdersController extends Controller
 	 * @return View Order-create
 	 */
 	public function getOrderCreate(){
+		Cache::forget('orderDetailCart');
 		$notification = Cache::get('notification');
 		Cache::forget('notification');
 		return View::make('Orders_View.order-create', array('notification'=>$notification));					
@@ -265,27 +266,49 @@ class OrdersController extends Controller
 	 * @return Update database
 	 */
 	public function postOrderCreate(){
-		$order                = new Order;
-		$order->user_id       = Input::get('user_id');
-		$order->date          = Input::get('date');
-		$order->supplier_id   = Input::get('supplier_id');
-		$order->order_product = Input::get('product');
-		$order->due_date      = Input::get('due_date');
-		$order->delivery_date = Input::get('delivery_date');
-		$order->status        = Input::get('status');
-		$order->note          = Input::get('note');
+
+		if (!Cache::has('orderDetailCart')) {
+			$notification = new Notification;
+			$notification->set('danger', 'Fail to create new oder!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/order-create');
+		} else {
+			if (empty(Cache::get('orderDetailCart'))) {
+				$notification = new Notification;
+				$notification->set('danger', 'Fail to create new oder!!');
+				Cache::put('notification', $notification, 10);
+				return Redirect::to('orders/order-create');
+			}
+		}
+
+		$order              = new Order;
+		$order->user_id     = Input::get('user_id');
+		$order->date        = Input::get('date');
+		$order->supplier_id = Input::get('supplier_id');
+		$order->due_date    = Input::get('due_date');
+		$order->status      = 0;
+		$order->note        = Input::get('note');
 
 		$success = $order->save();
 
 		if ($success) {
-			$order_id = $order->id;
-			Mail::queue('Mail_View.order-mail', array('order_id'=>$order_id), function($message){
-				$message->to('hoainfo@chienowa.agri-wave.com', 'Hoa Chienowa')
-				->cc('minhgiang0801@outlook.com', 'Minh Giang')
-				->subject('Remind Order statement from Chienowa!!');
-			});
 
-			$diff       = abs(strtotime($order->due_date) - strtotime($order->date));
+			// Save order detail
+			$order_id = $order->id;
+			$orderDetailCart = Cache::get('orderDetailCart');
+			foreach ($orderDetailCart as $orderProduct_id => $orderDetail) {
+				$or_detail                  = $orderDetail;
+				$or_detail->order_id        = $order_id;
+				$or_detail->order_product_id = $orderProduct_id;
+				$successOD = $or_detail->save();
+				if (!$successOD) {
+					return Response::json('Error save OrderDetail', 400);
+				}
+			}
+
+			Queue::push('SendEmail', array('order_id'=>$order_id));
+
+			$diff       = strtotime($order->due_date) - strtotime(date('Y-m-d'));
 			$before1day = $diff - 86400;
 			$after1day  = $diff + 86400;
 
@@ -294,7 +317,7 @@ class OrdersController extends Controller
 				Queue::later($before1day, 'SendEmail', array('order_id'=>$order_id));
 			}
 
-			// Send email 1 day after Due_date
+			// // Send email 1 day after Due_date
 			Queue::later($after1day, 'SendEmail', array('order_id'=>$order_id));
 			
 			
@@ -304,7 +327,7 @@ class OrdersController extends Controller
 			return Redirect::to('orders/order-create');
 
 		} else {
-			return Response::json('error', 400);
+			return Response::json('error create new Order', 400);
 		}
 	}
 
@@ -342,11 +365,24 @@ class OrdersController extends Controller
 	}
 
 	/**
+	 * Order Product detail ajax
+	 * @return Ajax view
+	 */
+	public function postOrderProductShow(){
+		$order        = Order::find(Input::get('order_id'));
+		$orderDetails = $order->orderDetails;
+		return View::make('Orders_View.order-product-show', array('orderDetails'=>$orderDetails));
+	}
+
+	/**
 	 * Delete Order
 	 * @return Update database
 	 */
 	public function postOrderDelete(){
 		$order = Order::find(Input::get('order_id'));
+		foreach ($order->orderDetails as $orderDetail) {
+			$orderDetail->delete();
+		}
 		$order->delete();
 		$notification        = new Notification;
 		$notification->type  = "success";
@@ -359,28 +395,84 @@ class OrdersController extends Controller
 	 * Order Modify ajax
 	 * @return View ajax
 	 */
-	public function postOrderModify(){
-		$order = Order::find(Input::get('order_id'));
-		return View::make('Orders_View.order-modify-ajax', array('order'=>$order));
+	public function getOrderModify($order_id){
+		$order = Order::find($order_id);
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		
+		// Push orderDetails to Cache
+		Cache::forget('orderDetailCart');
+		$orderDetailCart = array();
+		foreach ($order->orderDetails as $or_detail) {
+
+			$orderDetail           = new OrderDetail;
+			$orderDetail->price    = $or_detail->price;
+			$orderDetail->quantity = $or_detail->quantity;
+
+			$orderDetailCart[$or_detail->order_product_id] = $orderDetail;
+		}
+		Cache::put('orderDetailCart', $orderDetailCart, 10);
+
+		return View::make('Orders_View.order-modify', array('order'=>$order, 'notification'=>$notification));
 	}
 
 	/**
 	 * Order Modify Confirm from ajax
 	 * @return Update Database
 	 */
-	public function postOrderModifyConfirm(){
-		$order                = Order::find(Input::get('order_id'));
-		$order->status        = Input::get('status');
-		$order->delivery_date = Input::get('delivery_date');
-		$order->note          = Input::get('note');
-		$success = $order->save();
-		if ($success) {
+	public function postOrderModify($order_id){
+
+		if (!Cache::has('orderDetailCart')) {
 			$notification = new Notification;
-			$notification->set('success', 'You have just updated Order!!');
+			$notification->set('danger', 'Your Product Cart is empty!!');
 			Cache::put('notification', $notification, 10);
-			return Redirect::to('orders/order-manage'); 
+			return Redirect::to('orders/order-modify/'.$order_id);
 		} else {
-			return Response::json('error', 400);
+			if (empty(Cache::get('orderDetailCart'))) {
+				$notification = new Notification;
+				$notification->set('danger', 'Your Product Cart is empty!!');
+				Cache::put('notification', $notification, 10);
+				return Redirect::to('orders/order-modify/'.$order_id);
+			}
+		}
+
+		$order              = Order::find($order_id);
+		$order->user_id     = Input::get('user_id');
+		$order->date        = Input::get('date');
+		$order->supplier_id = Input::get('supplier_id');
+		$order->due_date    = Input::get('due_date');
+		$order->status      = Input::get('status');
+		$order->note        = Input::get('note');
+
+		$success = $order->save();
+
+		if ($success) {
+
+			// Delete old OrderDetails
+			foreach ($order->orderDetails as $orderDetail) {
+				$orderDetail->delete();
+			}
+
+			// Save order detail
+			$orderDetailCart = Cache::get('orderDetailCart');
+			foreach ($orderDetailCart as $orderProduct_id => $orderDetail) {
+				$or_detail                  = $orderDetail;
+				$or_detail->order_id        = $order_id;
+				$or_detail->order_product_id = $orderProduct_id;
+				$successOD = $or_detail->save();
+				if (!$successOD) {
+					return Response::json('Error save OrderDetail', 400);
+				}
+			}
+			
+			
+			$notification = new Notification;
+			$notification->set('success', 'Update Order successfully!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/order-modify/'.$order_id);
+
+		} else {
+			return Response::json('Error create new Order', 400);
 		}
 	}
 
@@ -478,6 +570,86 @@ class OrdersController extends Controller
 		$requests = $requests->get();
 
 		return View::make('request_View.request-ajax', array('requests'=>$requests));
+	}
+
+	/**
+	 * orders/order-product-manage
+	 * @return View manage order product
+	 */
+	public function getOrderProductManage() {
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.order-product-manage', array('notification'=>$notification));
+	}
+
+	/**
+	 * orders/order-product-create
+	 * @return Update database
+	 */
+	public function postOrderProductCreate() {
+
+		$orderProduct = new OrderProduct;
+		$orderProduct->name = Input::get('name');
+		$orderProduct->note = Input::get('note');
+
+		$success = $orderProduct->save();
+		if ($success) {
+			$notification = new Notification;
+			$notification->set('success', 'You have created new Order Product!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/order-product-manage');
+		} else {
+			return Response::json('error', 400);
+		}
+
+	}
+
+	/**
+	 * Order Product delete
+	 * @return Update database
+	 */
+	public function postOrderProductDelete(){
+		$orderProduct = OrderProduct::find(Input::get('orderProduct_id'));
+		$orderProduct->delete();
+
+		return Redirect::to('orders/order-product-manage');
+	}
+
+	/**
+	 * handle oderProduct to new Order view
+	 * @return [type] [description]
+	 */
+	public function postOrderProductHandleCache() {
+		$type = Input::get('type');
+
+		if (Cache::has('orderDetailCart')) {
+			$orderDetailCart = Cache::get('orderDetailCart');
+		} else $orderDetailCart = array();
+
+		if ($type == 1) {
+
+			$order_product_id      = Input::get('order_product_id');
+			$orderDetail           = new OrderDetail;
+			
+			$orderDetail->price    = Input::get('order_product_price');
+			$orderDetail->quantity = Input::get('order_product_quantity');
+
+			$orderDetailCart[$order_product_id] = $orderDetail;
+		} elseif ($type == 2) {
+			
+			$order_product_id = Input::get('order_product_id');
+			unset($orderDetailCart[$order_product_id]);
+
+		}
+
+		if (empty($orderDetailCart)) {
+			Cache::forget('orderDetailCart');
+		} else {
+			Cache::put('orderDetailCart', $orderDetailCart, 10);	
+		}
+		
+		return View::make('Orders_View.order-detail-cart');
+
 	}
 	
 }

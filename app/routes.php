@@ -123,6 +123,12 @@ Route::group(array("prefix"=>"check"), function(){
 			return "true";
 		} else return "false";
 	});
+	// Check valid Order Product name
+	Route::post('check-order-product', function(){
+		if(OrderProduct::check_order_product_exist(Input::get('name'))) {
+			return "false";
+		} else return "true";
+	});
 });
 
 //Get data to lookup
@@ -345,13 +351,15 @@ class SendEmail
 {
 	public function fire($job, $data) {
 
-		$order_id = $data['order_id'];
-		$order    = Order::find($order_id);
+		$order_id       = $data['order_id'];
+		$order          = Order::find($order_id);
+		$user_email     = $order->user->email;
+		$supplier_email = $order->supplier->email;
 
 		if ($order->status == 0) {
-			Mail::queue('Mail_View.order-mail', array('order_id'=>$order_id), function($message){
-				$message->to('hoainfo@chienowa.agri-wave.com', 'Hoa Chienowa')
-				->cc('minhgiang0801@outlook.com', 'Minh Giang')
+			Mail::queue('Mail_View.order-mail', array('order_id'=>$order_id), function($message) use ($user_email, $supplier_email){
+				$message->to($user_email, 'Chienowa Vietnam Staff')
+				->cc($supplier_email, 'Supplier')
 				->subject('Remind Order statement from Chienowa!!');
 			});
 		}
@@ -367,7 +375,6 @@ class SendEmail
 		$request     = RequestLC::find($request_id);
 		$user_email  = $request->user->email;
 		$staff_email = $request->inchargeStaff->email;
-		
 		
 
 		if ($request->status == 0) {
@@ -396,13 +403,17 @@ Route::get('test', function(){
 	// echo "ok";
 	// 
 	
+	// $orderDetail = OrderDetail::find(1);
+	// print_r($orderDetail);
+	// echo "<br/>";
+	// 
 
-	
-	Queue::push('SendEmail@requestLC', array('request_id'=>10));
-
-	return View::make('Mail_View.request-mail', array('request_id'=>10));
-		
-	// return View::make('Mail_View.request-mail', array('request_id'=>1));		
+	// $orderProduct = OrderProduct::find(4);
+	// print_r($orderProduct->orderDetails);
+	// print_r($orderDetail->orderProduct->name);
+	$order = Order::find(10);
+	print_r($order->supplier->email);
+	// return View::make('Mail_View.order-mail', array('order_id'=>14));		
 
 	// $request->save();
 

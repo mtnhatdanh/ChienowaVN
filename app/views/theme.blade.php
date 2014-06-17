@@ -36,7 +36,6 @@
 
     <!-- Jquery for tab -->
     {{HTML::script('js/jquery.tabbable.min.js')}}
-
     
   </head>
 
@@ -102,8 +101,11 @@
             <li class="dropdown @if(Session::get('active_menu')=='orders') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orders & Requests<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li class="dropdown-header">Quotations</li>
+                <li class="dropdown-header">Supplier & Or_Product</li>
                 <li><a href="{{Asset('orders/supplier-manage')}}">Manage Suppliers</a></li>
+                <li><a href="{{Asset('orders/order-product-manage')}}">Manage Order Products</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Quotations</li>
                 <li><a href="{{Asset('orders/quotation-create')}}">Create Quotation</a></li>
                 <li><a href="{{Asset('orders/quotation-manage')}}">Manage Quotation</a></li>
                 <li class="divider"></li>
@@ -120,7 +122,7 @@
             <li class="dropdown @if(Session::get('active_menu')=='report') active @endif">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li class="dropdown-header">Inventory</li>
+                <li class="dropdown-header">Inventory Report</li>
                 <li><a href="{{Asset('report/inventory-in-stock')}}">In-Stock</a></li>
                 <li><a href="{{Asset('report/inventory-by-day')}}">By Day</a></li>
                 <li><a href="{{Asset('report/transactions')}}">Transactions</a></li>
@@ -128,6 +130,9 @@
                 <li><a href="{{Asset('report/expense')}}">Expense report</a></li>
                 <li class="divider"></li>
                 <li><a href="{{Asset('report/quality-control')}}">Quality Control Report</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Order Report</li>
+                <li><a href="{{Asset('report/order-product-detail')}}">Order Product Detail</a></li>
               </ul>
             </li>
 

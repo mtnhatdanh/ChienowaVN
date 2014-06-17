@@ -1,7 +1,7 @@
 @extends("theme")
 
 @section('title')
-Order Create
+Order Modify
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@ Order Create
 
 <div class="container">
 	<div class="page-header">
-		<h1>Create new Order</h1>
+		<h1>Modify Order</h1>
 	</div>
 	@include('notification')
 </div>
@@ -21,13 +21,14 @@ Order Create
 
 <div class="container" id='content'>
 	<div class="row">
-		{{Former::open()->action(asset('orders/order-create'))->id('new-order-form')}}
+		{{Former::open()->action(asset('orders/order-modify/'.$order->id))->id('modify-order-form')}}
+		{{Former::populate(Order::find($order->id))}}
 		<div class="col-sm-6">
 			<div class="col-sm-6">
-				{{Former::select('user_id')->options(array(Session::get('user')->id=>Session::get('user')->name))->label('User')->class('form-control')}}
+				{{Former::select('user_id')->options(array($order->user->id=>$order->user->name))->label('User')->class('form-control')->readonly()}}
 			</div>
 			<div class="col-sm-6">
-				{{Former::date('date')->class('form-control')->value(date('Y-m-d'))}}
+				{{Former::date('date')->class('form-control')->readonly()}}
 			</div>
 			<div class="col-sm-12">
 				<label for="supplier_name" class="control-label">Supplier name</label>
@@ -35,16 +36,22 @@ Order Create
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#lookup-supplier" id="lookup_btn"><span class="glyphicon glyphicon-search"></span></button>
 					</span>
-					<input type="text" class="form-control" id="supplier_name" name="supplier_name" placeholder="Supplier name..">
+					<input type="text" class="form-control" id="supplier_name" name="supplier_name" placeholder="Supplier name.." value="{{$order->supplier->name}}">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-supplier-info" id="info_btn" ><span class="glyphicon glyphicon-info-sign"></span></button>
 						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-new-supplier"><span class="glyphicon glyphicon-plus"></span></button>
 					</span>
-					{{Former::hidden('supplier_id')->id('supplier_id')}}
+					{{Former::hidden('supplier_id')->id('supplier_id')->value($order->supplier_id)}}
 				</div>
 			</div>
 			<div class="col-sm-6">
 				{{Former::date('due_date')->class('form-control')}}
+			</div>
+			<div class="col-sm-6">
+				<?php 
+				$status = array('on-proccess', 'completed');
+				?>
+				{{Former::select('status')->options($status, $order->status)->class('form-control')}}
 			</div>
 			<div class="col-sm-12">
 				{{Former::textarea('note')->class('form-control')->placeholder('Note..')}}
@@ -78,7 +85,7 @@ Order Create
 				</div>
 				<!-- Table Order Product -->
 				<table class="table table-responsive" id="table-order-product">
-					
+					@include('Orders_View.order-detail-cart')
 				</table>
 			</div>
 		</div>
@@ -86,7 +93,7 @@ Order Create
 	<br/>
 	<div class="row">
 		<div class="col-sm-2 col-sm-offset-5">
-			<button type="button" id="new-order-button" class="btn btn-primary btn-block">New Order</button>
+			<button type="button" id="update-order-button" class="btn btn-primary btn-block">Update Order</button>
 		</div>
 	</div>
 
@@ -277,17 +284,17 @@ Order Create
 	});
 
 	// New quotation button
-	$('#new-order-button').click(function(){
+	$('#update-order-button').click(function(){
 		create_date = $('#date').val();
 		due_date = $('#due_date').val();
 		if (create_date>due_date) alert('Create date is bigger than Due Day!!');
 		else {
-			$('#new-order-form').submit();
+			$('#modify-order-form').submit();
 		}
 	});
 
-	// New Quotation validate
-	$('#new-order-form').validate({
+	// Modify Quotation validate
+	$('#modify-order-form').validate({
 		errorLabelContainer: "#validation_errors",
 		wrapper: "li",
 		rules: {

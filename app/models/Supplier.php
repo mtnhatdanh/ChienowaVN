@@ -18,6 +18,6 @@ class Supplier extends Ardent
         if (Supplier::where('name', '=', $supplier_name)->count()>0) {
             return true;
         } else return false;
-    }        
+    }
 
 }

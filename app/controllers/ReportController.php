@@ -125,4 +125,38 @@ class ReportController extends Controller
 		return View::make('Report_View.quality_control_table', array('reports'=>$reports));
 	}
 
+	/**
+	 * Order Product report
+	 * @return View Order Product
+	 */
+	public function getOrderProductDetail(){
+		return View::make('Report_View.order-product-detail');
+	}
+
+	/**
+	 * show Ajax order/order-product-detail
+	 * @return Ajax View
+	 */
+	public function postOrderProductDetail(){
+		$from_day         = Input::get('from_day');
+		$to_day           = Input::get('to_day');
+		$order_product_id = Input::get('order_product_id');
+
+		$orderDetailTable = DB::table('order_details')
+							->join('orders', 'order_details.order_id', '=', 'orders.id')
+							->where('order_details.order_product_id', '=', $order_product_id);
+						
+		if ($from_day != '') {
+			$orderDetailTable = $orderDetailTable->where('orders.date', '>=', $from_day);
+		}
+		if ($to_day!= '') {
+			$orderDetailTable = $orderDetailTable->where('orders.date', '<=', $to_day);
+		}
+
+		$orderDetailTable = $orderDetailTable->orderBy('orders.date', 'asc')->get();
+
+		return View::make('Report_View.order-detail-table', array('orderDetailTable' => $orderDetailTable, 'order_product_id' => $order_product_id));
+
+	}
+
 }

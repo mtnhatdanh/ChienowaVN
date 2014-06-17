@@ -8,13 +8,13 @@ class Order extends Ardent
         'user_id'       =>'required|integer',
         'date'          =>'required|date',
         'supplier_id'   =>'required|integer',
-        'order_product' =>'required',
-        'due_date'      =>'required|date',
+        'due_date'      =>'required|date'
         );
 
     public static $relationsData = array(
-        'user' => array(self::BELONGS_TO, 'User', 'user_id'),
-        'supplier'=>array(self::BELONGS_TO, 'Supplier', 'supplier_id')
+        'user'         => array(self::BELONGS_TO, 'User', 'user_id'),
+        'supplier'     => array(self::BELONGS_TO, 'Supplier', 'supplier_id'),
+        'orderDetails' => array(self::HAS_MANY, 'OrderDetail', 'order_id')
         ); 
 
 }
