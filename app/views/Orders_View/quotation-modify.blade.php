@@ -1,7 +1,7 @@
 @extends("theme")
 
 @section('title')
-Quotation Create
+Quotation Modify
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@ Quotation Create
 
 <div class="container">
 	<div class="page-header">
-		<h1>Create new Quotation</h1>
+		<h1>Modify Quotation</h1>
 	</div>
 	@include('notification')
 </div>
@@ -21,13 +21,14 @@ Quotation Create
 
 <div class="container" id='content'>
 	<div class="row">
-		{{Former::open()->action(asset('orders/quotation-new'))->id('new-quotation-form')}}
+		{{Former::open()->action(asset('orders/quotation-modify/'.$quotation->id))->id('modify-quotation-form')}}
+		{{Former::populate(Quotation::find($quotation->id))}}
 		<div class="col-sm-6">
 			<div class="col-sm-6">
-				{{Former::select('user_id')->options(array(Session::get('user')->id=>Session::get('user')->name))->label('User')->class('form-control')->readonly()}}
+				{{Former::select('user_id')->options(array($quotation->user->id=>$quotation->user->name))->label('User')->class('form-control')->readonly()}}
 			</div>
 			<div class="col-sm-6">
-				{{Former::date('date')->class('form-control')->value(date('Y-m-d'))}}
+				{{Former::date('date')->class('form-control')->readonly()}}
 			</div>
 			<div class="col-sm-12">
 				<label for="supplier_name" class="control-label">Supplier name</label>
@@ -35,13 +36,22 @@ Quotation Create
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#lookup-supplier" id="lookup_btn"><span class="glyphicon glyphicon-search"></span></button>
 					</span>
-					<input type="text" class="form-control" id="supplier_name" name="supplier_name" placeholder="Supplier name..">
+					<input type="text" class="form-control" id="supplier_name" name="supplier_name" placeholder="Supplier name.." value="{{$quotation->supplier->name}}">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-supplier-info" id="info_btn" ><span class="glyphicon glyphicon-info-sign"></span></button>
 						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-new-supplier"><span class="glyphicon glyphicon-plus"></span></button>
 					</span>
-					{{Former::hidden('supplier_id')->id('supplier_id')}}
+					{{Former::hidden('supplier_id')->id('supplier_id')->value($quotation->supplier_id)}}
 				</div>
+			</div>
+			<div class="col-sm-6">
+				{{Former::date('completed_date')->class('form-control')->id('completed_date')}}
+			</div>
+			<div class="col-sm-6">
+				<?php 
+				$status = array('on-proccess', 'completed');
+				?>
+				{{Former::select('status')->options($status, $quotation->status)->class('form-control')->id('status')}}
 			</div>
 			<div class="col-sm-12">
 				{{Former::textarea('note')->class('form-control')->placeholder('Note..')}}
@@ -75,7 +85,7 @@ Quotation Create
 				</div>
 				<!-- Table Order Product -->
 				<table class="table table-responsive" id="table-order-product">
-					
+					@include('Orders_View.quotation-detail-cart')
 				</table>
 			</div>
 		</div>
@@ -83,7 +93,7 @@ Quotation Create
 	<br/>
 	<div class="row">
 		<div class="col-sm-2 col-sm-offset-5">
-			<button type="button" id="new-quotation-button" class="btn btn-primary btn-block">New Quotation</button>
+			<button type="button" id="update-quotation-button" class="btn btn-primary btn-block">Update Quotation</button>
 		</div>
 	</div>
 
@@ -243,11 +253,6 @@ Quotation Create
 
 <script>
 
-	// New quotation button submit form
-	$('#new-quotation-button').click(function(){
-		$('#new-quotation-form').submit();
-	});
-
 	// Add product
 	$('#add-product-button').click(function(){
 		order_product_id       = $('#order_product_id').val();
@@ -278,8 +283,19 @@ Quotation Create
 		}
 	});
 
-	// New Quotation validate
-	$('#new-quotation-form').validate({
+	// New quotation button
+	$('#update-quotation-button').click(function(){
+		completed_date = $('#completed_date').val();
+		status = $('#status').val();
+		if (completed_date == '' && status == 1) {
+			alert('Not input completed date yet!!');
+		} else {
+			$('#modify-quotation-form').submit();
+		}
+	});
+
+	// Modify Quotation validate
+	$('#modify-quotation-form').validate({
 		errorLabelContainer: "#validation_errors",
 		wrapper: "li",
 		rules: {

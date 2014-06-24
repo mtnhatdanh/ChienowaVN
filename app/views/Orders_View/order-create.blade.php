@@ -307,9 +307,6 @@ Order Create
 			},
 			Due_date: {
 				required: true
-			},
-			Product: {
-				required: true
 			}
 		}
 	});

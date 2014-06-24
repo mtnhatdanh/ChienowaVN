@@ -159,4 +159,39 @@ class ReportController extends Controller
 
 	}
 
+	/**
+	 * Quotation Product report
+	 * @return View Quotation Product report
+	 */
+	public function getQuotationProductDetail(){
+		return View::make('Report_View.quotation-product-detail');
+	}
+
+	/**
+	 * show Ajax order/quotation-product-detail
+	 * @return Ajax View
+	 */
+	public function postQuotationProductDetail(){
+		$from_day         = Input::get('from_day');
+		$to_day           = Input::get('to_day');
+		$order_product_id = Input::get('order_product_id');
+
+		$quotationDetailTable = DB::table('quotation_details')
+							->join('quotation', 'quotation_details.quotation_id', '=', 'quotation.id')
+							->where('quotation.status', '=', 1)
+							->where('quotation_details.order_product_id', '=', $order_product_id);
+						
+		if ($from_day != '') {
+			$quotationDetailTable = $quotationDetailTable->where('quotation.date', '>=', $from_day);
+		}
+		if ($to_day!= '') {
+			$quotationDetailTable = $quotationDetailTable->where('quotation.date', '<=', $to_day);
+		}
+
+		$quotationDetailTable = $quotationDetailTable->orderBy('quotation.date', 'asc')->get();
+
+		return View::make('Report_View.quotation-detail-table', array('quotationDetailTable' => $quotationDetailTable, 'order_product_id' => $order_product_id));
+
+	}
+
 }

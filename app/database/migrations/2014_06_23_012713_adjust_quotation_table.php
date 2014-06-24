@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropOrderProductColumnFromOrdersTable extends Migration {
+class AdjustQuotationTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,13 @@ class DropOrderProductColumnFromOrdersTable extends Migration {
 	 */
 	public function up()
 	{
-		//Drop order_product column from orders table
-		// Schema::table('orders', function($table) {
-		// 	$table->dropColumn('order_product');
-		// });
+		//Adjust quotations table structure
+		Schema::table('quotation', function($table)
+		{
+			// Delete old columns
+			$table->dropColumn('product');
+
+		});
 	}
 
 	/**

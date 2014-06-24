@@ -1,19 +1,13 @@
 @extends('theme')
 
 @section('title')
-Order Product Detail
+Quotation Product Detail
 @endsection
 @section('content')
 
-<!--Load the AJAX API for google chart-->
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-	google.load("visualization", "1", {packages:["corechart"]});
-</script>
-
 <div class="container">
 	<div class="page-header">
-		<h1>Report Order Product Detail</h1>
+		<h1>Report Quotation Product Detail</h1>
 	</div>
 </div>
 <br/>
@@ -55,13 +49,12 @@ Order Product Detail
 				var btn=$(this);
 				btn.button('loading');
 				$.ajax({
-					url: '{{asset("report/order-product-detail")}}',
+					url: '{{asset("report/quotation-product-detail")}}',
 					type: 'POST',
 					data: {order_product_id: order_product_id, from_day: from_day, to_day: to_day},
 				})
 				.done(function(data) {
 					$('#result_div').html(data);
-					google.setOnLoadCallback(drawChart(data));
 					btn.button('reset');
 					console.log("success");
 				})

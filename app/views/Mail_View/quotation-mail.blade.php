@@ -1,5 +1,6 @@
 <?php
-$quotation = Quotation::find($quotation_id);
+$quotation        = Quotation::find($quotation_id);
+$quotationDetails = $quotation->quotationDetails;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,18 +47,14 @@ $quotation = Quotation::find($quotation_id);
                 </p>
             </div>
         </div>
-    </div>
-    <div class="container">
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-header">
-                    <h1>Quotation <small>remind mail</small></h1>
+                    <h1>Quotation <small>remind email</small></h1>
                 </div>
             </div>
         </div>
-    </div>
-    <br/>
-    <div class="container">
+        <br/>
         <div class="row">
             <div class="col-sm-12">
                 <p>
@@ -65,8 +62,6 @@ $quotation = Quotation::find($quotation_id);
                 </p>
             </div>
         </div>
-    </div>
-    <div class="container">
         <div class="row">
             <div class="col-sm-2">
                 <strong>User:</strong>
@@ -75,29 +70,59 @@ $quotation = Quotation::find($quotation_id);
                 {{$quotation->user->name}}
             </div>
             <div class="col-sm-2">
-                <strong>Date</strong>
-            </div>
-            <div class="col-sm-4">
-                {{$quotation->date}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">
                 <strong>Supplier name</strong>
             </div>
             <div class="col-sm-4">
                 {{$quotation->supplier->name}}
             </div>
+        </div>
+        
+        <div class="row">
             <div class="col-sm-2">
-                <strong>Product</strong>
+                <strong>Date</strong>
             </div>
             <div class="col-sm-4">
-                {{$quotation->product}}
+                {{$quotation->date}}
+            </div>
+            <div class="col-sm-2">
+                <strong>Completed Date</strong>
+            </div>
+            <div class="col-sm-4">
+                {{$quotation->completed_date}}
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <strong>Note: </strong>{{$quotation->note}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>No</th>
+                        <th>Order product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Sum</th>
+                    </tr>
+                    <?php $no = 0; $sum = 0 ?>
+                    @foreach ($quotationDetails as $quotationDetail)
+                    <?php $total = $quotationDetail->price * $quotationDetail->quantity; ?>
+                    <tr>
+                        <td>{{++$no}}</td>
+                        <td>{{$quotationDetail->orderProduct->name}}</td>
+                        <td>{{number_format($quotationDetail->price, 0, '.', ',')}}</td>
+                        <td>{{$quotationDetail->quantity}}</td>
+                        <td>{{number_format($total, 0, '.', ',')}}</td>
+                    </tr>
+                    <?php $sum+=$total; ?>
+                    @endforeach
+                    <tr>
+                        <td colspan="4"></td>
+                        <td>{{number_format($sum, 0, '.', ',')}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

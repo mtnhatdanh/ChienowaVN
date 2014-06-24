@@ -399,6 +399,13 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
+	
+	$abc = Cache::get('quotationDetailCart');
+
+	if (count(Cache::get('quotationDetailCart'))) {
+		print_r($abc);
+	} else echo 'empty';
+
 	// Queue::push('SendEmail@requestLC', array('request_id'=>7));
 	// echo "ok";
 	// 
@@ -411,8 +418,7 @@ Route::get('test', function(){
 	// $orderProduct = OrderProduct::find(4);
 	// print_r($orderProduct->orderDetails);
 	// print_r($orderDetail->orderProduct->name);
-	$order = Order::find(10);
-	print_r($order->supplier->email);
+	
 	// return View::make('Mail_View.order-mail', array('order_id'=>14));		
 
 	// $request->save();

@@ -144,22 +144,30 @@ class OrdersController extends Controller
 	}
 
 	/**
-	 * Quotation Status Change ajax
+	 * Quotation Detail show ajax
+	 * @return Ajax View
+	 */
+	public function postQuotationDetailShow(){
+		$quotation        = Quotation::find(Input::get('quotation_id'));
+		$quotationDetails = $quotation->quotationDetails;
+		return View::make('Orders_View.quotation-detail-show', array('quotationDetails'=>$quotationDetails));
+	}
+
+	/**
+	 * Delete Quotation
 	 * @return Update database
 	 */
-	public function postQuotationChangeStatus(){
-		$quotation         = Quotation::find(Input::get('quotation_id'));
-		$quotation->status = Input::get('status');
-
-		if (Input::get('status') == 1) {
-			$quotation->completed_date = date('Y-m-d');
+	public function postQuotationDelete(){
+		$quotation = Quotation::find(Input::get('quotation_id'));
+		foreach ($quotation->quotationDetails as $quotationDetail) {
+			$quotationDetail->delete();
 		}
-
-		$success           = $quotation->save();
-
-		if ($success) {
-			echo 'OK';
-		} else {echo 'error';}
+		$quotation->delete();
+		$notification        = new Notification;
+		$notification->type  = "success";
+		$notification->value = "You have just deleted quotation!!";
+		Cache::put('notification', $notification, 10);
+		return Redirect::to('orders/quotation-manage');
 	}
 
 	/**
@@ -167,9 +175,96 @@ class OrdersController extends Controller
 	 * @return View quotation
 	 */
 	public function getQuotationCreate(){
+		Cache::forget('quotationDetailCart');
 		$notification = Cache::get('notification');
 		Cache::forget('notification');
 		return View::make('Orders_View.quotation-create', array('notification'=>$notification));			
+	}
+
+	/**
+	 * Quotation Modify 
+	 * @return View
+	 */
+	public function getQuotationModify($quotation_id){
+		$quotation = Quotation::find($quotation_id);
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		
+		// Push orderDetails to Cache
+		Cache::forget('orderDetailCart');
+		$quotationDetailCart = $quotation->quotationDetails;
+		
+		Cache::put('quotationDetailCart', $quotationDetailCart, 10);
+
+		return View::make('Orders_View.quotation-modify', array('quotation'=>$quotation, 'notification'=>$notification));
+	}
+
+	/**
+	 * Modify Quotation
+	 * @return Database modify quotation
+	 */
+	public function postQuotationModify($quotation_id){
+
+		if (!Cache::has('quotationDetailCart') || !count(Cache::get('quotationDetailCart'))) {
+			$notification = new Notification;
+			$notification->set('danger', 'Fail to modify Quotation!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/quotation-modify/'.$quotation_id);
+		}
+
+		$quotation                 = Quotation::find($quotation_id);
+		$quotation->user_id        = Input::get('user_id');
+		$quotation->date           = Input::get('date');
+		$quotation->supplier_id    = Input::get('supplier_id');
+		$quotation->completed_date = Input::get('completed_date');
+		$quotation->status         = Input::get('status');
+		$quotation->note           = Input::get('note');
+
+		$success = $quotation->save();
+
+		if ($success) {
+
+			// Delete old Quotation Detail
+			foreach ($quotation->quotationDetails as $quotationDetail) {
+				$quotationDetail->delete();
+			}
+
+			// Save new Quotation Detail
+			$quotationDetailCart = Cache::get('quotationDetailCart');
+			foreach ($quotationDetailCart as $quotationDetail) {
+				
+				$quo_detail                   = new QuotationDetail;
+				$quo_detail->quotation_id     = $quotation_id;
+				$quo_detail->order_product_id = $quotationDetail->order_product_id;
+				$quo_detail->price            = $quotationDetail->price;
+				$quo_detail->quantity         = $quotationDetail->quantity;
+				
+				$successQD                    = $quo_detail->save();
+				if (!$successQD) {
+					return Response::json('Error save Quotation Detail', 400);
+				}
+			}
+
+			// Send email if quotation completed
+			if ($quotation->status == 1) {
+			
+				$user_email = $quotation->user->email;
+			
+				Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
+					$message->to($user_email, 'Chienowa Vietnam Staff')->subject('Quotation statement from Chienowa!!');
+				});
+			}
+			
+			
+			$notification = new Notification;
+			$notification->set('success', 'Update Quotation successfully!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/quotation-modify/'.$quotation_id);
+
+		} else {
+			return Response::json('error update Quotation', 400);
+		}
+
 	}
 
 
@@ -218,34 +313,53 @@ class OrdersController extends Controller
 	 * @return Database new quotation
 	 */
 	public function postQuotationNew(){
+
+		if (!Cache::has('quotationDetailCart') || !count(Cache::get('quotationDetailCart'))) {
+			$notification = new Notification;
+			$notification->set('danger', 'Fail to create new Quotation!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/quotation-create');
+		}
+
 		$quotation              = new Quotation;
 		$quotation->user_id     = Input::get('user_id');
 		$quotation->date        = Input::get('date');
 		$quotation->supplier_id = Input::get('supplier_id');
-		$quotation->product     = Input::get('Product');
 		$quotation->status      = 0;
 		$quotation->note        = Input::get('note');
 
 		$success = $quotation->save();
-		$quotation_id = $quotation->id;
-
-		$user_email = User::find(Input::get('user_id'))->email;
-
-		$data = array('quotation'=>$quotation);
 
 		if ($success) {
 
+			// Save order detail
+			$quotation_id = $quotation->id;
+			$quotationDetailCart = Cache::get('quotationDetailCart');
+			foreach ($quotationDetailCart as $quotationDetail) {
+				
+				$quo_detail               = $quotationDetail;
+				$quo_detail->quotation_id = $quotation_id;
+
+				$successQD                = $quo_detail->save();
+				if (!$successQD) {
+					return Response::json('Error save Quotation Detail', 400);
+				}
+			}
+
+			$user_email = $quotation->user->email;
+			
 			Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
 				$message->to($user_email, 'Chienowa Vietnam Staff')->subject('Quotation statement from Chienowa!!');
 			});
-
+			
+			
 			$notification = new Notification;
 			$notification->set('success', 'Create new Quotation successfully!!');
 			Cache::put('notification', $notification, 10);
 			return Redirect::to('orders/quotation-create');
 
 		} else {
-			return Response::json('error', 400);
+			return Response::json('error create new Quotation', 400);
 		}
 
 	}
@@ -392,8 +506,8 @@ class OrdersController extends Controller
 	}
 
 	/**
-	 * Order Modify ajax
-	 * @return View ajax
+	 * Order Modify 
+	 * @return View
 	 */
 	public function getOrderModify($order_id){
 		$order = Order::find($order_id);
@@ -649,6 +763,59 @@ class OrdersController extends Controller
 		}
 		
 		return View::make('Orders_View.order-detail-cart');
+
+	}
+
+	/**
+	 * handle orderProduct to new Quotation view
+	 * @return [type] [description]
+	 */
+	public function postQuotationProductHandleCache() {
+		$type = Input::get('type');
+
+		if (Cache::has('quotationDetailCart')) {
+			$quotationDetailCart = Cache::get('quotationDetailCart');
+		} else $quotationDetailCart = array();
+
+		if ($type == 1) {
+
+			$quotationDetail                   = new QuotationDetail;
+			
+			$quotationDetail->order_product_id = Input::get('order_product_id');
+			$quotationDetail->price            = Input::get('order_product_price');
+			$quotationDetail->quantity         = Input::get('order_product_quantity');
+
+			$quotationDetailCart[] = $quotationDetail;
+
+		} elseif ($type == 2) {
+			
+			$key = Input::get('key');
+			unset($quotationDetailCart[$key]);
+
+		} elseif ($type == 3) {
+			
+			$key = Input::get('key');
+
+			$quotationDetail = $quotationDetailCart[$key];
+
+			if (Input::has('product_price')) {
+				$quotationDetail->price = Input::get('product_price');
+			}
+			if (Input::has('product_quantity')) {
+				$quotationDetail->quantity = Input::get('product_quantity');
+			}
+
+			$quotationDetailCart[$key] = $quotationDetail;
+
+		}
+
+		if (empty($quotationDetailCart)) {
+			Cache::forget('quotationDetailCart');
+		} else {
+			Cache::put('quotationDetailCart', $quotationDetailCart, 10);	
+		}
+		
+		return View::make('Orders_View.quotation-detail-cart');
 
 	}
 	

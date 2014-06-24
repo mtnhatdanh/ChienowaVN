@@ -9,7 +9,7 @@ Order Manage
 
 <div class="container">
 	<div class="page-header">
-		<h1>Order Quotation</h1>
+		<h1>Manage Order</h1>
 	</div>
 	@include('notification')
 </div>

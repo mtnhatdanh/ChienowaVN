@@ -7,13 +7,13 @@ class Quotation extends Ardent
     public static $rules = array(
         'user_id'     =>'required|integer',
         'date'        =>'required|date',
-        'supplier_id' =>'required|integer',
-        'product'     =>'required'
+        'supplier_id' =>'required|integer'
         );
 
     public static $relationsData = array(
-        'user' => array(self::BELONGS_TO, 'User', 'user_id'),
-        'supplier'=>array(self::BELONGS_TO, 'Supplier', 'supplier_id')
+        'user'             => array(self::BELONGS_TO, 'User', 'user_id'),
+        'supplier'         => array(self::BELONGS_TO, 'Supplier', 'supplier_id'),
+        'quotationDetails' => array(self::HAS_MANY, 'QuotationDetail', 'quotation_id')
         ); 
 
 }

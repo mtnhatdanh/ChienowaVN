@@ -1,25 +1,3 @@
-<!-- Script for google chart -->
-<script type="text/javascript">
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Date', 'Price'],
-      @foreach ($orderDetailTable as $orderDetail)
-      ['{{date('m-d-Y', strtotime($orderDetail->date))}}',  {{$orderDetail->price}}],
-      @endforeach
-    ]);
-
-    var options = {
-      title: 'Product Price',
-      hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
-      vAxis: {minValue: 0}
-    };
-
-    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-</script>
-
 <style type="text/css">
 	#order-detail-table td {
 		vertical-align: middle;
@@ -44,15 +22,15 @@
 			</thead>
 			<tbody>
 				<?php $no = 0;?>
-				@foreach ($orderDetailTable as $orderDetail)
+				@foreach ($quotationDetailTable as $quotationDetail)
 				<tr>
 					<td>{{++$no}}</td>
-					<td class="text-center">{{date('m-d-Y', strtotime($orderDetail->date))}}</td>
-					<td>{{number_format($orderDetail->price, 0, '.', ',')}}</td>
-					<td class="text-center">{{$orderDetail->quantity}}</td>
+					<td class="text-center">{{date('m-d-Y', strtotime($quotationDetail->date))}}</td>
+					<td>{{number_format($quotationDetail->price, 0, '.', ',')}}</td>
+					<td class="text-center">{{$quotationDetail->quantity}}</td>
 					<td>
-						{{Supplier::find($orderDetail->supplier_id)->name}}
-						<button type="button" id="{{$orderDetail->supplier_id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button>
+						{{Supplier::find($quotationDetail->supplier_id)->name}}
+						<button type="button" id="{{$quotationDetail->supplier_id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button>
 					</td>
 				</tr>
 				@endforeach
