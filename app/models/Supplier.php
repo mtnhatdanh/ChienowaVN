@@ -10,9 +10,9 @@ class Supplier extends Ardent
         );
 
     public static $relationsData = array(
-        'quotation' => array(self::HAS_MANY, 'Quotation', 'supplier_id'),
-        'order'     => array(self::HAS_MANY, 'Order', 'supplier_id')
-        ); 
+        'quotations' => array(self::HAS_MANY, 'Quotation', 'supplier_id'),
+        'orders'     => array(self::HAS_MANY, 'Order', 'supplier_id')
+        );
         
     public static function checkSupplierExist($supplier_name){
         if (Supplier::where('name', '=', $supplier_name)->count()>0) {

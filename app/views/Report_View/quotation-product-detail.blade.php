@@ -5,6 +5,12 @@ Quotation Product Detail
 @endsection
 @section('content')
 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("visualization", "1", {packages:["corechart"]});
+</script>
+
+
 <div class="container">
 	<div class="page-header">
 		<h1>Report Quotation Product Detail</h1>

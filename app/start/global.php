@@ -215,3 +215,18 @@ Inspection::deleting(function($inspection){
 		}
 	}
 });
+
+// Model Supplier prevent delete Supplier when still have link
+Supplier::deleting(function($supplier){
+	if (count($supplier->quotations) || count($supplier->orders)) {
+		return false;
+	}
+});
+
+// Model OrderProduct prevent delete OrderProduct when still have link
+OrderProduct::deleting(function($orderProduct){
+	if (count($orderProduct->quotationDetails) || count($orderProduct->orderDetails)) {
+		return false;
+	}
+});
+

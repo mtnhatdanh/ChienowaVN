@@ -4,12 +4,12 @@
 	}
 </style>
 
-
 <div class="row">
 	<div class="col-sm-12 text-center">
 		<h3>{{OrderProduct::find($order_product_id)->name}} <small>Product</small></h3>
 	</div>
 	<div class="col-sm-12">
+		{{Former::open()->action(asset('report/quotation-draw-chart'))->id('quotation-draw-chart-form')}}
 		<table class="table table-responsive" id="order-detail-table">
 			<thead>
 				<tr>
@@ -18,6 +18,7 @@
 					<th>Price(VND)</th>
 					<th class="text-center">Quantity</th>
 					<th>Supplier</th>
+					<th class="text-center">Draw Chart</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,10 +33,22 @@
 						{{Supplier::find($quotationDetail->supplier_id)->name}}
 						<button type="button" id="{{$quotationDetail->supplier_id}}" class="btn btn-link info-button"><span class='glyphicon glyphicon-info-sign'></span></button>
 					</td>
+					<td class="text-center">
+						<label>
+							<input type="checkbox" name="quotationDetailArray[]" value="{{$quotationDetail->id}}">
+						</label>
+					</td>
 				</tr>
 				@endforeach
+				<tr>
+					<td colspan="5"></td>
+					<td class="text-center">
+						<button type="button" class="btn btn-info" id="draw-chart-button">Draw Chart</button>
+					</td>
+				</tr>
 			</tbody>
 		</table>
+		{{Former::close()}}
 	</div>
 </div>
 
@@ -66,6 +79,30 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+
+	// Prepare for ajax submit
+	var options = {
+		target: '#chart_div',
+		success: showResponse
+	};
+
+	function showResponse(responseText, statusText, xhr, $form) {
+		google.setOnLoadCallback(drawChart(responseText));
+	}
+
+	// draw-chart-button
+	$('#draw-chart-button').click(function(event) {
+		$('#quotation-draw-chart-form').submit();
+	});
+
+	// Draw chart
+	$('#quotation-draw-chart-form').validate({
+		submitHandler: function(form){
+			$(form).ajaxSubmit(options);
+			return false;
+		}
+	});
+
 	// Info button
 	$('.info-button').click(function(){
 		supplier_id = $(this).attr('id');

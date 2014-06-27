@@ -36,6 +36,8 @@
 
     <!-- Jquery for tab -->
     {{HTML::script('js/jquery.tabbable.min.js')}}
+    <!-- Jquery for ajaxSubmit -->
+    {{HTML::script('js/jquery.form.js')}}
     
   </head>
 
@@ -110,7 +112,7 @@
                 <li><a href="{{Asset('orders/quotation-manage')}}">Manage Quotation</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Orders</li>
-                <li><a href="{{Asset('orders/order-create')}}">Create Orders</a></li>
+                <li><a href="{{Asset('orders/order-create')}}">Create Order</a></li>
                 <li><a href="{{Asset('orders/order-manage')}}">Manage Orders</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Local Request</li>

@@ -550,13 +550,14 @@ class OrdersController extends Controller
 			}
 		}
 
-		$order              = Order::find($order_id);
-		$order->user_id     = Input::get('user_id');
-		$order->date        = Input::get('date');
-		$order->supplier_id = Input::get('supplier_id');
-		$order->due_date    = Input::get('due_date');
-		$order->status      = Input::get('status');
-		$order->note        = Input::get('note');
+		$order                = Order::find($order_id);
+		$order->user_id       = Input::get('user_id');
+		$order->date          = Input::get('date');
+		$order->supplier_id   = Input::get('supplier_id');
+		$order->due_date      = Input::get('due_date');
+		$order->delivery_date = Input::get('delivery_date');
+		$order->status        = Input::get('status');
+		$order->note          = Input::get('note');
 
 		$success = $order->save();
 

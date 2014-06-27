@@ -178,6 +178,7 @@ class ReportController extends Controller
 
 		$quotationDetailTable = DB::table('quotation_details')
 							->join('quotation', 'quotation_details.quotation_id', '=', 'quotation.id')
+							->select('quotation_details.id', 'quotation_details.order_product_id', 'quotation_details.price', 'quotation_details.quantity', 'quotation.date', 'quotation.supplier_id', 'quotation.completed_date')
 							->where('quotation.status', '=', 1)
 							->where('quotation_details.order_product_id', '=', $order_product_id);
 						
@@ -192,6 +193,15 @@ class ReportController extends Controller
 
 		return View::make('Report_View.quotation-detail-table', array('quotationDetailTable' => $quotationDetailTable, 'order_product_id' => $order_product_id));
 
+	}
+
+	/**
+	 * Quotation Draw Chart ajax
+	 * @return Ajax view
+	 */
+	public function postQuotationDrawChart() {
+		$quotationDetailArray = Input::get('quotationDetailArray');
+		return View::make('Report_View.quotation-chart', array('quotationDetailArray'=>$quotationDetailArray));
 	}
 
 }

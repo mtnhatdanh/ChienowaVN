@@ -48,6 +48,9 @@ Order Modify
 				{{Former::date('due_date')->class('form-control')}}
 			</div>
 			<div class="col-sm-6">
+				{{Former::date('delivery_date')->class('form-control')}}
+			</div>
+			<div class="col-sm-6">
 				<?php 
 				$status = array('on-proccess', 'completed');
 				?>

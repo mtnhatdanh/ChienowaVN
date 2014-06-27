@@ -51,7 +51,15 @@ Quotation Modify
 				<?php 
 				$status = array('on-proccess', 'completed');
 				?>
-				{{Former::select('status')->options($status, $quotation->status)->class('form-control')->id('status')}}
+				<label for="status" class="control-label">Status</label>
+				<select name="status" id="status" class="form-control">
+					<option value="0" @if (Session::get('user')->id != 10 && Session::get('user')->id != 17) disabled="disabled" @endif @if ($quotation->status == 0) selected @endif>
+						{{$status[0]}}
+					</option>
+					<option value="1" @if (Session::get('user')->id != 10 && Session::get('user')->id != 17) disabled="disabled" @endif @if ($quotation->status == 1) selected @endif>
+						{{$status[1]}}
+					</option>
+				</select>
 			</div>
 			<div class="col-sm-12">
 				{{Former::textarea('note')->class('form-control')->placeholder('Note..')}}
