@@ -204,4 +204,53 @@ class ReportController extends Controller
 		return View::make('Report_View.quotation-chart', array('quotationDetailArray'=>$quotationDetailArray));
 	}
 
+	/**
+	 * Supplier report
+	 * @return view
+	 */
+	public function getSupplierReport() {
+		return View::make('Report_View.supplier-report');
+	}
+
+	/**
+	 * Supplier report ajax
+	 * @return View ajax
+	 */
+	public function postSupplierReport() {
+		$statement_type = Input::get('statement_type');
+		$from_day       = Input::get('from_day');
+		$to_day         = Input::get('to_day');
+		$supplier       = Supplier::find(Input::get('supplier_id'));
+		$supplier_name  = $supplier->name;
+
+		if ($statement_type == 0) {
+			// Get quotations statement of supplier
+			$quotations = $supplier->load(array('quotations' => function($query) use ($from_day, $to_day){
+				$query->where('status', '=', 1);
+				if ($from_day != '') {
+					$query->where('date', '>=', $from_day);
+				}
+				if ($to_day!= '') {
+					$query->where('date', '<=', $to_day);
+				}
+			}))->quotations;
+
+			return View::make('Report_View.supplier-ajax-quotations', array('quotations' => $quotations, 'supplier_name' => $supplier_name));
+		} else {
+			// Get orders statement of supplier
+			$orders = $supplier->load(array('orders' => function($query) use ($from_day, $to_day){
+				$query->where('status', '=', 1);
+				if ($from_day != '') {
+					$query->where('date', '>=', $from_day);
+				}
+				if ($to_day!= '') {
+					$query->where('date', '<=', $to_day);
+				}
+			}))->orders;
+
+
+			return View::make('Report_View.supplier-ajax-orders', array('orders' => $orders, 'supplier_name' => $supplier_name));
+		}
+	}
+
 }
