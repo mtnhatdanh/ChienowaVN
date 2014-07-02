@@ -114,10 +114,10 @@
                 <li class="dropdown-header">Orders</li>
                 <li><a href="{{Asset('orders/order-create')}}">Create Order</a></li>
                 <li><a href="{{Asset('orders/order-manage')}}">Manage Orders</a></li>
-                <li class="divider"></li>
+                <!-- <li class="divider"></li>
                 <li class="dropdown-header">Local Request</li>
                 <li><a href="{{Asset('orders/request-create')}}">Create Request</a></li>
-                <li><a href="{{Asset('orders/request-manage')}}">Request belong to you</a></li>
+                <li><a href="{{Asset('orders/request-manage')}}">Request belong to you</a></li> -->
               </ul>
             </li>
 

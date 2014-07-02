@@ -1,25 +1,39 @@
 @if(Cache::has('quotationDetailCart'))
 <tr>
 	<th>Name</th>
-	<th>Price</th>
+	<th class='text-center'>Price</th>
 	<th class="text-center">Quantity</th>
 	<th class="text-center">Total</th>
 	<th>Action</th>
 </tr>
-<?php $sum = 0;?>
+<?php 
+$sum = 0;
+$sumUSD = 0;
+?>
 @foreach (Cache::get('quotationDetailCart') as $key => $quotationDetail)
 <tr>
-	<td>{{$quotationDetail->orderProduct->name}}</td>
+	<td rowspan="3">{{$quotationDetail->orderProduct->name}}</td>
 	<td>
-		<input type="text" name="price" class="inputPrice" id="{{$key}}" value="{{$quotationDetail->price}}" size="12" style="text-align: right">
+		<input type="text" name="price" class="inputPrice" id="{{$key}}" value="{{$quotationDetail->price}}" size="8" style="text-align: right"> VND
 	</td>
-	<td class="text-center">
-		<input type="text" name="quantity" class="inputQuantity" id="{{$key}}" value="{{$quotationDetail->quantity}}" size="4" style="text-align: center">
+	<td class="text-center" rowspan="3">
+		<input type="text" name="quantity" class="inputQuantity" id="{{$key}}" value="{{$quotationDetail->quantity}}" size="3" style="text-align: center">
 	</td>
-	<td class="text-center">{{number_format($quotationDetail->price*$quotationDetail->quantity, 0, '.', ',')}}</td>
-	<td><button type="button" class="btn btn-link delete-quotationDetail-button" id="{{$key}}">Del</button></td>
+	<td class="text-center">{{number_format($quotationDetail->price*$quotationDetail->quantity, 0, '.', ',')}} VND</td>
+	<td rowspan="3"><button type="button" class="btn btn-link delete-quotationDetail-button" id="{{$key}}">Del</button></td>
 </tr>
-<?php $sum+= $quotationDetail->price*$quotationDetail->quantity?>
+<tr>
+	<td>
+		<input type="text" name="price_usd" class="inputPrice_usd" id="{{$key}}" value="{{$quotationDetail->price_usd}}" size="8" style="text-align: right"> USD
+	</td>
+	<td class="text-center">{{number_format($quotationDetail->price_usd*$quotationDetail->quantity, 2, '.', ',')}} USD</td>
+</tr>
+<tr>
+	<td>
+		<input type="text" name="price_jpy" class="inputPrice_jpy" id="{{$key}}" value="{{$quotationDetail->price_jpy}}" size="8" style="text-align: right"> JPY
+	</td>
+	<td class="text-center">{{number_format($quotationDetail->price_jpy*$quotationDetail->quantity, 2, '.', ',')}} JPY</td>
+</tr>
 @endforeach
 
 <script>
@@ -53,6 +67,52 @@
 			url: '{{asset("orders/quotation-product-handle-cache")}}',
 			type: 'post',
 			data: {type: 3, product_price: product_price, key: key},
+		})
+		.done(function(data) {
+			$('#table-order-product').html(data);
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+
+	// Change PriceUSD Quotation Product
+	$('.inputPrice_usd').change(function() {
+		product_price_usd = $(this).val();
+		key               = $(this).attr('id');
+
+		$.ajax({
+			url: '{{asset("orders/quotation-product-handle-cache")}}',
+			type: 'post',
+			data: {type: 3, product_price_usd: product_price_usd, key: key},
+		})
+		.done(function(data) {
+			$('#table-order-product').html(data);
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+
+	// Change PriceUSD Quotation Product
+	$('.inputPrice_jpy').change(function() {
+		product_price_jpy = $(this).val();
+		key               = $(this).attr('id');
+
+		$.ajax({
+			url: '{{asset("orders/quotation-product-handle-cache")}}',
+			type: 'post',
+			data: {type: 3, product_price_jpy: product_price_jpy, key: key},
 		})
 		.done(function(data) {
 			$('#table-order-product').html(data);

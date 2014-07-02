@@ -178,7 +178,7 @@ class ReportController extends Controller
 
 		$quotationDetailTable = DB::table('quotation_details')
 							->join('quotation', 'quotation_details.quotation_id', '=', 'quotation.id')
-							->select('quotation_details.id', 'quotation_details.order_product_id', 'quotation_details.price', 'quotation_details.quantity', 'quotation.date', 'quotation.supplier_id', 'quotation.completed_date')
+							->select('quotation_details.id', 'quotation_details.order_product_id', 'quotation_details.price', 'quotation_details.quantity', 'quotation.date', 'quotation.supplier_id', 'quotation.completed_date', 'quotation_details.price_usd', 'quotation_details.price_jpy')
 							->where('quotation.status', '=', 1)
 							->where('quotation_details.order_product_id', '=', $order_product_id);
 						

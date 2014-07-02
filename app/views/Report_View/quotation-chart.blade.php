@@ -7,12 +7,12 @@
       <?php
       $quotationDetail = QuotationDetail::find($quotationDetail_id);
       ?>
-      ['{{date('m-d-Y', strtotime($quotationDetail->quotation->date))}}',  {{$quotationDetail->price}}],
+      ['{{date('m-d-Y', strtotime($quotationDetail->quotation->date))}}',  {{$quotationDetail->price_usd}}],
       @endforeach
     ]);
 
     var options = {
-      title: 'Quotation Product Price',
+      title: 'Quotation Product Price (USD)',
       hAxis: {title: 'Date', titleTextStyle: {color: 'red'}}
     };
 

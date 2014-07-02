@@ -10,8 +10,11 @@
 				<th>User</th>
 				<th>Supplier</th>
 				<th class="text-center">Order Detail</th>
-				<th>Date</th>
+				<th>Created Date</th>
 				<th>Due Date</th>
+				@if ($status == 1)
+				<th>Delivery date</th>
+				@endif
 				<th class="text-center">Over date</th>
 				<th class="text-center">Status</th>
 				<th class="text-center">Action</th>
@@ -26,12 +29,17 @@
 				<td class="text-center"><button type="button" class="btn btn-link order-product-button" id="{{$order->id}}" data-toggle="modal" href='#order-products-modal'>Order Products</button></td>
 				<td>{{date('m-d-Y', strtotime($order->date))}}</td>
 				<td>{{date('m-d-Y', strtotime($order->due_date))}}</td>
+				@if ($status == 1)
+				<td>{{date('m-d-Y', strtotime($order->delivery_date))}}</td>
+				@endif
 				<?php
 				$present_date = date('Y-m-d');
-				$secs         = strtotime($order->due_date)-strtotime($present_date);
+				if ($status == 0) {
+					$secs = strtotime($order->due_date)-strtotime($present_date);
+				} else $secs = strtotime($order->due_date)-strtotime($order->delivery_date);
 				$days         = $secs/86400;
 				?>
-				<td class="text-center"><span class="label @if ($days>0) label-success @else label-danger @endif">{{$days}}</span></td>
+				<td class="text-center"><span class="label @if ($days>=0) label-success @else label-danger @endif">{{$days}}</span></td>
 				<td class="text-center">@if ($order->status == 1) Completed @else On-process @endif</td>
 				<td class="text-center">
 					<a href="{{asset("orders/order-modify/".$order->id)}}"><button type="button" class="btn btn-default modify-button">Modify</button></a>

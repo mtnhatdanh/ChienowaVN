@@ -399,12 +399,17 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
-	
-	$abc = Cache::get('quotationDetailCart');
+	$rate = new Rate;
+	$rate->show();
+	echo "<br/>";
+	echo $rate->showUsdBuyRate();
 
-	if (count(Cache::get('quotationDetailCart'))) {
-		print_r($abc);
-	} else echo 'empty';
+	
+	// $abc = Cache::get('quotationDetailCart');
+
+	// if (count(Cache::get('quotationDetailCart'))) {
+	// 	print_r($abc);
+	// } else echo 'empty';
 
 	// Queue::push('SendEmail@requestLC', array('request_id'=>7));
 	// echo "ok";

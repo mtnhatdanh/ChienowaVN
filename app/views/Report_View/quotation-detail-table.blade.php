@@ -2,6 +2,9 @@
 	#order-detail-table td {
 		vertical-align: middle;
 	}
+	#order-detail-table th {
+		text-align: center;
+	}
 </style>
 
 <div class="row">
@@ -10,13 +13,15 @@
 	</div>
 	<div class="col-sm-12">
 		{{Former::open()->action(asset('report/quotation-draw-chart'))->id('quotation-draw-chart-form')}}
-		<table class="table table-responsive" id="order-detail-table">
+		<table class="table table-responsive table-bordered" id="order-detail-table">
 			<thead>
 				<tr>
 					<th>No</th>
-					<th class="text-center">Date</th>
+					<th>Date</th>
 					<th>Price(VND)</th>
-					<th class="text-center">Quantity</th>
+					<th>USD</th>
+					<th>JPY</th>
+					<th>Quantity</th>
 					<th>Supplier</th>
 					<th class="text-center">Draw Chart</th>
 				</tr>
@@ -27,7 +32,9 @@
 				<tr>
 					<td>{{++$no}}</td>
 					<td class="text-center">{{date('m-d-Y', strtotime($quotationDetail->date))}}</td>
-					<td>{{number_format($quotationDetail->price, 0, '.', ',')}}</td>
+					<td class="text-right">{{number_format($quotationDetail->price, 0, '.', ',')}}</td>
+					<td class="text-right">{{number_format($quotationDetail->price_usd, 2, '.', ',')}}</td>
+					<td class="text-right">{{number_format($quotationDetail->price_jpy, 2, '.', ',')}}</td>
 					<td class="text-center">{{$quotationDetail->quantity}}</td>
 					<td>
 						{{Supplier::find($quotationDetail->supplier_id)->name}}
@@ -41,7 +48,7 @@
 				</tr>
 				@endforeach
 				<tr>
-					<td colspan="5"></td>
+					<td colspan="7"></td>
 					<td class="text-center">
 						<button type="button" class="btn btn-info" id="draw-chart-button">Draw Chart</button>
 					</td>

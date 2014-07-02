@@ -5,12 +5,12 @@
     var data = google.visualization.arrayToDataTable([
       ['Date', 'Price'],
       @foreach ($orderDetailTable as $orderDetail)
-      ['{{date('m-d-Y', strtotime($orderDetail->date))}}',  {{$orderDetail->price}}],
+      ['{{date('m-d-Y', strtotime($orderDetail->date))}}',  {{$orderDetail->price_usd}}],
       @endforeach
     ]);
 
     var options = {
-      title: 'Product Price',
+      title: 'Product Price (USD)',
       hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
       vAxis: {minValue: 0}
     };
@@ -24,6 +24,9 @@
 	#order-detail-table td {
 		vertical-align: middle;
 	}
+	#order-detail-table th {
+		text-align: center;
+	}
 </style>
 
 
@@ -32,13 +35,15 @@
 		<h3>{{OrderProduct::find($order_product_id)->name}} <small>Product</small></h3>
 	</div>
 	<div class="col-sm-12">
-		<table class="table table-responsive" id="order-detail-table">
+		<table class="table table-responsive table-bordered" id="order-detail-table">
 			<thead>
 				<tr>
 					<th>No</th>
-					<th class="text-center">Date</th>
+					<th>Date</th>
 					<th>Price(VND)</th>
-					<th class="text-center">Quantity</th>
+					<th>USD</th>
+					<th>JPY</th>
+					<th>Quantity</th>
 					<th>Supplier</th>
 				</tr>
 			</thead>
@@ -46,9 +51,11 @@
 				<?php $no = 0;?>
 				@foreach ($orderDetailTable as $orderDetail)
 				<tr>
-					<td>{{++$no}}</td>
+					<td class='text-center'>{{++$no}}</td>
 					<td class="text-center">{{date('m-d-Y', strtotime($orderDetail->date))}}</td>
-					<td>{{number_format($orderDetail->price, 0, '.', ',')}}</td>
+					<td class="text-right">{{number_format($orderDetail->price, 0, '.', ',')}}</td>
+					<td class="text-right">{{number_format($orderDetail->price_usd, 2, '.', ',')}}</td>
+					<td class="text-right">{{number_format($orderDetail->price_jpy, 2, '.', ',')}}</td>
 					<td class="text-center">{{$orderDetail->quantity}}</td>
 					<td>
 						{{Supplier::find($orderDetail->supplier_id)->name}}

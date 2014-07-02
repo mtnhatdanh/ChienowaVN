@@ -50,34 +50,7 @@ Quotation Create
 		{{Former::close()}}
 		<!-- Panel -->
 		<div class="col-sm-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Quotation Products</h3>
-				</div>
-				<div class="panel-body">
-				 	<div class="row">
-				 		<div class="col-sm-4">
-				 			{{Former::select('order_product')->fromQuery(OrderProduct::all(), 'name', 'id')->class('form-control')->id('order_product_id')->placeholder('-- Pick a Product --')}}
-				 		</div>
-				 		<div class="col-sm-4">
-				 			{{Former::text('price')->id('order_product_price')->class('form-control')->placeholder('Product Price..')}}
-				 		</div>
-				 		<div class="col-sm-4">
-				 			{{Former::text('quantity')->id('order_product_quantity')->class('form-control')->placeholder('Product Quantity..')}}
-				 		</div>
-				 	</div>
-				 	<br/>
-				 	<div class="row">
-				 		<div class="col-sm-4 col-sm-offset-4">
-				 			<button type="button" class="btn btn-default" id="add-product-button">Add product</button>
-				 		</div>
-				 	</div>
-				</div>
-				<!-- Table Order Product -->
-				<table class="table table-responsive" id="table-order-product">
-					
-				</table>
-			</div>
+			@include('Orders_View.quotation-products-panel')
 		</div>
 	</div>
 	<br/>
@@ -243,39 +216,10 @@ Quotation Create
 
 <script>
 
+
 	// New quotation button submit form
 	$('#new-quotation-button').click(function(){
 		$('#new-quotation-form').submit();
-	});
-
-	// Add product
-	$('#add-product-button').click(function(){
-		order_product_id       = $('#order_product_id').val();
-		order_product_price    = $('#order_product_price').val();
-		order_product_quantity = $('#order_product_quantity').val();
-		if (order_product_id == 0) {
-			alert('Do not have enough data to add product!!');
-		} else {
-			$.ajax({
-				url: '{{asset("orders/quotation-product-handle-cache")}}',
-				type: 'POST',
-				data: {order_product_id: order_product_id, order_product_price: order_product_price, order_product_quantity: order_product_quantity, type: 1},
-			})
-			.done(function(data) {
-				console.log("success");
-				$('#table-order-product').html(data);
-				$('#order_product_id').prop('selectedIndex', 0);
-				$('#order_product_price').val('');
-				$('#order_product_quantity').val('');
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});
-			
-		}
 	});
 
 	// New Quotation validate

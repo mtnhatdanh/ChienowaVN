@@ -237,6 +237,8 @@ class OrdersController extends Controller
 				$quo_detail->quotation_id     = $quotation_id;
 				$quo_detail->order_product_id = $quotationDetail->order_product_id;
 				$quo_detail->price            = $quotationDetail->price;
+				$quo_detail->price_usd        = $quotationDetail->price_usd;
+				$quo_detail->price_jpy        = $quotationDetail->price_jpy;
 				$quo_detail->quantity         = $quotationDetail->quantity;
 				
 				$successQD                    = $quo_detail->save();
@@ -475,7 +477,7 @@ class OrdersController extends Controller
 
 		$orders = $orders->get();
 
-		return View::make('Orders_View.order-ajax', array('orders'=>$orders));
+		return View::make('Orders_View.order-ajax', array('orders'=>$orders, 'status'=>$status));
 	}
 
 	/**
@@ -519,9 +521,11 @@ class OrdersController extends Controller
 		$orderDetailCart = array();
 		foreach ($order->orderDetails as $or_detail) {
 
-			$orderDetail           = new OrderDetail;
-			$orderDetail->price    = $or_detail->price;
-			$orderDetail->quantity = $or_detail->quantity;
+			$orderDetail            = new OrderDetail;
+			$orderDetail->price     = $or_detail->price;
+			$orderDetail->price_usd = $or_detail->price_usd;
+			$orderDetail->price_jpy = $or_detail->price_jpy;
+			$orderDetail->quantity  = $or_detail->quantity;
 
 			$orderDetailCart[$or_detail->order_product_id] = $orderDetail;
 		}
@@ -743,11 +747,13 @@ class OrdersController extends Controller
 
 		if ($type == 1) {
 
-			$order_product_id      = Input::get('order_product_id');
-			$orderDetail           = new OrderDetail;
+			$order_product_id       = Input::get('order_product_id');
+			$orderDetail            = new OrderDetail;
 			
-			$orderDetail->price    = Input::get('order_product_price');
-			$orderDetail->quantity = Input::get('order_product_quantity');
+			$orderDetail->price     = Input::get('order_product_price');
+			$orderDetail->price_usd = Input::get('order_product_price_usd');
+			$orderDetail->price_jpy = Input::get('order_product_price_jpy');
+			$orderDetail->quantity  = Input::get('order_product_quantity');
 
 			$orderDetailCart[$order_product_id] = $orderDetail;
 		} elseif ($type == 2) {
@@ -784,6 +790,8 @@ class OrdersController extends Controller
 			
 			$quotationDetail->order_product_id = Input::get('order_product_id');
 			$quotationDetail->price            = Input::get('order_product_price');
+			$quotationDetail->price_usd        = Input::get('order_product_price_usd');
+			$quotationDetail->price_jpy        = Input::get('order_product_price_jpy');
 			$quotationDetail->quantity         = Input::get('order_product_quantity');
 
 			$quotationDetailCart[] = $quotationDetail;
@@ -801,6 +809,12 @@ class OrdersController extends Controller
 
 			if (Input::has('product_price')) {
 				$quotationDetail->price = Input::get('product_price');
+			}
+			if (Input::has('product_price_usd')) {
+				$quotationDetail->price_usd = Input::get('product_price_usd');
+			}
+			if (Input::has('product_price_jpy')) {
+				$quotationDetail->price_jpy = Input::get('product_price_jpy');
 			}
 			if (Input::has('product_quantity')) {
 				$quotationDetail->quantity = Input::get('product_quantity');
