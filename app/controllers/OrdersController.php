@@ -253,7 +253,9 @@ class OrdersController extends Controller
 				$user_email = $quotation->user->email;
 			
 				Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
-					$message->to($user_email, 'Chienowa Vietnam Staff')->subject('Quotation statement from Chienowa!!');
+					$message->to($user_email, 'Chienowa Vietnam Staff')
+					->cc('itou@chienowa.agri-wave.com', 'Mr Itou - Chienowa Vietnam')
+					->subject('Quotation statement from Chienowa!!');
 				});
 			}
 			
@@ -351,7 +353,9 @@ class OrdersController extends Controller
 			$user_email = $quotation->user->email;
 			
 			Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
-				$message->to($user_email, 'Chienowa Vietnam Staff')->subject('Quotation statement from Chienowa!!');
+				$message->to($user_email, 'Chienowa Vietnam Staff')
+				->cc('itou@chienowa.agri-wave.com', 'Mr Itou - Chienowa Vietnam')
+				->subject('Quotation statement from Chienowa!!');
 			});
 			
 			
