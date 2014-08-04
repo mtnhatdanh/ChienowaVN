@@ -52,10 +52,10 @@ class Rate{
 		$result = array();
 		foreach ($data as $k=>$v) {
 			if ($v['CURRENCYCODE'] == 'USD') {
-				$result['USD'] = $v['BUY'];
+				$result['USD'] = $v['SELL'];
 			}
 			if ($v['CURRENCYCODE'] == 'JPY') {
-				$result['JPY'] = $v['BUY'];
+				$result['JPY'] = $v['SELL'];
 			}
 		}
 		return $result;

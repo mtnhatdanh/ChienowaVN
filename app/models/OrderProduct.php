@@ -10,7 +10,8 @@ class OrderProduct extends Ardent
 
     public static $relationsData = array(
         'orderDetails' => array(self::HAS_MANY, 'OrderDetail', 'order_product_id'),
-        'quotationDetails' => array(self::HAS_MANY, 'QuotationDetail', 'order_product_id')
+        'quotationDetails' => array(self::HAS_MANY, 'QuotationDetail', 'order_product_id'),
+        'projectDetails' => array(self::HAS_MANY, 'ProjectDetail', 'order_product_id')
         ); 
 
     public static function check_order_product_exist($product_name) {

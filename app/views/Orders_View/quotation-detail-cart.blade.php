@@ -14,7 +14,7 @@ $sumUSD = 0;
 <tr>
 	<td rowspan="3">{{$quotationDetail->orderProduct->name}}</td>
 	<td>
-		<input type="text" name="price" class="inputPrice" id="{{$key}}" value="{{$quotationDetail->price}}" size="8" style="text-align: right"> VND
+		<input type="text" name="price" class="inputPrice" id="{{$key}}" value="{{number_format($quotationDetail->price, 0, '.', ',')}}" size="8" style="text-align: right"> VND
 	</td>
 	<td class="text-center" rowspan="3">
 		<input type="text" name="quantity" class="inputQuantity" id="{{$key}}" value="{{$quotationDetail->quantity}}" size="3" style="text-align: center">
@@ -24,13 +24,13 @@ $sumUSD = 0;
 </tr>
 <tr>
 	<td>
-		<input type="text" name="price_usd" class="inputPrice_usd" id="{{$key}}" value="{{$quotationDetail->price_usd}}" size="8" style="text-align: right"> USD
+		<input type="text" name="price_usd" class="inputPrice_usd" id="{{$key}}" value="{{number_format($quotationDetail->price_usd, 4, '.', ',')}}" size="8" style="text-align: right"> USD
 	</td>
-	<td class="text-center">{{number_format($quotationDetail->price_usd*$quotationDetail->quantity, 2, '.', ',')}} USD</td>
+	<td class="text-center">{{number_format($quotationDetail->price_usd*$quotationDetail->quantity, 4, '.', ',')}} USD</td>
 </tr>
 <tr>
 	<td>
-		<input type="text" name="price_jpy" class="inputPrice_jpy" id="{{$key}}" value="{{$quotationDetail->price_jpy}}" size="8" style="text-align: right"> JPY
+		<input type="text" name="price_jpy" class="inputPrice_jpy" id="{{$key}}" value="{{number_format($quotationDetail->price_jpy, 2, '.', ',')}}" size="8" style="text-align: right"> JPY
 	</td>
 	<td class="text-center">{{number_format($quotationDetail->price_jpy*$quotationDetail->quantity, 2, '.', ',')}} JPY</td>
 </tr>

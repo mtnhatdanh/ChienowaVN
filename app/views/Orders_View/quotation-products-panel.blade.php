@@ -52,12 +52,20 @@
 
 <script>
 
-	// convert from VND to USD
+	// convert from VND to USD and JPY
 	$('#order_product_price').change(function(){
 		priceVND = $(this).val();
-		priceUSD = (priceVND/{{$usdRate}}).toFixed(2);
+		priceUSD = (priceVND/{{$usdRate}}).toFixed(4);
 		priceJPY = (priceVND/{{$jpyRate}}).toFixed(2);
 		$('#order_product_price_usd').val(priceUSD);
+		$('#order_product_price_jpy').val(priceJPY);
+	});
+	// convert from USD to VND and JPY
+	$('#order_product_price_usd').change(function(){
+		priceUSD = $(this).val();
+		priceVND = (priceUSD*{{$usdRate}});
+		priceJPY = (priceVND/{{$jpyRate}}).toFixed(2);
+		$('#order_product_price').val(priceVND);
 		$('#order_product_price_jpy').val(priceJPY);
 	});
 

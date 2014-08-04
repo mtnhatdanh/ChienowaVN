@@ -114,10 +114,15 @@ class OrdersController extends Controller
 	 * Quotation Manage
 	 * @return View quotation
 	 */
-	public function getQuotationManage(){
+	public function getQuotationManage($project_id){
 		$notification = Cache::get('notification');
 		Cache::forget('notification');
-		return View::make('Orders_View.quotation-manage', array('notification'=>$notification));		
+		$project = Project::find($project_id);
+		$project = $project->load(array('quotations'=>function($query){
+			$query->orderBy('date', 'desc');
+		}));
+		$quotations = $project->quotations;
+		return View::make('Orders_View.quotation-manage', array('notification'=>$notification, 'quotations'=>$quotations, 'project'=>$project));		
 	}
 
 	/**
@@ -157,7 +162,7 @@ class OrdersController extends Controller
 	 * Delete Quotation
 	 * @return Update database
 	 */
-	public function postQuotationDelete(){
+	public function postQuotationDelete($project_id){
 		$quotation = Quotation::find(Input::get('quotation_id'));
 		foreach ($quotation->quotationDetails as $quotationDetail) {
 			$quotationDetail->delete();
@@ -167,18 +172,18 @@ class OrdersController extends Controller
 		$notification->type  = "success";
 		$notification->value = "You have just deleted quotation!!";
 		Cache::put('notification', $notification, 10);
-		return Redirect::to('orders/quotation-manage');
+		return Redirect::to('orders/quotation-manage/'.$project_id);
 	}
 
 	/**
 	 * Quotation Create
 	 * @return View quotation
 	 */
-	public function getQuotationCreate(){
+	public function getQuotationCreate($project_id){
 		Cache::forget('quotationDetailCart');
 		$notification = Cache::get('notification');
 		Cache::forget('notification');
-		return View::make('Orders_View.quotation-create', array('notification'=>$notification));			
+		return View::make('Orders_View.quotation-create', array('notification'=>$notification, 'project_id'=>$project_id));
 	}
 
 	/**
@@ -263,7 +268,7 @@ class OrdersController extends Controller
 			$notification = new Notification;
 			$notification->set('success', 'Update Quotation successfully!!');
 			Cache::put('notification', $notification, 10);
-			return Redirect::to('orders/quotation-modify/'.$quotation_id);
+			return Redirect::to('orders/quotation-manage/'.$quotation->project->id);
 
 		} else {
 			return Response::json('error update Quotation', 400);
@@ -316,7 +321,7 @@ class OrdersController extends Controller
 	 * New Quotation
 	 * @return Database new quotation
 	 */
-	public function postQuotationNew(){
+	public function postQuotationNew($project_id){
 
 		if (!Cache::has('quotationDetailCart') || !count(Cache::get('quotationDetailCart'))) {
 			$notification = new Notification;
@@ -331,6 +336,7 @@ class OrdersController extends Controller
 		$quotation->supplier_id = Input::get('supplier_id');
 		$quotation->status      = 0;
 		$quotation->note        = Input::get('note');
+		$quotation->project_id  = $project_id;
 
 		$success = $quotation->save();
 
@@ -350,19 +356,20 @@ class OrdersController extends Controller
 				}
 			}
 
-			$user_email = $quotation->user->email;
+			// $user_email = $quotation->user->email;
 			
-			Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
-				$message->to($user_email, 'Chienowa Vietnam Staff')
-				->cc('itou@chienowa.agri-wave.com', 'Mr Itou - Chienowa Vietnam')
-				->subject('Quotation statement from Chienowa!!');
-			});
+			// Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>$quotation_id), function($message) use ($user_email){
+			// 	$message->to($user_email, 'Chienowa Vietnam Staff')
+			// 	->cc('itou@chienowa.agri-wave.com', 'Mr Itou - Chienowa Vietnam')
+			// 	->cc('takeshi@iwa.att.ne.jp', 'Mr Natsui - Chienowa Vietnam')
+			// 	->subject('Quotation statement from Chienowa!!');
+			// });
 			
 			
 			$notification = new Notification;
 			$notification->set('success', 'Create new Quotation successfully!!');
 			Cache::put('notification', $notification, 10);
-			return Redirect::to('orders/quotation-create');
+			return Redirect::to('orders/quotation-manage/'.$project_id);
 
 		} else {
 			return Response::json('error create new Quotation', 400);
@@ -836,6 +843,200 @@ class OrdersController extends Controller
 		
 		return View::make('Orders_View.quotation-detail-cart');
 
+	}
+
+	public function getProjectCreate(){
+		Cache::forget('projectDetailCart');
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.project-create', array('notification'=>$notification));
+	}
+
+	/**
+	 * handle orderProduct to new Quotation view
+	 * @return [type] [description]
+	 */
+	public function postProjectProductHandleCache() {
+		$type = Input::get('type');
+
+		if (Cache::has('projectDetailCart')) {
+			$projectDetailCart = Cache::get('projectDetailCart');
+		} else $projectDetailCart = array();
+
+		if ($type == 1) {
+
+			$order_product_id = Input::get('order_product_id');
+
+			if (!in_array($order_product_id, $projectDetailCart)) {
+				$projectDetailCart[] = $order_product_id;
+			}
+
+		} elseif ($type == 2) {
+			
+			$key = Input::get('key');
+			unset($projectDetailCart[$key]);
+		} 
+
+		if (empty($projectDetailCart)) {
+			Cache::forget('projectDetailCart');
+		} else {
+			Cache::put('projectDetailCart', $projectDetailCart, 10);	
+		}
+		
+		return View::make('Orders_View.project-detail-cart');
+
+	}
+
+	/**
+	 * Project Create post
+	 * @return Database update
+	 */
+	public function postProjectCreate(){
+		if (!Cache::has('projectDetailCart') || !count(Cache::get('projectDetailCart'))) {
+			$notification = new Notification;
+			$notification->set('danger', 'Fail to create new Project!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/project-create');
+		} else {
+			$project         = new Project;
+			$project->name   = Input::get('name');
+			$project->note   = Input::get('note');
+			$project->status = 0;
+			$success         = $project->save();
+
+			if ($success) {
+
+				$project_id = $project->id;
+
+				$projectDetailCart = Cache::get('projectDetailCart');
+				foreach ($projectDetailCart as $order_product_id) {
+					$projectDetail                   = new ProjectDetail;
+					$projectDetail->project_id       = $project_id;
+					$projectDetail->order_product_id = $order_product_id;
+					$projectDetail->status           = 0;
+					$success = $projectDetail->save();
+					if (!$success) {
+						return Response::json('error create new Project Detail', 400);
+					}
+
+				}
+
+				Cache::forget('projectDetailCart');
+
+
+				$notification = new Notification;
+				$notification->set('success', 'You have just created a new project!!');
+				Cache::put('notification', $notification, 10);
+				return Redirect::to('orders/project-create');
+			} else {
+				return Response::json('error create new Project', 400);
+			}
+		}
+	}
+
+	/**
+	 * Project Manage view
+	 * @return View Project-manage
+	 */
+	public function getProjectManage(){
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		return View::make('Orders_View.project-manage', array('notification'=>$notification));
+	}
+
+	/**
+	 * Project Manage post
+	 * @return ajax view
+	 */
+	public function postProjectManage(){
+		$from_date = Input::get('from_date');
+		$to_date   = Input::get('to_date');
+		$status    = Input::get('status');
+
+		$projects = Project::where('status', '=', $status)->get();
+
+		return View::make('Orders_View.project-ajax', array('projects'=>$projects, 'status'=>$status));
+	}
+
+	/**
+	 * Project Detail show ajax
+	 * @return Ajax View
+	 */
+	public function postProjectDetailShow(){
+		$project        = Project::find(Input::get('project_id'));
+		$projectDetails = $project->projectDetails;
+		return View::make('Orders_View.project-detail-show', array('projectDetails'=>$projectDetails));
+	}
+
+	/**
+	 * Project Modify 
+	 * @return View
+	 */
+	public function getProjectModify($project_id){
+		$project      = Project::find($project_id);
+		$notification = Cache::get('notification');
+		Cache::forget('notification');
+		
+		// Push projectDetails to Cache
+		Cache::forget('orderDetailCart');
+		$projectDetailCart = array();
+		foreach ($project->projectDetails as $projectDetail) {
+			$projectDetailCart[] = $projectDetail->order_product_id;
+		}
+		
+		Cache::put('projectDetailCart', $projectDetailCart, 10);
+
+		return View::make('Orders_View.project-modify', array('project'=>$project, 'notification'=>$notification));
+	}
+
+	/**
+	 * Project Modify post
+	 * @return Database update
+	 */
+	public function postProjectModify($project_id){
+		if (!Cache::has('projectDetailCart') || !count(Cache::get('projectDetailCart'))) {
+			$notification = new Notification;
+			$notification->set('danger', 'Fail to Update Project!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/project-modify/'.$project_id);
+		} else {
+			$project         = Project::find($project_id);
+			$project->name   = Input::get('name');
+			$project->note   = Input::get('note');
+			$project->status = Input::get('status');
+			$success         = $project->save();
+
+			if ($success) {
+
+				// Delete old data from ProjectDetails table
+				foreach ($project->projectDetails as $projectDetail) {
+					$projectDetail->delete();
+				}
+
+				$projectDetailCart = Cache::get('projectDetailCart');
+				foreach ($projectDetailCart as $order_product_id) {
+					$projectDetail                   = new ProjectDetail;
+					$projectDetail->project_id       = $project_id;
+					$projectDetail->order_product_id = $order_product_id;
+					$projectDetail->status           = 0;
+					$success = $projectDetail->save();
+					if (!$success) {
+						return Response::json('error create new Project Detail', 400);
+					}
+
+				}
+
+				Cache::forget('projectDetailCart');
+
+
+				$notification = new Notification;
+				$notification->set('success', 'You have just updated project!!');
+				Cache::put('notification', $notification, 10);
+				return Redirect::to('orders/project-modify/'.$project_id);
+			} else {
+				return Response::json('error update Project', 400);
+			}
+		}
 	}
 	
 }

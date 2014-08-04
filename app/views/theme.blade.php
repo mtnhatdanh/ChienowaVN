@@ -108,8 +108,10 @@
                 <li><a href="{{Asset('orders/order-product-manage')}}">Manage Order Products</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Quotations</li>
-                <li><a href="{{Asset('orders/quotation-create')}}">Create Quotation</a></li>
-                <li><a href="{{Asset('orders/quotation-manage')}}">Manage Quotation</a></li>
+                <li><a href="{{Asset('orders/project-create')}}">Create Project</a></li>
+                <li><a href="{{Asset('orders/project-manage')}}">Manage Project</a></li>
+                <!-- <li><a href="{{Asset('orders/quotation-create')}}">Create Quotation</a></li>
+                <li><a href="{{Asset('orders/quotation-manage')}}">Manage Quotation</a></li> -->
                 <li class="divider"></li>
                 <li class="dropdown-header">Orders</li>
                 <li><a href="{{Asset('orders/order-create')}}">Create Order</a></li>

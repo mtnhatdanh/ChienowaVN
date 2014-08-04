@@ -399,10 +399,20 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
-	$rate = new Rate;
-	$rate->show();
-	echo "<br/>";
-	echo $rate->showUsdBuyRate();
+	Cache::forget('projectDetailCart');
+	// $rate = new Rate;
+	// $rate->show();
+	// echo "<br/>";
+	// echo $rate->showUsdBuyRate();
+	// 
+	
+	
+	// Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>21), function($message) {
+	// 			$message->to('mtnhatdanh@gmail.com', 'Chienowa Vietnam Staff')
+	// 			->subject('Quotation statement from Chienowa!!');
+	// 		});
+	//return View::make('Mail_View.quotation-mail', array('quotation_id'=>21));
+	//
 
 	
 	// $abc = Cache::get('quotationDetailCart');

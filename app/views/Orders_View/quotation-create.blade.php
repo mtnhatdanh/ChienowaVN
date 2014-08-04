@@ -13,7 +13,10 @@ Quotation Create
 
 <div class="container">
 	<div class="page-header">
-		<h1>Create new Quotation</h1>
+		<h1>
+		Create new Quotation<br/>
+		<small>Project: {{Project::find($project_id)->name}}</small>
+		</h1>
 	</div>
 	@include('notification')
 </div>
@@ -21,7 +24,7 @@ Quotation Create
 
 <div class="container" id='content'>
 	<div class="row">
-		{{Former::open()->action(asset('orders/quotation-new'))->id('new-quotation-form')}}
+		{{Former::open()->action(asset('orders/quotation-new/'.$project_id))->id('new-quotation-form')}}
 		<div class="col-sm-6">
 			<div class="col-sm-6">
 				{{Former::select('user_id')->options(array(Session::get('user')->id=>Session::get('user')->name))->label('User')->class('form-control')->readonly()}}

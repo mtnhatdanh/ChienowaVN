@@ -1,6 +1,5 @@
 <?php
-$quotation        = Quotation::find($quotation_id);
-$quotationDetails = $quotation->quotationDetails;
+$quotations = Quotation::where('status', '=', 0)->orderBy('date', 'desc');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +9,7 @@ $quotationDetails = $quotation->quotationDetails;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Quotation mail</title>
+    <title>Quotation on-prcess report mail</title>
 
     <!-- Bootstrap core CSS -->
     {{HTML::style('bootstrap-3.1.1/dist/css/bootstrap.min.css')}}
@@ -50,7 +49,7 @@ $quotationDetails = $quotation->quotationDetails;
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-header">
-                    <h1>Quotation <small>remind email</small></h1>
+                    <h1>Quotation on-prcess report <small>email</small></h1>
                 </div>
             </div>
         </div>
