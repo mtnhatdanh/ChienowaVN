@@ -22,7 +22,15 @@
 		<br/>
 	 	<div class="row">
 	 		<div class="col-sm-6">
-	 			{{Former::select('order_product')->fromQuery(OrderProduct::all(), 'name', 'id')->class('form-control')->id('order_product_id')->placeholder('-- Pick a Product --')}}
+	 			<?php 
+	 			$order_products = Project::find($project_id)->projectDetails;
+	 			?>
+	 			<label for="order_product">Product Item</label>
+	 			<select name="order_product" id="order_product_id" class="form-control" required="required">
+	 				@foreach ($order_products as $order_product)
+	 				<option value="{{$order_product->order_product_id}}">{{$order_product->orderProduct->name}}</option>
+	 				@endforeach
+	 			</select>
 	 		</div>
 	 		<div class="col-sm-6">
 	 			{{Former::text('quantity')->id('order_product_quantity')->class('form-control')->placeholder('Product Quantity..')}}

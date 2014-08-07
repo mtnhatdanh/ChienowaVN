@@ -136,6 +136,7 @@
                 <li><a href="{{Asset('report/quality-control')}}">Quality Control Report</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Order Report</li>
+                <li><a href="{{Asset('report/project-detail-report')}}">Project Detail Report</a></li>
                 <li><a href="{{Asset('report/order-product-detail')}}">Order Product Detail</a></li>
                 <li><a href="{{Asset('report/quotation-product-detail')}}">Quotation Product Detail</a></li>
                 <li><a href="{{Asset('report/supplier-report')}}">Supplier Report</a></li>

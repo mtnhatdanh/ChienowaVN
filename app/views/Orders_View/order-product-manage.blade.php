@@ -35,6 +35,7 @@ Manage Order Product
 					<td>{{$or_product->name}}</td>
 					<td>{{$or_product->note}}</td>
 					<td class="text-center">
+						<button type="button" id="{{$or_product->id}}" class="btn btn-link modify_button" data-toggle="modal" data-target="#myModifyModal">Modify</button>
 						<button type="button" id="{{$or_product->id}}" class="btn btn-link del_button" data-toggle="modal" data-target="#myDeleteModal">Del</button>
 					</td>
 				</tr>
@@ -44,7 +45,28 @@ Manage Order Product
 	</div>
 </div>
 
-<!-- Modal Create Equipment -->
+<!-- Modal for modify Or_Product -->
+<form action="{{asset('orders/order-product-modify')}}" method="post">
+	<div class="modal fade" id="myModifyModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Modify Order Product</h4>
+				</div>
+				<div class="modal-body">
+					<div id="modify_product_div"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Update Order Product</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</form>
+
+<!-- Modal Create Or_product -->
 <form action="{{asset('orders/order-product-create')}}" method="post" id="form-register">
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
@@ -119,7 +141,29 @@ Manage Order Product
 		orderProduct_id = $(this).attr('id');
 		$('#orderProduct_id').val(orderProduct_id);
 	});
-</script>
 
+	// Modify button
+	$('.modify_button').click(function(){
+		orderProduct_id = $(this).attr('id');
+		$.ajax({
+			url: '{{asset("orders/order-product-modify-ajax")}}',
+			type: 'POST',
+			data: {orderProduct_id: orderProduct_id},
+		})
+		.done(function(data) {
+			console.log("success");
+			$('#modify_product_div').html(data);
+
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+
+</script>
 
 @endsection

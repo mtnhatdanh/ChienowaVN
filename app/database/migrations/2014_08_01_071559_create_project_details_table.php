@@ -19,6 +19,8 @@ class CreateProjectDetailsTable extends Migration {
             $table->integer("order_product_id");
             $table->smallInteger('status');
             $table->integer('repeat_times');
+            $table->integer('sg_quotation_detail_id');
+            $table->text('sg_note');
             $table->timestamps();
         });
 	}
@@ -30,7 +32,8 @@ class CreateProjectDetailsTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		//Drop prject_details table
+		Schema::drop('project_details');
 	}
 
 }

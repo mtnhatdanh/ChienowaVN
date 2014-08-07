@@ -55,10 +55,10 @@ Quotation Modify
 				?>
 				<label for="status" class="control-label">Status</label>
 				<select name="status" id="status" class="form-control">
-					<option value="0" @if (Session::get('user')->id != 16 && Session::get('user')->id != 17) disabled="disabled" @endif @if ($quotation->status == 0) selected @endif>
+					<option value="0" @if ($quotation->status == 0) selected @endif>
 						{{$status[0]}}
 					</option>
-					<option value="1" @if (Session::get('user')->id != 16 && Session::get('user')->id != 17) disabled="disabled" @endif @if ($quotation->status == 1) selected @endif>
+					<option value="1" @if ($quotation->status == 1) selected @endif>
 						{{$status[1]}}
 					</option>
 				</select>

@@ -253,4 +253,58 @@ class ReportController extends Controller
 		}
 	}
 
+	/**
+	 * [getProjectDetailReport description]
+	 * @return View Project Detail report
+	 */
+	public function getProjectDetailReport(){
+		return View::make('Report_View.project-detail-report');
+	}
+
+	/**
+	 * [postProjectStatusAjax description]
+	 * @return Ajax view
+	 */
+	public function postProjectStatusAjax(){
+		$status = Input::get('status');
+		$projects = Project::where('status', '=', $status)->get();
+		return View::make('Report_View.project-status-ajax', array('projects'=>$projects));
+	}
+
+	/**
+	 * [postProjectDetailAjax description]
+	 * @return Ajax View
+	 */
+	public function postProjectDetailAjax(){
+		$project = Project::find(Input::get('project_id'));
+		return View::make('Report_View.project-detail-ajax', array('project'=>$project));
+	}
+
+	/**
+	 * [postProjectDetailSuggestModal description]
+	 * @return Ajax modal for suggest project detail
+	 */
+	public function postProjectDetailSuggestModal(){
+		$projectDetail_id       = Input::get('projectDetail_id');
+		$sg_quotation_detail_id = Input::get('sg_quotation_detail_id');
+		return View::make('Report_View.project-detail-suggest-modal', array('projectDetail_id'=>$projectDetail_id, 'sg_quotation_detail_id'=>$sg_quotation_detail_id));
+	}
+
+	/**
+	 * [postProjectDetailSuggestHandle description]
+	 * @return Database update
+	 */
+	public function postProjectDetailSuggestHandle(){
+		$projectDetail                         = ProjectDetail::find(Input::get('projectDetail_id'));
+		$projectDetail->sg_quotation_detail_id = Input::get('sg_quotation_detail_id');
+		$projectDetail->sg_note                = Input::get('sg_note');
+		$success = $projectDetail->save();
+		if (!$success) {
+			return Response::json('error save Project Detail', 400);
+		}
+
+		$project = $projectDetail->project;
+		return View::make('Report_View.project-detail-ajax', array('project'=>$project));
+	}
+
 }

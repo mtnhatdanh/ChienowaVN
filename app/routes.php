@@ -399,57 +399,7 @@ Route::get('test-complete', function(){
 // test route
 Route::get('test', function(){
 
-	Cache::forget('projectDetailCart');
-	// $rate = new Rate;
-	// $rate->show();
-	// echo "<br/>";
-	// echo $rate->showUsdBuyRate();
-	// 
+	return View::make('Mail_View.project-detail-mail', array('projectDetail_id'=>4));
 	
-	
-	// Mail::queue('Mail_View.quotation-mail', array('quotation_id'=>21), function($message) {
-	// 			$message->to('mtnhatdanh@gmail.com', 'Chienowa Vietnam Staff')
-	// 			->subject('Quotation statement from Chienowa!!');
-	// 		});
-	//return View::make('Mail_View.quotation-mail', array('quotation_id'=>21));
-	//
-
-	
-	// $abc = Cache::get('quotationDetailCart');
-
-	// if (count(Cache::get('quotationDetailCart'))) {
-	// 	print_r($abc);
-	// } else echo 'empty';
-
-	// Queue::push('SendEmail@requestLC', array('request_id'=>7));
-	// echo "ok";
-	// 
-	
-	// $orderDetail = OrderDetail::find(1);
-	// print_r($orderDetail);
-	// echo "<br/>";
-	// 
-
-	// $orderProduct = OrderProduct::find(4);
-	// print_r($orderProduct->orderDetails);
-	// print_r($orderDetail->orderProduct->name);
-	
-	// return View::make('Mail_View.order-mail', array('order_id'=>14));		
-
-	// $request->save();
-
-	// print_r($request);
-
-	// $user = User::find(10);
-	// print_r($user);
-	
-
-
-	// Queue::push(function($job){
-	// 	File::append(app_path().'/queue.txt', 'Test Queue Laravel'.PHP_EOL);
-	// 	$job->delete();
-	// });
-
-	// return "ok";
 	
 });

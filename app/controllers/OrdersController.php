@@ -192,6 +192,7 @@ class OrdersController extends Controller
 	 */
 	public function getQuotationModify($quotation_id){
 		$quotation = Quotation::find($quotation_id);
+		$project_id = $quotation->project_id;
 		$notification = Cache::get('notification');
 		Cache::forget('notification');
 		
@@ -201,7 +202,7 @@ class OrdersController extends Controller
 		
 		Cache::put('quotationDetailCart', $quotationDetailCart, 10);
 
-		return View::make('Orders_View.quotation-modify', array('quotation'=>$quotation, 'notification'=>$notification));
+		return View::make('Orders_View.quotation-modify', array('quotation'=>$quotation, 'notification'=>$notification, 'project_id'=>$project_id));
 	}
 
 	/**
@@ -746,6 +747,34 @@ class OrdersController extends Controller
 	}
 
 	/**
+	 * [postOrderProductModifyAjax description]
+	 * @return Ajax modify
+	 */
+	public function postOrderProductModifyAjax(){
+		$orderProduct = OrderProduct::find(Input::get('orderProduct_id'));
+		return View::make('Orders_View.order-product-modify-ajax', array('orderProduct'=>$orderProduct));
+	}
+
+	/**
+	 * [postOrderProductModify description]
+	 * @return Update database
+	 */
+	public function postOrderProductModify(){
+		$orderProduct       = OrderProduct::find(Input::get('orderProduct_id'));
+		$orderProduct->name = Input::get('name');
+		$orderProduct->note = Input::get('note');
+		$success            = $orderProduct->save();
+		if (!$success) {
+			return Response::json('Error save order product', 400);
+		} else {
+			$notification = new Notification;
+			$notification->set('success', 'Update order product successfully!!');
+			Cache::put('notification', $notification, 10);
+			return Redirect::to('orders/order-product-manage');
+		}
+	}
+
+	/**
 	 * handle oderProduct to new Order view
 	 * @return [type] [description]
 	 */
@@ -1027,7 +1056,6 @@ class OrdersController extends Controller
 				}
 
 				Cache::forget('projectDetailCart');
-
 
 				$notification = new Notification;
 				$notification->set('success', 'You have just updated project!!');
